@@ -13,7 +13,8 @@ The principles covered are are the same ones used by production-level dApps, suc
 
 ### Live Demo
 
-![](https://raw.githubusercontent.com/0xProject/0x-examples/tx-relay-next-app/tx-relay-demo-screen-recording.gif)
+Checkout the live demo 👉 [here](https://0x-examples.vercel.app/)
+
 
 ## Getting Started
 
@@ -47,6 +48,10 @@ open http://localhost:3000
 ## Resources
 
 ### Tx Relay API Docs
+
+Checkout this guide, for a full walk-through of this demo app [**How to build a dApp with Tx Relay API**](https://0x.org/docs/tx-relay-api/guides/build-a-dapp-with-tx-relay-api).
+
+Additional Tx Relay API resources:
 
 - [Intro to Tx Relay API](https://0x.org/docs/tx-relay-api/introduction)
 - [Development Status](https://0x.org/docs/tx-relay-api/development-status)
