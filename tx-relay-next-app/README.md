@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide will walk-through the demo app [TODO: Insert LINK] that demonstrates best practices when implementing gasless approvals and swap functionality into your ERC-20 token swapping dApp using Tx Relay API.
+This guide will walk-through a demo app that demonstrates best practices when implementing gasless approvals and swap functionality into your ERC-20 token swapping dApp using Tx Relay API.
 
 An example ERC-20 swap application built on [Next.js 13](https://nextjs.org/) with [0x Tx Relay API](https://0x.org/docs/tx-relay-api/introduction). It covers best practices when implementing gasless approvals and swap functionality into your dApp or workflow.
 
@@ -13,20 +13,18 @@ The principles covered are are the same ones used by production-level dApps, suc
 
 ### Live Demo
 
-Checkout with live demo 👉 here [TODO: Insert link]
-
-![](https://raw.githubusercontent.com/0xProject/0x-examples/tx-relay-next-app/tx-relay-demo-screen-recording.gif))
+![](https://raw.githubusercontent.com/0xProject/0x-examples/tx-relay-next-app/tx-relay-demo-screen-recording.gif)
 
 ## Getting Started
 
 1. Setup the required API keys
 
 - projectId
-  - RainbowKit relies on WalletConnect. Obtain a free `projectId` from [WalletConnect Cloud](https://cloud.walletconnect.com/app).
-  - Add [here](TODO add link)
+  - Description: RainbowKit relies on WalletConnect. Obtain a free `projectId` from [WalletConnect Cloud](https://cloud.walletconnect.com/app).
+  - Code: Add [here](https://github.com/0xProject/0x-examples/blob/main/tx-relay-next-app/app/providers.tsx#L39)
 - 0x
-  - 0x API key (create one [here](https://0x.org/docs/introduction/getting-started)) =
-  - Add for /price [here](TODO add code) and for /quote [here](TODO add code)
+  - Description: All 0x calls require an API key. Create a free one [here](https://0x.org/docs/introduction/getting-started)
+  - Code: Add for /price [here](https://github.com/0xProject/0x-examples/blob/main/tx-relay-next-app/app/api/price/route.ts#L11), /quote [here](https://github.com/0xProject/0x-examples/blob/main/tx-relay-next-app/app/api/quote/route.ts#L11), /status [here](https://github.com/0xProject/0x-examples/blob/main/tx-relay-next-app/app/api/status/route.ts#L14), /submit [here](https://github.com/0xProject/0x-examples/blob/main/tx-relay-next-app/app/api/submit/route.ts#L11)
 
 2. Install project dependencies
 

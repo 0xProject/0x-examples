@@ -63,7 +63,7 @@ export const txRelayTradeSchema = z.object({
         args: string
       ): MetaTransactionV1Eip712Context | MetaTransactionV2Eip712Context =>
         JSON.parse(args)
-    ), // todo: better parsing of eip712 contexts
+    ),
 });
 
 export const txRelaySubmitTradeSchema = z.object({
@@ -73,11 +73,11 @@ export const txRelaySubmitTradeSchema = z.object({
     z.literal(GaslessTypes.OtcOrder),
   ]),
   eip712: z.object({
-    types: z.object({}).passthrough(), // todo: better parsing of ExecuteMetaTransactionEip712 | PermitEip712 types
+    types: z.object({}).passthrough(),
     primaryType: z.string(),
     domain: z.object({}).passthrough(),
     message: z.object({}).passthrough(),
-  }), // todo: better parsing of eip712 contexts
+  }),
   signature: signatureSchema,
 });
 
@@ -92,7 +92,7 @@ export const txRelaySubmitApprovalSchema = z.object({
     primaryType: z.string(),
     domain: z.object({}).passthrough(),
     message: z.object({}).passthrough(),
-  }), // todo: better parsing of eip712 contexts
+  }),
   signature: signatureSchema,
 });
 

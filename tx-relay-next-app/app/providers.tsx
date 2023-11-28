@@ -36,7 +36,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
   [publicProvider()]
 );
 
-const projectId = "669f3565f461ffc127f131e43753b274";
+const projectId = "669f3565f461ffc127f131e43753b274"; // Replace with your own free key from WalletConnect Cloud https://cloud.walletconnect.com/sign-in
 
 const { wallets } = getDefaultWallets({
   appName: "RainbowKit demo",
