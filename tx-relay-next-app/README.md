@@ -1,30 +1,62 @@
-This is a [Next.js](https://nextjs.org/) 13 App Router project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 0x Tx Relay API Demo App (Next.js App Router)
+
+## Overview
+
+This guide will walk-through the demo app [TODO: Insert LINK] that demonstrates best practices when implementing gasless approvals and swap functionality into your ERC-20 token swapping dApp using Tx Relay API.
+
+An example ERC-20 swap application built on [Next.js 13](https://nextjs.org/) with [0x Tx Relay API](https://0x.org/docs/tx-relay-api/introduction). It covers best practices when implementing gasless approvals and swap functionality into your dApp or workflow.
+
+The principles covered are are the same ones used by production-level dApps, such as in the [Matcha Auto](https://help.matcha.xyz/en/articles/7939087-what-is-matcha-auto) feature of [Matcha.xyz](https://matcha.xyz/), in which Matcha submits the transactions and handles the gas on users behalf.
+
+> [!WARNING]  
+> This is a demo, and is not ready for production use. The code has not been audited and does not account for all error handling. Use at your own risk.
+
+### Live Demo
+
+Checkout with live demo 👉 here [TODO: Insert link]
+
+![](https://raw.githubusercontent.com/0xProject/0x-examples/tx-relay-next-app/tx-relay-demo-screen-recording.gif))
 
 ## Getting Started
 
-First, run the development server:
+1. Setup the required API keys
 
-```bash
-npm run dev
-# or
-yarn dev
+- projectId
+  - RainbowKit relies on WalletConnect. Obtain a free `projectId` from [WalletConnect Cloud](https://cloud.walletconnect.com/app).
+  - Add [here](TODO add link)
+- 0x
+  - 0x API key (create one [here](https://0x.org/docs/introduction/getting-started)) =
+  - Add for /price [here](TODO add code) and for /quote [here](TODO add code)
+
+2. Install project dependencies
+
+```
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Start the Next.js development server
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```
+npm run dev
+```
 
-## Learn More
+4. Navigate to [http://localhost:3000](http://localhost:3000)
 
-To learn more about Next.js, take a look at the following resources:
+```
+open http://localhost:3000
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Resources
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Tx Relay API Docs
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- [Intro to Tx Relay API](https://0x.org/docs/tx-relay-api/introduction)
+- [Development Status](https://0x.org/docs/tx-relay-api/development-status)
+- [Understanding Tx Relay API](https://0x.org/docs/tx-relay-api/guides/understanding-tx-relay-api)
+- [API Overview](https://0x.org/docs/tx-relay-api/api-references/overview)
+  - [/price](https://0x.org/docs/tx-relay-api/api-references/get-tx-relay-v1-swap-price)
+  - [/quote](https://0x.org/docs/tx-relay-api/api-references/get-tx-relay-v1-swap-quote)
+  - [/submit](https://0x.org/docs/tx-relay-api/api-references/post-tx-relay-v1-swap-submit)
+  - [/status](https://0x.org/docs/tx-relay-api/api-references/get-tx-relay-v1-swap-status-trade-hash)
+- [FAQ](https://0x.org/docs/tx-relay-api/tx-relay-faq)
+- [Gasless approvals token list](https://0x.org/docs/tx-relay-api/gasless-approvals-token-list)
