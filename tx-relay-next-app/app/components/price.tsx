@@ -291,7 +291,7 @@ export default function PriceView({
           </u>{" "}
           and{" "}
           <u className="underline">
-            <a href="https://0x.org/docs/">Code</a>
+            <a href="https://github.com/0xProject/0x-examples/tree/main/tx-relay-next-app">Code</a>
           </u>{" "}
           to build your own
         </p>
