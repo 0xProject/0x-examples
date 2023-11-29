@@ -8,6 +8,8 @@ An example ERC-20 swap application built on [Next.js 13](https://nextjs.org/) wi
 
 The principles covered are are the same ones used by production-level dApps, such as in the [Matcha Auto](https://help.matcha.xyz/en/articles/7939087-what-is-matcha-auto) feature of [Matcha.xyz](https://matcha.xyz/), in which Matcha submits the transactions and handles the gas on users behalf.
 
+This demo showcases trading USDC (a gasless approved token that is on the Polygon-supported sell list) for WMATIC (a non-gasless approved token). Read more about tokens supported by Tx Relay API [here](https://0x.org/docs/tx-relay-api/guides/build-a-dapp-with-tx-relay-api#-token-lists). 
+
 > [!WARNING]  
 > This is a demo, and is not ready for production use. The code has not been audited and does not account for all error handling. Use at your own risk.
 
