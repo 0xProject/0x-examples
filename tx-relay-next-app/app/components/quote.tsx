@@ -131,6 +131,7 @@ export default function QuoteView({
           </div>
         </div>
       </form>
+      {/* TODO: Add a timer that refreshes the quote every 30s to ensure it stays fresh. */}
       <div className="flex items-center mb-2 font-bold mt-2 py-2 px-4 w-full">
         ⏰ Quotes are expire in ~30s. Make sure to sign & submit order before
         the quote expires.
