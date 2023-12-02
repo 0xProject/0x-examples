@@ -131,6 +131,10 @@ export default function QuoteView({
           </div>
         </div>
       </form>
+      <div className="flex items-center mb-2 font-bold mt-2 py-2 px-4 w-full">
+        ⏰ Quotes are expire in ~30s. Make sure to sign & submit order before
+        the quote expires.
+      </div>
 
       {approvalEip712 ? (
         <SignApproval
@@ -141,7 +145,7 @@ export default function QuoteView({
           }}
         />
       ) : (
-        <div>Approval Already Signed</div>
+        <div>Token Allowance Already Approved</div>
       )}
 
       {tradeEip712 ? (
