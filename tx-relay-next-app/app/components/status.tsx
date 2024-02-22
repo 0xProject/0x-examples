@@ -17,7 +17,7 @@ export default function StatusView({ tradeHash }: { tradeHash: string }) {
   useEffect(() => {
     async function fetchStatus() {
       if (!chain) return;
-      console.log("chain.id", chain.id);
+
       const response = await fetch(
         `/api/status?tradeHash=${tradeHash}&chainId=${chain.id}`
       );

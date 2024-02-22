@@ -90,7 +90,7 @@ export const ETHEREUM_TOKENS: Token[] = [
     decimals: 18,
     address: "0xba100000625a3754423978a60c9317c58a424e3d",
     logoURI:
-      "https://raw.githubusercontent.com/balancer/brand-assets/main/logo/no-container/logo-balancer-black.svg",
+      "https://raw.githubusercontent.com/balancer/brand-assets/main/logo/circle-container/logo-balancer-black-128x128.svg",
   },
   {
     chainId: 1,
@@ -111,7 +111,7 @@ export const ETHEREUM_TOKENS_BY_SYMBOL: Record<string, Token> = {
     decimals: 18,
     address: "0xba100000625a3754423978a60c9317c58a424e3d",
     logoURI:
-      "https://raw.githubusercontent.com/balancer/brand-assets/main/logo/no-container/logo-balancer-black.svg",
+      "https://raw.githubusercontent.com/balancer/brand-assets/main/logo/circle-container/logo-balancer-black-128x128.svg",
   },
   usdc: {
     chainId: 1,
@@ -132,7 +132,7 @@ export const ETHEREUM_TOKENS_BY_ADDRESS: Record<string, Token> = {
     decimals: 18,
     address: "0xba100000625a3754423978a60c9317c58a424e3d",
     logoURI:
-      "https://raw.githubusercontent.com/balancer/brand-assets/main/logo/no-container/logo-balancer-black.svg",
+      "https://raw.githubusercontent.com/balancer/brand-assets/main/logo/circle-container/logo-balancer-black-128x128.svg",
   },
   "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": {
     chainId: 1,
@@ -167,14 +167,14 @@ export const ARBITRUM_TOKENS: Token[] = [
 ];
 
 export const ARBITRUM_TOKENS_BY_SYMBOL: Record<string, Token> = {
-  bal: {
+  weth: {
     chainId: 42161,
-    name: "Balancer",
-    symbol: "BAL",
+    name: "Wrapped Ether",
+    symbol: "WETH",
     decimals: 18,
     address: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
     logoURI:
-      "https://raw.githubusercontent.com/balancer/brand-assets/main/logo/no-container/logo-balancer-black.svg",
+      "https://raw.githubusercontent.com/OffchainLabs/arbitrum-classic/master/docs/assets/arbitrum_logo.svg",
   },
   usdc: {
     chainId: 42161,
@@ -190,12 +190,12 @@ export const ARBITRUM_TOKENS_BY_SYMBOL: Record<string, Token> = {
 export const ARBITRUM_TOKENS_BY_ADDRESS: Record<string, Token> = {
   "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1": {
     chainId: 42161,
-    name: "Balancer",
-    symbol: "BAL",
+    name: "Wrapped Ether",
+    symbol: "WETH",
     decimals: 18,
     address: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
     logoURI:
-      "https://raw.githubusercontent.com/balancer/brand-assets/main/logo/no-container/logo-balancer-black.svg",
+      "https://raw.githubusercontent.com/OffchainLabs/arbitrum-classic/master/docs/assets/arbitrum_logo.svg",
   },
   "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8": {
     chainId: 42161,

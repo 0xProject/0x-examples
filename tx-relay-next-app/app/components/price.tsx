@@ -17,47 +17,64 @@ import {
   ARBITRUM_EXCHANGE_PROXY,
 } from "../../src/constants";
 import MATIC_PERMIT_TOKENS from "../../src/supports-permit/137.json";
+import ETHEREUM_PERMIT_TOKENS from "../../src/supports-permit/1.json";
+import ARBITRUM_PERMIT_TOKENS from "../../src/supports-permit/42161.json";
 import type { TokenSupportsPermit } from "../../src/utils/eip712_utils.types";
 import ZeroExLogo from "../../src/images/white-0x-logo.png";
 import Image from "next/image";
 import qs from "qs";
+
+export const DEFAULT_BUY_TOKEN = (chainId: number) => {
+  if (chainId === 137) {
+    return "wmatic";
+  }
+  if (chainId === 1) {
+    return "bal";
+  }
+  if (chainId === 42161) {
+    return "weth";
+  }
+  return "wmatic";
+};
+
+export const permitTokensByChain = (chainId: number) => {
+  if (chainId === 137) {
+    return MATIC_PERMIT_TOKENS;
+  }
+  if (chainId === 1) {
+    return ETHEREUM_PERMIT_TOKENS;
+  }
+  if (chainId === 42161) {
+    return ARBITRUM_PERMIT_TOKENS;
+  }
+  return MATIC_PERMIT_TOKENS;
+};
 
 export default function PriceView({
   takerAddress,
   setPrice,
   setFinalize,
   setCheckApproval,
+  chainId,
 }: {
   takerAddress: Address | undefined;
   setPrice: (price: any) => void;
   setFinalize: (finalize: boolean) => void;
   setCheckApproval: (data: boolean) => void;
+  chainId: number;
 }) {
-  const maticPermitTokensDataTyped = MATIC_PERMIT_TOKENS as TokenSupportsPermit;
+  const permitTokensDataTyped = permitTokensByChain(
+    chainId
+  ) as TokenSupportsPermit;
 
+  const buyToken = DEFAULT_BUY_TOKEN(chainId);
+  const sellToken = "usdc";
+
+  const [error, setError] = useState([]);
   const [sellAmount, setSellAmount] = useState("");
   const [buyAmount, setBuyAmount] = useState("");
-  const [sellToken, setSellToken] = useState("usdc");
-  const [buyToken, setBuyToken] = useState("wmatic");
+
   const [tradeDirection] = useState("sell");
-  const { chain } = useNetwork();
-
-  const chainId = chain?.id || 137;
-
-  useEffect(() => {
-    if (chainId === 137) {
-      setSellToken("usdc");
-      setBuyToken("wmatic");
-    }
-    if (chainId === 1) {
-      setSellToken("usdc");
-      setBuyToken("bal");
-    }
-    if (chainId === 42161) {
-      setSellToken("usdc");
-      setBuyToken("weth");
-    }
-  }, [chainId]);
 
   const exchangeProxy =
     chainId === 137
@@ -66,7 +83,7 @@ export default function PriceView({
       ? ETHEREUM_EXCHANGE_PROXY
       : ARBITRUM_EXCHANGE_PROXY;
 
-  const sellTokenByChain = (chainId: number) => {
+  const tokensByChain = (chainId: number) => {
     if (chainId === 137) {
       return POLYGON_TOKENS_BY_SYMBOL;
     }
@@ -79,21 +96,8 @@ export default function PriceView({
     return POLYGON_TOKENS_BY_SYMBOL;
   };
 
-  const buyTokenByChain = (chainId: number) => {
-    if (chainId === 137) {
-      return POLYGON_TOKENS_BY_SYMBOL;
-    }
-    if (chainId === 1) {
-      return ETHEREUM_TOKENS_BY_SYMBOL;
-    }
-    if (chainId === 42161) {
-      return ARBITRUM_TOKENS_BY_SYMBOL;
-    }
-    return POLYGON_TOKENS_BY_SYMBOL;
-  };
-
-  const sellTokenObject = sellTokenByChain(chainId)[sellToken];
-  const buyTokenObject = buyTokenByChain(chainId)[buyToken];
+  const sellTokenObject = tokensByChain(chainId)[sellToken];
+  const buyTokenObject = tokensByChain(chainId)[buyToken];
 
   const sellTokenDecimals = sellTokenObject.decimals;
   const buyTokenDecimals = buyTokenObject.decimals;
@@ -123,9 +127,17 @@ export default function PriceView({
     async function main() {
       const response = await fetch(`/api/price?${qs.stringify(params)}`);
       const data = await response.json();
-      console.log(data, "<--data");
-      setBuyAmount(formatUnits(data.buyAmount, 18));
-      setPrice(data);
+
+      if (data?.validationErrors?.length > 0) {
+        // error for sellAmount too low
+        setError(data.validationErrors);
+      } else {
+        setError([]);
+      }
+      if (data.buyAmount) {
+        setBuyAmount(formatUnits(data.buyAmount, 18));
+        setPrice(data);
+      }
     }
 
     if (sellAmount !== "") {
@@ -153,9 +165,7 @@ export default function PriceView({
   const inSufficientBalance =
     data && sellAmount ? parseUnits(sellAmount, 6) > data.value : true;
 
-  const isSellTokenPermit = Boolean(
-    maticPermitTokensDataTyped[sellTokenAddress]
-  );
+  const isSellTokenPermit = Boolean(permitTokensDataTyped[sellTokenAddress]);
 
   const { data: allowance, refetch } = useContractRead({
     address: sellTokenObject.address,
@@ -198,7 +208,7 @@ export default function PriceView({
             <div className="mb-6">
               <div className="flex items-center">
                 <label htmlFor="sell" className="text-gray-300 mb-2 mr-2">
-                  Sell USDC
+                  Sell {sellTokenObject.symbol}
                 </label>
                 <Image
                   alt={sellToken}
@@ -230,7 +240,7 @@ export default function PriceView({
                   htmlFor="buy-amount"
                   className="block text-gray-300 mb-2 mr-2"
                 >
-                  Buy WMATIC
+                  Buy {buyTokenObject.symbol}
                 </label>
                 <Image
                   alt={buyToken}
@@ -252,7 +262,12 @@ export default function PriceView({
               </div>
             </div>
             <hr className="my-6 border-gray-700" />
-
+            {error.length > 0 &&
+              error.map(({ field, code, reason, description }, index) => (
+                <div key={index} className="text-red-500 text-sm mb-4">
+                  [{code}] {reason} - {description}
+                </div>
+              ))}
             {takerAddress ? (
               <ApproveOrReviewButton
                 sellTokenAddress={sellTokenObject.address}

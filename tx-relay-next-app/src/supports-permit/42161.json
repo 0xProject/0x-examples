@@ -1,0 +1,996 @@
+{
+  "0x82af49447d8a07e3bd95bd0d56f35241523fbab1": {
+    "kind": "permit",
+    "domain": {
+      "name": "Wrapped Ether",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1"
+    },
+    "domainSeparator": "0xac33225466df015cad7b0e1bf31afc69a49f20d95501a98d9644ad21163469a0",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8": {
+    "kind": "permit",
+    "domain": {
+      "name": "USD Coin (Arb1)",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8"
+    },
+    "domainSeparator": "0xa074269f06a6961e917f3c53d7204a31a08aec9a5f4a5801e8a8f837483b62a0",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9": {
+    "kind": "permit",
+    "domain": {
+      "name": "Tether USD",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9"
+    },
+    "domainSeparator": "0xac9d14034394f4b1d4bb6a20191a30c20faf508b6c4670e931b954eb281b8a33",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xaf88d065e77c8cc2239327c5edb3a432268e5831": {
+    "kind": "permit",
+    "domain": {
+      "name": "USD Coin",
+      "version": "2",
+      "chainId": 42161,
+      "verifyingContract": "0xaf88d065e77c8cc2239327c5edb3a432268e5831"
+    },
+    "domainSeparator": "0x08d11903f8419e68b1b8721bcbe2e9fc68569122a77ef18c216f10b3b5112c78",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x912ce59144191c1204e64559fe8253a0e49e6548": {
+    "kind": "permit",
+    "domain": {
+      "name": "Arbitrum",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x912ce59144191c1204e64559fe8253a0e49e6548"
+    },
+    "domainSeparator": "0x81e28e6f37e32d4756bbeaf3c057b82178ac53398af819adfc680fad31b2ecd5",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f": {
+    "kind": "permit",
+    "domain": {
+      "name": "Wrapped BTC",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f"
+    },
+    "domainSeparator": "0x5a8dcb3325ce248306e60935ba6afde41646fd4e466b684babc515bce77ce7af",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1": {
+    "kind": "permit",
+    "domain": {
+      "name": "Dai Stablecoin",
+      "version": "2",
+      "chainId": 42161,
+      "verifyingContract": "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1"
+    },
+    "domainSeparator": "0x8990f9dbb6294602194fe5f05549dd56bac20e2291d6034e1ba5746495dc4d37",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xf97f4df75117a78c1a5a0dbb814af92458539fb4": {
+    "kind": "permit",
+    "domain": {
+      "name": "ChainLink Token",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xf97f4df75117a78c1a5a0dbb814af92458539fb4"
+    },
+    "domainSeparator": "0x42684971c6f486437d3de866e7dafff06b9b8f570323c8f2dcc519e998333f97",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x0c880f6761f1af8d9aa9c466984b80dab9a8c9e8": {
+    "kind": "permit",
+    "domain": {
+      "name": "Pendle",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x0c880f6761f1af8d9aa9c466984b80dab9a8c9e8"
+    },
+    "domainSeparator": "0x51c881379d502b27709ba0ee4b7c17e4aa2ed1cea04d32666e9c7a0665a40bf5",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x539bde0d7dbd336b79148aa742883198bbf60342": {
+    "kind": "permit",
+    "domain": {
+      "name": "MAGIC",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x539bde0d7dbd336b79148aa742883198bbf60342"
+    },
+    "domainSeparator": "0xaeb5495f10bc7e5c8deaa07660bbe8c30ed27b8a64be945a589bb21e3531ae18",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xeb466342c4d449bc9f53a865d5cb90586f405215": {
+    "kind": "permit",
+    "domain": {
+      "name": "Axelar Wrapped USDC",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xeb466342c4d449bc9f53a865d5cb90586f405215"
+    },
+    "domainSeparator": "0x6d3826532b7502fc544874e82f93738a4a4660589ef9d12a74659907c3feefbf",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xec70dcb4a1efa46b8f2d97c310c9c4790ba5ffa8": {
+    "kind": "permit",
+    "domain": {
+      "name": "Rocket Pool ETH",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xec70dcb4a1efa46b8f2d97c310c9c4790ba5ffa8"
+    },
+    "domainSeparator": "0x35e3c9df6e2be050d3decdb775e82cfb817a802aa7b976f9ca3e1a99f9f239d6",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xfa5ed56a203466cbbc2430a43c66b9d8723528e7": {
+    "kind": "permit",
+    "domain": {
+      "name": "agEUR",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xfa5ed56a203466cbbc2430a43c66b9d8723528e7"
+    },
+    "domainSeparator": "0x113b07a53197177b838e31b394805c93ece5d3a1980b84925f25dbdff58c7380",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xda1cd1711743e57dd57102e9e61b75f3587703da": {
+    "kind": "permit",
+    "domain": {
+      "name": "Balancer Aave v3 Boosted Pool (WETH)",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xda1cd1711743e57dd57102e9e61b75f3587703da"
+    },
+    "domainSeparator": "0x9ff79cf67261134e8b49ee01d9a026c6bffa483f70294812f6661bc3d95bacac",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x7c82a23b4c48d796dee36a9ca215b641c6a8709d": {
+    "kind": "permit",
+    "domain": {
+      "name": "Balancer Aave v3 Boosted Pool (USDC)",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x7c82a23b4c48d796dee36a9ca215b641c6a8709d"
+    },
+    "domainSeparator": "0xaa7fa076eb92f437eef38a502de6e5129091aeb181e1c0c828fdfbb12dbba524",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xbd724eb087d4cc0f61a5fed1fffaf937937e14de": {
+    "kind": "permit",
+    "domain": {
+      "name": "Balancer Aave v3 Boosted Pool (USDC)",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xbd724eb087d4cc0f61a5fed1fffaf937937e14de"
+    },
+    "domainSeparator": "0xc66069a7f1e816f993e7e8913d104b82795e2b7356777f3bc7295827cae5be13",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xcafcd85d8ca7ad1e1c6f82f651fa15e33aefd07b": {
+    "kind": "permit",
+    "domain": {
+      "name": "Wootrade Network",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xcafcd85d8ca7ad1e1c6f82f651fa15e33aefd07b"
+    },
+    "domainSeparator": "0xb59b2469ec014bc2ac90ac9db313858c298b9183fe94671483048302d2f20167",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x93b346b6bc2548da6a1e7d98e9a421b42541425b": {
+    "kind": "permit",
+    "domain": {
+      "name": "LUSD Stablecoin",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x93b346b6bc2548da6a1e7d98e9a421b42541425b"
+    },
+    "domainSeparator": "0xe8c9f0a6a4a13761b98d5003db88c57f851f40dfdc00cba66e682a27da797501",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x6c2c06790b3e3e3c38e12ee22f8183b37a13ee55": {
+    "kind": "permit",
+    "domain": {
+      "name": "Dopex Governance Token",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x6c2c06790b3e3e3c38e12ee22f8183b37a13ee55"
+    },
+    "domainSeparator": "0x68d2089ebe0c8c31ca76fca9b480da6b2e04ee9c98d644a648bc2c0a282c01f5",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x6c84a8f1c29108f47a79964b5fe888d4f4d0de40": {
+    "kind": "permit",
+    "domain": {
+      "name": "Arbitrum tBTC v2",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x6c84a8f1c29108f47a79964b5fe888d4f4d0de40"
+    },
+    "domainSeparator": "0x5adb34e37bb6c611e38b389f6f230bc6d3782833ec6983b8201f822a9f835f6d",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x13ad51ed4f1b7e9dc168d8a00cb3f4ddd85efa60": {
+    "kind": "permit",
+    "domain": {
+      "name": "Lido DAO Token",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x13ad51ed4f1b7e9dc168d8a00cb3f4ddd85efa60"
+    },
+    "domainSeparator": "0x81b0c96c44a52f3c065233fbbd5b2ef65b4900f707b327e6c0385b9251b52af6",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x9e34631547adcf2f8cefa0f5f223955c7b137571": {
+    "kind": "permit",
+    "domain": {
+      "name": "Balancer Aave v3 Boosted Pool (DAI)",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x9e34631547adcf2f8cefa0f5f223955c7b137571"
+    },
+    "domainSeparator": "0xdf71f1bd6cd0f9b412cead15f2090b6f214afafea2050ebe96f05035cb991afa",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x4739e50b59b552d490d3fdc60d200977a38510c0": {
+    "kind": "permit",
+    "domain": {
+      "name": "Balancer Aave v3 Boosted Pool (USDT)",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x4739e50b59b552d490d3fdc60d200977a38510c0"
+    },
+    "domainSeparator": "0xcd40d2077d61343051885f060761672394d55d05510b1801e408a19e2e83046a",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xad28940024117b442a9efb6d0f25c8b59e1c950b": {
+    "kind": "permit",
+    "domain": {
+      "name": "Balancer Aave v3 Boosted Pool (WETH)",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xad28940024117b442a9efb6d0f25c8b59e1c950b"
+    },
+    "domainSeparator": "0x1b667f32af74c21379141f4063fd15b6599d963f515aee16357d4a8d9bda3917",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x9cfb13e6c11054ac9fcb92ba89644f30775436e4": {
+    "kind": "permit",
+    "domain": {
+      "name": "Axelar Wrapped wstETH",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x9cfb13e6c11054ac9fcb92ba89644f30775436e4"
+    },
+    "domainSeparator": "0xaf4be73354b75009da49170673bda7bb02df816fd4324d2731d3b905ec87c01a",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a": {
+    "kind": "permit",
+    "domain": {
+      "name": "Magic Internet Money",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a"
+    },
+    "domainSeparator": "0x5f3b7300686183f6f8df3013c5d37ebea182596964b35908b266ead50015be8b",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xc46be4b8bb6b5a3d3120660efae9c5416318ed40": {
+    "kind": "permit",
+    "domain": {
+      "name": "Balancer Aave v3 Boosted Pool (USDT)",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xc46be4b8bb6b5a3d3120660efae9c5416318ed40"
+    },
+    "domainSeparator": "0x4ca1f0b7d26b8e75af7ab0f1d478cd0defd5a8d070ba8204905f03819f98a57f",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xd74f5255d557944cf7dd0e45ff521520002d5748": {
+    "kind": "permit",
+    "domain": {
+      "name": "Sperax USD",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xd74f5255d557944cf7dd0e45ff521520002d5748"
+    },
+    "domainSeparator": "0xb867823257323749c326b07d00f5e52563d468947e16373b65004ded60afe2eb",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x40af308e3d07ec769d85eb80afb116525ff4ac99": {
+    "kind": "permit",
+    "domain": {
+      "name": "Balancer Aave v3 Boosted Pool (USDCe)",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x40af308e3d07ec769d85eb80afb116525ff4ac99"
+    },
+    "domainSeparator": "0x5fb462aa0158c7980d03a555b550defeea034f0229d0474a99a61892d2e1b15b",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xfa7f8980b0f1e64a2062791cc3b0871572f1f7f0": {
+    "kind": "permit",
+    "domain": {
+      "name": "Uniswap",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xfa7f8980b0f1e64a2062791cc3b0871572f1f7f0"
+    },
+    "domainSeparator": "0x099ffbe1fad32e6ee5947d0aabd3cfb546531f2d79893c671ea5cfd8f210d7a0",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x033f193b3fceb22a440e89a2867e8fee181594d9": {
+    "kind": "permit",
+    "domain": {
+      "chainId": 42161,
+      "verifyingContract": "0x033f193b3fceb22a440e89a2867e8fee181594d9"
+    },
+    "domainSeparator": "0x2522091834862d50c1a641d0f27a2fcbdc3668bd298d0290c34c2f06d75285e4",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x6fc2680d8ad8e8312191441b4eca9eff8d06b45a": {
+    "kind": "permit",
+    "domain": {
+      "name": "Choke",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x6fc2680d8ad8e8312191441b4eca9eff8d06b45a"
+    },
+    "domainSeparator": "0x7a5b555a31983c64bec7f0e8ff0589cad190a4260b3b4575967625bbd220e7d6",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xbfbcfe8873fe28dfa25f1099282b088d52bbad9c": {
+    "kind": "permit",
+    "domain": {
+      "name": "Equilibria Token",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xbfbcfe8873fe28dfa25f1099282b088d52bbad9c"
+    },
+    "domainSeparator": "0x23a50d1a7d5e2282a483f6e0608102d35e9b0aba0ca26e9bf05e077d67e8b5ee",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x3a18dcc9745edcd1ef33ecb93b0b6eba5671e7ca": {
+    "kind": "permit",
+    "domain": {
+      "name": "Kujira native asset",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x3a18dcc9745edcd1ef33ecb93b0b6eba5671e7ca"
+    },
+    "domainSeparator": "0xfb143398efac8fa3101f8b21bd69d885d724e9cf93ed44e4f5bbdcce46f3c894",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x59a729658e9245b0cf1f8cb9fb37945d2b06ea27": {
+    "kind": "permit",
+    "domain": {
+      "name": "GenomesDAO",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x59a729658e9245b0cf1f8cb9fb37945d2b06ea27"
+    },
+    "domainSeparator": "0xf7971d94847ae63a171b9f59c6596a939dbf7cf57112317a1811f08699a1f92c",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x289ba1701c2f088cf0faf8b3705246331cb8a839": {
+    "kind": "permit",
+    "domain": {
+      "name": "Livepeer Token",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x289ba1701c2f088cf0faf8b3705246331cb8a839"
+    },
+    "domainSeparator": "0x5ff74acdc5611d02f7e8b3546518fcc050cf24fce263966943de517e9b63649d",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x17fc002b466eec40dae837fc4be5c67993ddbd6f": {
+    "kind": "permit",
+    "domain": {
+      "name": "Frax",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x17fc002b466eec40dae837fc4be5c67993ddbd6f"
+    },
+    "domainSeparator": "0x66bf3ec29abafbf17148297fbefdd3632a17654c85419b3505decc968d3aad8a",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xe4dddfe67e7164b0fe14e218d80dc4c08edc01cb": {
+    "kind": "permit",
+    "domain": {
+      "name": "Kyber Network Crystal v2",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xe4dddfe67e7164b0fe14e218d80dc4c08edc01cb"
+    },
+    "domainSeparator": "0x91776f0aa1fa00cc9b4ec5e84d9422d69b147c7a3e45822b61ee9e35f72965b2",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x431402e8b9de9aa016c743880e04e517074d8cec": {
+    "kind": "permit",
+    "domain": {
+      "name": "Hegic",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x431402e8b9de9aa016c743880e04e517074d8cec"
+    },
+    "domainSeparator": "0x439cca74247f5494d05637d96e9cb4d5f92795b59dc7c1713714d0bfd01522cd",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x8d9ba570d6cb60c7e3e0f31343efe75ab8e65fb1": {
+    "kind": "permit",
+    "domain": {
+      "name": "Governance OHM",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x8d9ba570d6cb60c7e3e0f31343efe75ab8e65fb1"
+    },
+    "domainSeparator": "0xd9ca5d33f99c0c28111b70ac8a35e38a66091e708d4e64bc567d178db25f8ae7",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x7a5d193fe4ed9098f7eadc99797087c96b002907": {
+    "kind": "permit",
+    "domain": {
+      "name": "Plutus ARB",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x7a5d193fe4ed9098f7eadc99797087c96b002907"
+    },
+    "domainSeparator": "0xbdccbb9addcd32986701b00bf5cdc5c948d161457d2eef9584f6b587ad9d5518",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x6cb787a419c3e6ee2e9ff365856c29cd10659113": {
+    "kind": "permit",
+    "domain": {
+      "name": "Balancer Aave v3 Boosted Pool (DAI)",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x6cb787a419c3e6ee2e9ff365856c29cd10659113"
+    },
+    "domainSeparator": "0x0ee9543d5216d4eef06fed6a661597f4581b18567dcbfbfcfba4c8ded8bf8fdf",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x1debd73e752beaf79865fd6446b0c970eae7732f": {
+    "kind": "permit",
+    "domain": {
+      "name": "Coinbase Wrapped Staked ETH",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x1debd73e752beaf79865fd6446b0c970eae7732f"
+    },
+    "domainSeparator": "0x7126f5ba5fed3ace1c55def939e8a0644c20171ef4d745d52ce532c33d32a869",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x4cfa50b7ce747e2d61724fcac57f24b748ff2b2a": {
+    "kind": "permit",
+    "domain": {
+      "name": "Fluid USDC",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x4cfa50b7ce747e2d61724fcac57f24b748ff2b2a"
+    },
+    "domainSeparator": "0xe936828fd531a3eeef53ff40cc5fb0ba30d0e32210dae17d82826fa37fab7322",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x040d1edc9569d4bab2d15287dc5a4f10f56a56b8": {
+    "kind": "permit",
+    "domain": {
+      "name": "Balancer",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x040d1edc9569d4bab2d15287dc5a4f10f56a56b8"
+    },
+    "domainSeparator": "0x55234f3bdaa50f5d9d13a9ee51bd90ac4c58d3bff1f22b3df1476d8eb5bf6ba7",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xa684cd057951541187f288294a1e1c2646aa2d24": {
+    "kind": "permit",
+    "domain": {
+      "name": "Vesta",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xa684cd057951541187f288294a1e1c2646aa2d24"
+    },
+    "domainSeparator": "0x969c428ad232f2c81c5e0afa2aa960d956c931aac61c57a3782dff50fdb45cfa",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x1622bf67e6e5747b81866fe0b85178a93c7f86e3": {
+    "kind": "permit",
+    "domain": {
+      "name": "Umami",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x1622bf67e6e5747b81866fe0b85178a93c7f86e3"
+    },
+    "domainSeparator": "0x00da32098b5ddf0d199820c9695703bfdb5326e1bc1250a2ed112f7c3cb6e3fb",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x0341c0c0ec423328621788d4854119b97f44e391": {
+    "kind": "permit",
+    "domain": {
+      "name": "Silo Governance Token",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x0341c0c0ec423328621788d4854119b97f44e391"
+    },
+    "domainSeparator": "0x9357f3433dfa7a0a342e4b2e76877aa963bce94715a873b7357de912eef54466",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xe9a5af50874c0ef2748b5db70104b5ccb5557f6d": {
+    "kind": "permit",
+    "domain": {
+      "name": "GMBL COMPUTER CHiP",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xe9a5af50874c0ef2748b5db70104b5ccb5557f6d"
+    },
+    "domainSeparator": "0x0f18bd463dfcfc994bea956c2e0837701f07f3c43a0d844b4601ae0329ad16d9",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x11bf4f05eb28b802ed3ab672594decb20ffe2313": {
+    "kind": "permit",
+    "domain": {
+      "name": "Aury",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x11bf4f05eb28b802ed3ab672594decb20ffe2313"
+    },
+    "domainSeparator": "0x9ac40fd92c169ae1662a7abb36f8cd4c97a7fd109f056e3397e15cb6b4ecaecf",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x3404149e9ee6f17fb41db1ce593ee48fbdcd9506": {
+    "kind": "permit",
+    "domain": {
+      "name": "Hydranet",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x3404149e9ee6f17fb41db1ce593ee48fbdcd9506"
+    },
+    "domainSeparator": "0x0d928ff7e75dc9ed5d26dafb3e05db25ffc9cafff2e511070c140fdcf8a3d1df",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x6a7661795c374c0bfc635934efaddff3a7ee23b6": {
+    "kind": "permit",
+    "domain": {
+      "name": "Dola USD Stablecoin",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x6a7661795c374c0bfc635934efaddff3a7ee23b6"
+    },
+    "domainSeparator": "0x4064c73270eff2a82d0aa1ad0699cba19e46719a8f1fb4d1bedcdf3974279170",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x561877b6b3dd7651313794e5f2894b2f18be0766": {
+    "kind": "permit",
+    "domain": {
+      "name": "Matic Token",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x561877b6b3dd7651313794e5f2894b2f18be0766"
+    },
+    "domainSeparator": "0xd42fe0e24d887205b024826769d9a6a49c3bee6c1204414c3b896e94e7577160",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x11cdb42b0eb46d95f990bedd4695a6e3fa034978": {
+    "kind": "permit",
+    "domain": {
+      "name": "Curve DAO Token",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x11cdb42b0eb46d95f990bedd4695a6e3fa034978"
+    },
+    "domainSeparator": "0xb1f5b77620efc304fdb49897f895066a7213f125f941add0dbb27e6c8e8be41c",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x10393c20975cf177a3513071bc110f7962cd67da": {
+    "kind": "permit",
+    "domain": {
+      "name": "Jones DAO",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x10393c20975cf177a3513071bc110f7962cd67da"
+    },
+    "domainSeparator": "0x14496d77f6c9931112b45d7cf06b288ac37d00d8f5ec0c73b5ba8babc6fd6d6d",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x323665443cef804a3b5206103304bd4872ea4253": {
+    "kind": "permit",
+    "domain": {
+      "name": "USDV",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x323665443cef804a3b5206103304bd4872ea4253"
+    },
+    "domainSeparator": "0xc57992fc1143727981085c9708ab96a5f7dc734b4b938911779e644812eca6f6",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xda661fa59320b808c5a6d23579fcfedf1fd3cf36": {
+    "kind": "permit",
+    "domain": {
+      "name": "Mobox",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xda661fa59320b808c5a6d23579fcfedf1fd3cf36"
+    },
+    "domainSeparator": "0xf83025786502260cc5df28e6560f05ff344a7a17285b551930cc34aaf74d4faa",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x4568ca00299819998501914690d6010ae48a59ba": {
+    "kind": "permit",
+    "domain": {
+      "name": "Army of Fortune Coin",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x4568ca00299819998501914690d6010ae48a59ba"
+    },
+    "domainSeparator": "0x38e1ffa0637f753bd3cfa5ec51b0e570d0fcd539efea7e32e6c3f2b86de2cd4d",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x65c936f008bc34fe819bce9fa5afd9dc2d49977f": {
+    "kind": "permit",
+    "domain": {
+      "name": "Y2K",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x65c936f008bc34fe819bce9fa5afd9dc2d49977f"
+    },
+    "domainSeparator": "0x9fee4e3ba2ee7d2fb61945a5264bdb69449bad4c9744f5446dd8457ba204f39f",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x51fc0f6660482ea73330e414efd7808811a57fa2": {
+    "kind": "permit",
+    "domain": {
+      "name": "Premia",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x51fc0f6660482ea73330e414efd7808811a57fa2"
+    },
+    "domainSeparator": "0x5e3fae7b512e035afb4c8e92cbd3c7a544cea5644ab21ea2c5b075acf6eadd3e",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xd4d42f0b6def4ce0383636770ef773390d85c61a": {
+    "kind": "permit",
+    "domain": {
+      "name": "SushiToken",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xd4d42f0b6def4ce0383636770ef773390d85c61a"
+    },
+    "domainSeparator": "0x4ef115fb229fd2eb09f243af11960e76ca878d8aba45e22b0e00acb76bbeba05",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xba5ddd1f9d7f570dc94a51479a000e3bce967196": {
+    "kind": "permit",
+    "domain": {
+      "name": "Aave Token",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xba5ddd1f9d7f570dc94a51479a000e3bce967196"
+    },
+    "domainSeparator": "0xc31695252b74d6f3b187ea01453a3cd77f4e20025145fd2561d3efc4237f91db",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x9d2f299715d94d8a7e6f5eaa8e654e8c74a988a7": {
+    "kind": "permit",
+    "domain": {
+      "name": "Frax Share",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x9d2f299715d94d8a7e6f5eaa8e654e8c74a988a7"
+    },
+    "domainSeparator": "0xc3e042a50b3cdcaf4b7f61df755a870ceae1b2896001cbeb8b3f6808e9c63864",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x9842989969687f7d249d01cae1d2ff6b7b6b6d35": {
+    "kind": "permit",
+    "domain": {
+      "name": "New Crypto Space",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x9842989969687f7d249d01cae1d2ff6b7b6b6d35"
+    },
+    "domainSeparator": "0xe4b400398effe9c1efde1602bd39a22d72a6659ac33050fe6fca47422a1c60bc",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xe85b662fe97e8562f4099d8a1d5a92d4b453bf30": {
+    "kind": "permit",
+    "domain": {
+      "name": "Thales DAO Token",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xe85b662fe97e8562f4099d8a1d5a92d4b453bf30"
+    },
+    "domainSeparator": "0xfbbf91049c90dfba6fe0e16535f8078c419732b577bd8c2cd015b3c9e96aa1ad",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x95146881b86b3ee99e63705ec87afe29fcc044d9": {
+    "kind": "permit",
+    "domain": {
+      "name": "Vertex",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x95146881b86b3ee99e63705ec87afe29fcc044d9"
+    },
+    "domainSeparator": "0xdaeea45d3fb7202805be63f0b2a9f12c5485fbcf98395058f2cdabebdb72a066",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xee02583596aee94cccb7e8ccd3921d955f17982a": {
+    "kind": "permit",
+    "domain": {
+      "name": "Balancer Aave v3 Boosted StablePool",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xee02583596aee94cccb7e8ccd3921d955f17982a"
+    },
+    "domainSeparator": "0x43eb080a57e216b5cd087c3e74e0e055a629059edce7178ad79b488e8437af0d",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xeeeeeb57642040be42185f49c52f7e9b38f8eeee": {
+    "kind": "permit",
+    "domain": {
+      "name": "Elk",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xeeeeeb57642040be42185f49c52f7e9b38f8eeee"
+    },
+    "domainSeparator": "0x809307dda4bbb79edac338daa73286edcbcfcf209da442f7dc6bc875c5b2a90c",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xf0cb2dc0db5e6c66b9a70ac27b06b878da017028": {
+    "kind": "permit",
+    "domain": {
+      "name": "Olympus",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xf0cb2dc0db5e6c66b9a70ac27b06b878da017028"
+    },
+    "domainSeparator": "0x2095a643c76274909f15ec7c48880ea12db70eac6ed8dd5786c146838cff3cc3",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x0fc0c323cf76e188654d63d62e668cabec7a525b": {
+    "kind": "permit",
+    "domain": {
+      "name": "Lumerin",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x0fc0c323cf76e188654d63d62e668cabec7a525b"
+    },
+    "domainSeparator": "0xefdea1880a5164753e5a2b6a690d5b83aa8e2ae0335a26b1112b9f30cebeef0b",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xadd5620057336f868eae78a451c503ae7b576bad": {
+    "kind": "permit",
+    "domain": {
+      "name": "noiseGPT",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xadd5620057336f868eae78a451c503ae7b576bad"
+    },
+    "domainSeparator": "0xee7256df7287899b3548197886782dc9dbe5834e828d3c4fbc8ec05eeadf71f9",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xb448ec505c924944ca8b2c55ef05c299ee0781df": {
+    "kind": "permit",
+    "domain": {
+      "name": "Axelar Wrapped KNC",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xb448ec505c924944ca8b2c55ef05c299ee0781df"
+    },
+    "domainSeparator": "0x70b888c0a1204528695141e49066cc3f489fe4b71b8970856abc2e499d502d33",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x3e6648c5a70a150a88bce65f4ad4d506fe15d2af": {
+    "kind": "permit",
+    "domain": {
+      "name": "Spell Token",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x3e6648c5a70a150a88bce65f4ad4d506fe15d2af"
+    },
+    "domainSeparator": "0x8f927bfc89cf1757024f3079a9261bb86911a6e6538172c41cf1af3818853772",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xc628534100180582e43271448098cb2c185795bd": {
+    "kind": "permit",
+    "domain": {
+      "name": "Flashstake",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xc628534100180582e43271448098cb2c185795bd"
+    },
+    "domainSeparator": "0x1a95f759e322bc2f8ec922628a5628e24cfb749e3f28d8d8c391d599c78511ca",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x244ae62439c1ef3187f244d8604ac2c391ef2b53": {
+    "kind": "permit",
+    "domain": {
+      "name": "Modular",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x244ae62439c1ef3187f244d8604ac2c391ef2b53"
+    },
+    "domainSeparator": "0x7b12e0de7fdef56b12039f83e7df006bc2ab78b7395947d9c0c735ba2a31e214",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x5a7f39435fd9c381e4932fa2047c9a5136a5e3e7": {
+    "kind": "permit",
+    "domain": {
+      "name": "Balancer wstETH-Boosted Aave WETH StablePool",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x5a7f39435fd9c381e4932fa2047c9a5136a5e3e7"
+    },
+    "domainSeparator": "0xd94fbd54dc991e919648cec126ef095324077c4c9613db3e877d4f3515b65c5f",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x07e49d5de43dda6162fa28d24d5935c151875283": {
+    "kind": "permit",
+    "domain": {
+      "name": "GOVI",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x07e49d5de43dda6162fa28d24d5935c151875283"
+    },
+    "domainSeparator": "0x28bf4feefbc02dd51f22dcb694a7a3856d3494f18f81fc8b982e5c3db015eb8e",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xcf985aba4647a432e60efceeb8054bbd64244305": {
+    "kind": "permit",
+    "domain": {
+      "name": "EUROe Stablecoin",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xcf985aba4647a432e60efceeb8054bbd64244305"
+    },
+    "domainSeparator": "0xfe7d54a9b8535f772670b7063c0b2372a921ac444a8df028901b696591a1b60f",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xc6eee8cb7643ec2f05f46d569e9ec8ef8b41b389": {
+    "kind": "permit",
+    "domain": {
+      "name": "Balancer Aave v3 Boosted StablePool",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xc6eee8cb7643ec2f05f46d569e9ec8ef8b41b389"
+    },
+    "domainSeparator": "0xfc3c2638bd44108811f17173a2d6ea194a849431206469af4156862c3c5e8bab",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x7dd747d63b094971e6638313a6a2685e80c7fb2e": {
+    "kind": "permit",
+    "domain": {
+      "name": "STFX",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x7dd747d63b094971e6638313a6a2685e80c7fb2e"
+    },
+    "domainSeparator": "0x9e469fd59590e24a7c6fa119b05dc63a4a7c5ee64109c7b798122e755f3c87a4",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x031d35296154279dc1984dcd93e392b1f946737b": {
+    "kind": "permit",
+    "domain": {
+      "name": "Cap",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x031d35296154279dc1984dcd93e392b1f946737b"
+    },
+    "domainSeparator": "0x4df97143d6bf104d37b12bf7681947d9f1eaa816dad24b32da45affccb85672f",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0xc5102fe9359fd9a28f877a67e36b0f050d81a3cc": {
+    "kind": "permit",
+    "domain": {
+      "name": "Hop",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0xc5102fe9359fd9a28f877a67e36b0f050d81a3cc"
+    },
+    "domainSeparator": "0x4f2e515e4537a9dc2ce2634b0edd9f1ac6307a8a5fdecbdec2d08a3815bdbb36",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  },
+  "0x079504b86d38119f859c4194765029f692b7b7aa": {
+    "kind": "permit",
+    "domain": {
+      "name": "Lyra Token",
+      "version": "1",
+      "chainId": 42161,
+      "verifyingContract": "0x079504b86d38119f859c4194765029f692b7b7aa"
+    },
+    "domainSeparator": "0x090a0e846323e070b62e2fe58591bec85fd56e02cacdc85b4c5e70adb84a6cb5",
+    "domainSeparatorFn": "DOMAIN_SEPARATOR()",
+    "nonce": "nonces()"
+  }
+}

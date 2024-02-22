@@ -3,7 +3,7 @@ import { type NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  console.log(searchParams, "<--searchParams");
+
   try {
     const res = await fetch(
       `https://api.0x.org/tx-relay/v1/swap/price?${searchParams}`,
@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
       }
     );
     const data = await res.json();
-    console.log(data, "<-/price data");
+
     return Response.json(data);
   } catch (error) {
     console.log(error);

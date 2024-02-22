@@ -22,6 +22,7 @@ export default function QuoteView({
   setQuote,
   onSubmitSuccess,
   takerAddress,
+  chainId,
 }: {
   checkApproval: boolean;
   price: TxRelayPriceResponse;
@@ -29,6 +30,7 @@ export default function QuoteView({
   setQuote: (price: any) => void;
   onSubmitSuccess: (tradeHash: string) => void;
   takerAddress: Address | undefined;
+  chainId: number;
 }) {
   const sellTokenInfo = (chainId: number) => {
     switch (chainId) {
@@ -54,9 +56,6 @@ export default function QuoteView({
         return POLYGON_TOKENS_BY_ADDRESS[price.buyTokenAddress.toLowerCase()];
     }
   };
-
-  const { chain } = useNetwork();
-  const chainId = chain?.id;
 
   // signature for approval (if gasless approval)
   const [gaslessApprovalSignature, setGaslessApprovalSignature] =
