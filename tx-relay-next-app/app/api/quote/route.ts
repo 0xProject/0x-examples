@@ -8,8 +8,8 @@ export async function GET(request: NextRequest) {
     `https://api.0x.org/tx-relay/v1/swap/quote?${searchParams}`,
     {
       headers: {
-        "0x-api-key": "57b28c7c-3bea-4367-be35-34f15013317c", // // Replace with your own 0x API key https://dashboard.0x.org/create-account
-        "0x-chain-id": "137",
+        "0x-api-key": process.env.NEXT_PUBLIC_0X_API_KEY as string,
+        "0x-chain-id": searchParams.get("chainId") as string,
       },
     }
   );

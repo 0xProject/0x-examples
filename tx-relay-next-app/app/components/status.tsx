@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { useNetwork } from "wagmi";
 
 type StatusResponse = {
   transactions: { hash: string; timestamp: number }[];
@@ -9,13 +10,17 @@ type StatusResponse = {
 
 export default function StatusView({ tradeHash }: { tradeHash: string }) {
   const [statusData, setStatusData] = useState<StatusResponse>();
-
+  const { chain } = useNetwork();
   const statusDataRef = useRef(); // useRef to keep track of statusData
 
   // Check the status of a trade
   useEffect(() => {
     async function fetchStatus() {
-      const response = await fetch(`/api/status?tradeHash=${tradeHash}`);
+      if (!chain) return;
+      console.log("chain.id", chain.id);
+      const response = await fetch(
+        `/api/status?tradeHash=${tradeHash}&chainId=${chain.id}`
+      );
       const data = await response.json();
 
       return data;
@@ -35,7 +40,7 @@ export default function StatusView({ tradeHash }: { tradeHash: string }) {
       }
     }, 3000);
     return () => clearInterval(intervalId); // Clear the interval when the component unmounts
-  }, [tradeHash]);
+  }, [tradeHash, chain]);
 
   return (
     <div className="container mx-auto p-20 text-center">

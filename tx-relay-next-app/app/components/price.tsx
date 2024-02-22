@@ -1,8 +1,21 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useEffect, useState, ChangeEvent } from "react";
+import { use, useEffect, useState } from "react";
 import { formatUnits, parseUnits } from "ethers";
-import { erc20ABI, useBalance, useContractRead, type Address } from "wagmi";
-import { POLYGON_TOKENS_BY_SYMBOL, exchangeProxy } from "../../src/constants";
+import {
+  erc20ABI,
+  useBalance,
+  useContractRead,
+  type Address,
+  useNetwork,
+} from "wagmi";
+import {
+  POLYGON_TOKENS_BY_SYMBOL,
+  POLYGON_EXCHANGE_PROXY,
+  ETHEREUM_TOKENS_BY_SYMBOL,
+  ETHEREUM_EXCHANGE_PROXY,
+  ARBITRUM_TOKENS_BY_SYMBOL,
+  ARBITRUM_EXCHANGE_PROXY,
+} from "../../src/constants";
 import MATIC_PERMIT_TOKENS from "../../src/supports-permit/137.json";
 import type { TokenSupportsPermit } from "../../src/utils/eip712_utils.types";
 import ZeroExLogo from "../../src/images/white-0x-logo.png";
@@ -27,10 +40,64 @@ export default function PriceView({
   const [sellToken, setSellToken] = useState("usdc");
   const [buyToken, setBuyToken] = useState("wmatic");
   const [tradeDirection] = useState("sell");
+  const { chain } = useNetwork();
 
-  const sellTokenDecimals = POLYGON_TOKENS_BY_SYMBOL[sellToken].decimals;
-  const buyTokenDecimals = POLYGON_TOKENS_BY_SYMBOL[buyToken].decimals;
-  const sellTokenAddress = POLYGON_TOKENS_BY_SYMBOL[sellToken].address;
+  const chainId = chain?.id || 137;
+
+  useEffect(() => {
+    if (chainId === 137) {
+      setSellToken("usdc");
+      setBuyToken("wmatic");
+    }
+    if (chainId === 1) {
+      setSellToken("usdc");
+      setBuyToken("bal");
+    }
+    if (chainId === 42161) {
+      setSellToken("usdc");
+      setBuyToken("weth");
+    }
+  }, [chainId]);
+
+  const exchangeProxy =
+    chainId === 137
+      ? POLYGON_EXCHANGE_PROXY
+      : chainId === 1
+      ? ETHEREUM_EXCHANGE_PROXY
+      : ARBITRUM_EXCHANGE_PROXY;
+
+  const sellTokenByChain = (chainId: number) => {
+    if (chainId === 137) {
+      return POLYGON_TOKENS_BY_SYMBOL;
+    }
+    if (chainId === 1) {
+      return ETHEREUM_TOKENS_BY_SYMBOL;
+    }
+    if (chainId === 42161) {
+      return ARBITRUM_TOKENS_BY_SYMBOL;
+    }
+    return POLYGON_TOKENS_BY_SYMBOL;
+  };
+
+  const buyTokenByChain = (chainId: number) => {
+    if (chainId === 137) {
+      return POLYGON_TOKENS_BY_SYMBOL;
+    }
+    if (chainId === 1) {
+      return ETHEREUM_TOKENS_BY_SYMBOL;
+    }
+    if (chainId === 42161) {
+      return ARBITRUM_TOKENS_BY_SYMBOL;
+    }
+    return POLYGON_TOKENS_BY_SYMBOL;
+  };
+
+  const sellTokenObject = sellTokenByChain(chainId)[sellToken];
+  const buyTokenObject = buyTokenByChain(chainId)[buyToken];
+
+  const sellTokenDecimals = sellTokenObject.decimals;
+  const buyTokenDecimals = buyTokenObject.decimals;
+  const sellTokenAddress = sellTokenObject.address;
 
   const parsedSellAmount =
     sellAmount && tradeDirection === "sell"
@@ -45,17 +112,18 @@ export default function PriceView({
   // Fetch price data and set the buyAmount whenever the sellAmount changes
   useEffect(() => {
     const params = {
-      sellToken: POLYGON_TOKENS_BY_SYMBOL[sellToken].address,
-      buyToken: POLYGON_TOKENS_BY_SYMBOL[buyToken].address,
+      sellToken: sellTokenObject.address,
+      buyToken: buyTokenObject.address,
       sellAmount: parsedSellAmount,
       buyAmount: parsedBuyAmount,
       takerAddress,
+      chainId,
     };
 
     async function main() {
       const response = await fetch(`/api/price?${qs.stringify(params)}`);
       const data = await response.json();
-
+      console.log(data, "<--data");
       setBuyAmount(formatUnits(data.buyAmount, 18));
       setPrice(data);
     }
@@ -64,20 +132,23 @@ export default function PriceView({
       main();
     }
   }, [
-    sellAmount,
-    sellToken,
-    buyToken,
-    parsedBuyAmount,
+    sellTokenObject.address,
+    buyTokenObject.address,
     parsedSellAmount,
+    parsedBuyAmount,
     takerAddress,
+    chainId,
+    sellAmount,
     setPrice,
   ]);
 
   // Hook for fetching balance information for specified token for a specific takerAddress
   const { data, isError, isLoading } = useBalance({
     address: takerAddress,
-    token: POLYGON_TOKENS_BY_SYMBOL[sellToken].address, // USDC
+    token: sellTokenObject.address, // USDC
   });
+
+  console.log(data, "<--data");
 
   const inSufficientBalance =
     data && sellAmount ? parseUnits(sellAmount, 6) > data.value : true;
@@ -87,7 +158,7 @@ export default function PriceView({
   );
 
   const { data: allowance, refetch } = useContractRead({
-    address: POLYGON_TOKENS_BY_SYMBOL[sellToken].address,
+    address: sellTokenObject.address,
     abi: erc20ABI,
     functionName: "allowance",
     args: takerAddress ? [takerAddress, exchangeProxy] : undefined,
@@ -132,7 +203,7 @@ export default function PriceView({
                 <Image
                   alt={sellToken}
                   className="h-6 w-6 mr-2 mb-2 rounded-md"
-                  src={POLYGON_TOKENS_BY_SYMBOL[sellToken].logoURI}
+                  src={sellTokenObject.logoURI}
                   width={6}
                   height={6}
                 />
@@ -164,7 +235,7 @@ export default function PriceView({
                 <Image
                   alt={buyToken}
                   className="h-6 w-6 mr-2 mb-2 rounded-md"
-                  src={POLYGON_TOKENS_BY_SYMBOL[buyToken].logoURI}
+                  src={buyTokenObject.logoURI}
                   width={6}
                   height={6}
                 />
@@ -184,7 +255,7 @@ export default function PriceView({
 
             {takerAddress ? (
               <ApproveOrReviewButton
-                sellTokenAddress={POLYGON_TOKENS_BY_SYMBOL[sellToken].address}
+                sellTokenAddress={sellTokenObject.address}
                 takerAddress={takerAddress}
                 onClick={() => {
                   setFinalize(true);
@@ -291,7 +362,9 @@ export default function PriceView({
           </u>{" "}
           and{" "}
           <u className="underline">
-            <a href="https://github.com/0xProject/0x-examples/tree/main/tx-relay-next-app">Code</a>
+            <a href="https://github.com/0xProject/0x-examples/tree/main/tx-relay-next-app">
+              Code
+            </a>
           </u>{" "}
           to build your own
         </p>
