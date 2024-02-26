@@ -11,12 +11,12 @@ export async function GET(request: NextRequest) {
     `https://api.0x.org/tx-relay/v1/swap/status/${tradeHash}`,
     {
       headers: {
-        "0x-api-key": "57b28c7c-3bea-4367-be35-34f15013317c", // // Replace with your own 0x API key https://dashboard.0x.org/create-account
-        "0x-chain-id": "137",
+        "0x-api-key": process.env.NEXT_PUBLIC_0X_API_KEY as string,
+        "0x-chain-id": searchParams.get("chainId") as string,
       },
     }
   );
-  console.log();
+
   const data = await res.json();
 
   console.log(data, "<-/status data");

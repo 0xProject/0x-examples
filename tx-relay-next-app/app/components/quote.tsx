@@ -1,4 +1,4 @@
-import { useSignTypedData, type Address } from "wagmi";
+import { useSignTypedData, type Address, useNetwork } from "wagmi";
 import { useEffect, useState } from "react";
 import qs from "qs";
 import Image from "next/image";
@@ -6,7 +6,11 @@ import {
   TxRelayPriceResponse,
   TxRelayQuoteResponse,
 } from "../../src/utils/types";
-import { POLYGON_TOKENS_BY_ADDRESS } from "../../src/constants";
+import {
+  ARBITRUM_TOKENS_BY_ADDRESS,
+  ETHEREUM_TOKENS_BY_ADDRESS,
+  POLYGON_TOKENS_BY_ADDRESS,
+} from "../../src/constants";
 import { Hex } from "viem";
 import { formatUnits } from "ethers";
 import { SignatureType, splitSignature } from "../../src/utils/signature";
@@ -18,6 +22,7 @@ export default function QuoteView({
   setQuote,
   onSubmitSuccess,
   takerAddress,
+  chainId,
 }: {
   checkApproval: boolean;
   price: TxRelayPriceResponse;
@@ -25,11 +30,32 @@ export default function QuoteView({
   setQuote: (price: any) => void;
   onSubmitSuccess: (tradeHash: string) => void;
   takerAddress: Address | undefined;
+  chainId: number;
 }) {
-  const sellTokenInfo =
-    POLYGON_TOKENS_BY_ADDRESS[price.sellTokenAddress.toLowerCase()];
-  const buyTokenInfo =
-    POLYGON_TOKENS_BY_ADDRESS[price.buyTokenAddress.toLowerCase()];
+  const sellTokenInfo = (chainId: number) => {
+    switch (chainId) {
+      case 137:
+        return POLYGON_TOKENS_BY_ADDRESS[price.sellTokenAddress.toLowerCase()];
+      case 1:
+        return ETHEREUM_TOKENS_BY_ADDRESS[price.sellTokenAddress.toLowerCase()];
+      case 42161:
+        return ARBITRUM_TOKENS_BY_ADDRESS[price.sellTokenAddress.toLowerCase()];
+      default:
+        return POLYGON_TOKENS_BY_ADDRESS[price.sellTokenAddress.toLowerCase()];
+    }
+  };
+  const buyTokenInfo = (chainId: number) => {
+    switch (chainId) {
+      case 137:
+        return POLYGON_TOKENS_BY_ADDRESS[price.buyTokenAddress.toLowerCase()];
+      case 1:
+        return ETHEREUM_TOKENS_BY_ADDRESS[price.buyTokenAddress.toLowerCase()];
+      case 42161:
+        return ARBITRUM_TOKENS_BY_ADDRESS[price.buyTokenAddress.toLowerCase()];
+      default:
+        return POLYGON_TOKENS_BY_ADDRESS[price.buyTokenAddress.toLowerCase()];
+    }
+  };
 
   // signature for approval (if gasless approval)
   const [gaslessApprovalSignature, setGaslessApprovalSignature] =
@@ -105,9 +131,9 @@ export default function QuoteView({
           <div className="text-xl mb-2 text-white">You pay</div>
           <div className="flex items-center text-3xl text-white">
             <Image
-              alt={sellTokenInfo.symbol}
+              alt={sellTokenInfo(chainId || 137).symbol}
               className="h-9 w-9 mr-2 rounded-md"
-              src={sellTokenInfo.logoURI}
+              src={sellTokenInfo(chainId || 137).logoURI}
               width={9}
               height={9}
             />
@@ -120,9 +146,9 @@ export default function QuoteView({
           <div className="text-xl mb-2 text-white">You receive</div>
           <div className="flex items-center text-lg sm:text-3xl text-white">
             <Image
-              alt={buyTokenInfo.symbol}
+              alt={buyTokenInfo(chainId || 137).symbol}
               className="h-9 w-9 mr-2 rounded-md"
-              src={buyTokenInfo.logoURI}
+              src={buyTokenInfo(chainId || 137).logoURI}
               width={9}
               height={9}
             />
@@ -305,10 +331,7 @@ export default function QuoteView({
     return (
       <div>
         {isTradeSigned ? (
-          <div
-            className="bg-slate-500 rounded-sm mb-3
-           text-white text-sm py-2 px-4 break-words"
-          >
+          <div className="bg-slate-500 rounded-sm mb-3text-white text-sm py-2 px-4 break-words">
             Trade Signature: {tradeSignature}
           </div>
         ) : (

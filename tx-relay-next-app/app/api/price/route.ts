@@ -4,16 +4,20 @@ import { type NextRequest } from "next/server";
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
 
-  const res = await fetch(
-    `https://api.0x.org/tx-relay/v1/swap/price?${searchParams}`,
-    {
-      headers: {
-        "0x-api-key": "57b28c7c-3bea-4367-be35-34f15013317c", // Replace with your own 0x API key https://dashboard.0x.org/create-account
-        "0x-chain-id": "137",
-      },
-    }
-  );
-  const data = await res.json();
+  try {
+    const res = await fetch(
+      `https://api.0x.org/tx-relay/v1/swap/price?${searchParams}`,
+      {
+        headers: {
+          "0x-api-key": process.env.NEXT_PUBLIC_0X_API_KEY as string,
+          "0x-chain-id": searchParams.get("chainId") as string,
+        },
+      }
+    );
+    const data = await res.json();
 
-  return Response.json(data);
+    return Response.json(data);
+  } catch (error) {
+    console.log(error);
+  }
 }

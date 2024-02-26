@@ -12,40 +12,24 @@ import {
   ledgerWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import {
-  mainnet,
-  polygon,
-  optimism,
-  arbitrum,
-  base,
-  zora,
-  goerli,
-} from "wagmi/chains";
+import { arbitrum, mainnet, polygon } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [
-    mainnet,
-    polygon,
-    optimism,
-    arbitrum,
-    base,
-    zora,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [goerli] : []),
-  ],
+  [mainnet, polygon, arbitrum],
   [publicProvider()]
 );
 
-const projectId = "669f3565f461ffc127f131e43753b274"; // Replace with your own free key from WalletConnect Cloud https://cloud.walletconnect.com/sign-in
+const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string;
 
 const { wallets } = getDefaultWallets({
-  appName: "RainbowKit demo",
+  appName: "Acctual Hosted Invoice App",
   projectId,
   chains,
 });
 
 const demoAppInfo = {
-  appName: "Rainbowkit Demo",
+  appName: "Acctual Hosted Invoice App",
 };
 
 const connectors = connectorsForWallets([

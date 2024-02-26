@@ -1,36 +1,107 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useEffect, useState, ChangeEvent } from "react";
+import { use, useEffect, useState } from "react";
 import { formatUnits, parseUnits } from "ethers";
-import { erc20ABI, useBalance, useContractRead, type Address } from "wagmi";
-import { POLYGON_TOKENS_BY_SYMBOL, exchangeProxy } from "../../src/constants";
+import {
+  erc20ABI,
+  useBalance,
+  useContractRead,
+  type Address,
+  useNetwork,
+} from "wagmi";
+import {
+  POLYGON_TOKENS_BY_SYMBOL,
+  POLYGON_EXCHANGE_PROXY,
+  ETHEREUM_TOKENS_BY_SYMBOL,
+  ETHEREUM_EXCHANGE_PROXY,
+  ARBITRUM_TOKENS_BY_SYMBOL,
+  ARBITRUM_EXCHANGE_PROXY,
+} from "../../src/constants";
 import MATIC_PERMIT_TOKENS from "../../src/supports-permit/137.json";
+import ETHEREUM_PERMIT_TOKENS from "../../src/supports-permit/1.json";
+import ARBITRUM_PERMIT_TOKENS from "../../src/supports-permit/42161.json";
 import type { TokenSupportsPermit } from "../../src/utils/eip712_utils.types";
 import ZeroExLogo from "../../src/images/white-0x-logo.png";
 import Image from "next/image";
 import qs from "qs";
+
+export const DEFAULT_BUY_TOKEN = (chainId: number) => {
+  if (chainId === 137) {
+    return "wmatic";
+  }
+  if (chainId === 1) {
+    return "bal";
+  }
+  if (chainId === 42161) {
+    return "weth";
+  }
+  return "wmatic";
+};
+
+export const permitTokensByChain = (chainId: number) => {
+  if (chainId === 137) {
+    return MATIC_PERMIT_TOKENS;
+  }
+  if (chainId === 1) {
+    return ETHEREUM_PERMIT_TOKENS;
+  }
+  if (chainId === 42161) {
+    return ARBITRUM_PERMIT_TOKENS;
+  }
+  return MATIC_PERMIT_TOKENS;
+};
 
 export default function PriceView({
   takerAddress,
   setPrice,
   setFinalize,
   setCheckApproval,
+  chainId,
 }: {
   takerAddress: Address | undefined;
   setPrice: (price: any) => void;
   setFinalize: (finalize: boolean) => void;
   setCheckApproval: (data: boolean) => void;
+  chainId: number;
 }) {
-  const maticPermitTokensDataTyped = MATIC_PERMIT_TOKENS as TokenSupportsPermit;
+  const permitTokensDataTyped = permitTokensByChain(
+    chainId
+  ) as TokenSupportsPermit;
 
+  const buyToken = DEFAULT_BUY_TOKEN(chainId);
+  const sellToken = "usdc";
+
+  const [error, setError] = useState([]);
   const [sellAmount, setSellAmount] = useState("");
   const [buyAmount, setBuyAmount] = useState("");
-  const [sellToken, setSellToken] = useState("usdc");
-  const [buyToken, setBuyToken] = useState("wmatic");
+
   const [tradeDirection] = useState("sell");
 
-  const sellTokenDecimals = POLYGON_TOKENS_BY_SYMBOL[sellToken].decimals;
-  const buyTokenDecimals = POLYGON_TOKENS_BY_SYMBOL[buyToken].decimals;
-  const sellTokenAddress = POLYGON_TOKENS_BY_SYMBOL[sellToken].address;
+  const exchangeProxy =
+    chainId === 137
+      ? POLYGON_EXCHANGE_PROXY
+      : chainId === 1
+      ? ETHEREUM_EXCHANGE_PROXY
+      : ARBITRUM_EXCHANGE_PROXY;
+
+  const tokensByChain = (chainId: number) => {
+    if (chainId === 137) {
+      return POLYGON_TOKENS_BY_SYMBOL;
+    }
+    if (chainId === 1) {
+      return ETHEREUM_TOKENS_BY_SYMBOL;
+    }
+    if (chainId === 42161) {
+      return ARBITRUM_TOKENS_BY_SYMBOL;
+    }
+    return POLYGON_TOKENS_BY_SYMBOL;
+  };
+
+  const sellTokenObject = tokensByChain(chainId)[sellToken];
+  const buyTokenObject = tokensByChain(chainId)[buyToken];
+
+  const sellTokenDecimals = sellTokenObject.decimals;
+  const buyTokenDecimals = buyTokenObject.decimals;
+  const sellTokenAddress = sellTokenObject.address;
 
   const parsedSellAmount =
     sellAmount && tradeDirection === "sell"
@@ -45,49 +116,59 @@ export default function PriceView({
   // Fetch price data and set the buyAmount whenever the sellAmount changes
   useEffect(() => {
     const params = {
-      sellToken: POLYGON_TOKENS_BY_SYMBOL[sellToken].address,
-      buyToken: POLYGON_TOKENS_BY_SYMBOL[buyToken].address,
+      sellToken: sellTokenObject.address,
+      buyToken: buyTokenObject.address,
       sellAmount: parsedSellAmount,
       buyAmount: parsedBuyAmount,
       takerAddress,
+      chainId,
     };
 
     async function main() {
       const response = await fetch(`/api/price?${qs.stringify(params)}`);
       const data = await response.json();
 
-      setBuyAmount(formatUnits(data.buyAmount, 18));
-      setPrice(data);
+      if (data?.validationErrors?.length > 0) {
+        // error for sellAmount too low
+        setError(data.validationErrors);
+      } else {
+        setError([]);
+      }
+      if (data.buyAmount) {
+        setBuyAmount(formatUnits(data.buyAmount, 18));
+        setPrice(data);
+      }
     }
 
     if (sellAmount !== "") {
       main();
     }
   }, [
-    sellAmount,
-    sellToken,
-    buyToken,
-    parsedBuyAmount,
+    sellTokenObject.address,
+    buyTokenObject.address,
     parsedSellAmount,
+    parsedBuyAmount,
     takerAddress,
+    chainId,
+    sellAmount,
     setPrice,
   ]);
 
   // Hook for fetching balance information for specified token for a specific takerAddress
   const { data, isError, isLoading } = useBalance({
     address: takerAddress,
-    token: POLYGON_TOKENS_BY_SYMBOL[sellToken].address, // USDC
+    token: sellTokenObject.address, // USDC
   });
+
+  console.log(data, "<--data");
 
   const inSufficientBalance =
     data && sellAmount ? parseUnits(sellAmount, 6) > data.value : true;
 
-  const isSellTokenPermit = Boolean(
-    maticPermitTokensDataTyped[sellTokenAddress]
-  );
+  const isSellTokenPermit = Boolean(permitTokensDataTyped[sellTokenAddress]);
 
   const { data: allowance, refetch } = useContractRead({
-    address: POLYGON_TOKENS_BY_SYMBOL[sellToken].address,
+    address: sellTokenObject.address,
     abi: erc20ABI,
     functionName: "allowance",
     args: takerAddress ? [takerAddress, exchangeProxy] : undefined,
@@ -127,12 +208,12 @@ export default function PriceView({
             <div className="mb-6">
               <div className="flex items-center">
                 <label htmlFor="sell" className="text-gray-300 mb-2 mr-2">
-                  Sell USDC
+                  Sell {sellTokenObject.symbol}
                 </label>
                 <Image
                   alt={sellToken}
                   className="h-6 w-6 mr-2 mb-2 rounded-md"
-                  src={POLYGON_TOKENS_BY_SYMBOL[sellToken].logoURI}
+                  src={sellTokenObject.logoURI}
                   width={6}
                   height={6}
                 />
@@ -159,12 +240,12 @@ export default function PriceView({
                   htmlFor="buy-amount"
                   className="block text-gray-300 mb-2 mr-2"
                 >
-                  Buy WMATIC
+                  Buy {buyTokenObject.symbol}
                 </label>
                 <Image
                   alt={buyToken}
                   className="h-6 w-6 mr-2 mb-2 rounded-md"
-                  src={POLYGON_TOKENS_BY_SYMBOL[buyToken].logoURI}
+                  src={buyTokenObject.logoURI}
                   width={6}
                   height={6}
                 />
@@ -181,10 +262,15 @@ export default function PriceView({
               </div>
             </div>
             <hr className="my-6 border-gray-700" />
-
+            {error.length > 0 &&
+              error.map(({ field, code, reason, description }, index) => (
+                <div key={index} className="text-red-500 text-sm mb-4">
+                  [{code}] {reason} - {description}
+                </div>
+              ))}
             {takerAddress ? (
               <ApproveOrReviewButton
-                sellTokenAddress={POLYGON_TOKENS_BY_SYMBOL[sellToken].address}
+                sellTokenAddress={sellTokenObject.address}
                 takerAddress={takerAddress}
                 onClick={() => {
                   setFinalize(true);
@@ -291,7 +377,9 @@ export default function PriceView({
           </u>{" "}
           and{" "}
           <u className="underline">
-            <a href="https://github.com/0xProject/0x-examples/tree/main/tx-relay-next-app">Code</a>
+            <a href="https://github.com/0xProject/0x-examples/tree/main/tx-relay-next-app">
+              Code
+            </a>
           </u>{" "}
           to build your own
         </p>
