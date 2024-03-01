@@ -86,6 +86,7 @@ export default function QuoteView({
       sellAmount: price.sellAmount,
       takerAddress,
       checkApproval: checkApproval,
+      chainId,
     };
 
     async function main() {
@@ -101,6 +102,7 @@ export default function QuoteView({
     takerAddress,
     checkApproval,
     setQuote,
+    chainId,
   ]);
 
   if (!quote) {
@@ -255,6 +257,7 @@ export default function QuoteView({
               body: JSON.stringify({
                 trade: tradeDataToSubmit,
                 approval: approvalDataToSubmit,
+                chainId,
               }),
             });
             const data = await response.json();
