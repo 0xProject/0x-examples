@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
   const res = await fetch(`https://api.0x.org/tx-relay/v1/swap/submit`, {
     method: "POST",
     headers: {
-      "0x-api-key": process.env.NEXT_PUBLIC_0X_API_KEY as string,
+      "0x-api-key": process.env.NEXT_PUBLIC_ZEROEX_API_KEY as string,
       "0x-chain-id": payload.chainId,
       "Content-Type": "application/json",
     },

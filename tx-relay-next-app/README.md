@@ -8,7 +8,7 @@ An example ERC-20 swap application built on [Next.js 13](https://nextjs.org/) wi
 
 The principles covered are are the same ones used by production-level dApps, such as in the [Matcha Auto](https://help.matcha.xyz/en/articles/7939087-what-is-matcha-auto) feature of [Matcha.xyz](https://matcha.xyz/), in which Matcha submits the transactions and handles the gas on users behalf.
 
-This demo showcases trading USDC (a gasless approved token that is on the Polygon-supported sell list) for WMATIC (a non-gasless approved token). An expanded version of this app that handles more token support is coming soon. Read more about tokens supported by Tx Relay API [here](https://0x.org/docs/tx-relay-api/guides/build-a-dapp-with-tx-relay-api#-token-lists).  
+This demo showcases trading USDC (a gasless approved token that is on the Polygon-supported sell list) for WMATIC (a non-gasless approved token). An expanded version of this app that handles more token support is coming soon. Read more about tokens supported by Tx Relay API [here](https://0x.org/docs/tx-relay-api/guides/build-a-dapp-with-tx-relay-api#-token-lists).
 
 Tx Relay API is supported on Mainnet (1) and Polygon (137), available via `https://api.0x.org/` and providing the corresponding chain id in `0x-chain-id` header. Read more the [API endpoints](https://0x.org/docs/tx-relay-api/api-references/overview).
 
@@ -19,17 +19,14 @@ Tx Relay API is supported on Mainnet (1) and Polygon (137), available via `https
 
 Checkout the live demo 👉 [here](https://0x-examples.vercel.app/)
 
-
 ## Getting Started
 
-1. Setup the required API keys
+1. Create an `.env` file and setup the required [environment variables](https://github.com/0xProject/0x-examples/blob/main/tx-relay-next-app/.env.template)
 
-- projectId
-  - Description: RainbowKit relies on WalletConnect. Obtain a free `projectId` from [WalletConnect Cloud](https://cloud.walletconnect.com/app).
-  - Code: Add [here](https://github.com/0xProject/0x-examples/blob/main/tx-relay-next-app/app/providers.tsx#L39)
-- 0x
-  - Description: All 0x calls require an API key. Create a free one [here](https://0x.org/docs/introduction/getting-started)
-  - Code: Add for /price [here](https://github.com/0xProject/0x-examples/blob/main/tx-relay-next-app/app/api/price/route.ts#L11), /quote [here](https://github.com/0xProject/0x-examples/blob/main/tx-relay-next-app/app/api/quote/route.ts#L11), /status [here](https://github.com/0xProject/0x-examples/blob/main/tx-relay-next-app/app/api/status/route.ts#L14), /submit [here](https://github.com/0xProject/0x-examples/blob/main/tx-relay-next-app/app/api/submit/route.ts#L11)
+| **env variable**            | **Description**                                                                                                                             |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID` | Description: RainbowKit relies on WalletConnect. Obtain a free `projectId` from [WalletConnect Cloud](https://cloud.walletconnect.com/app). |
+| `NEXT_PUBLIC_ZEROEX_API_KEY`            | All 0x calls require an API key. Create a free one [here](https://0x.org/docs/introduction/getting-started).                                |
 
 2. Install project dependencies
 
