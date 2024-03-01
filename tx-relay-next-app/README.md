@@ -26,7 +26,7 @@ Checkout the live demo 👉 [here](https://0x-examples.vercel.app/)
 | **env variable**            | **Description**                                                                                                                             |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID` | Description: RainbowKit relies on WalletConnect. Obtain a free `projectId` from [WalletConnect Cloud](https://cloud.walletconnect.com/app). |
-| `ZEROEX_API_KEY`            | All 0x calls require an API key. Create a free one [here](https://0x.org/docs/introduction/getting-started).                                |
+| `NEXT_PUBLIC_ZEROEX_API_KEY`            | All 0x calls require an API key. Create a free one [here](https://0x.org/docs/introduction/getting-started).                                |
 
 2. Install project dependencies
 
