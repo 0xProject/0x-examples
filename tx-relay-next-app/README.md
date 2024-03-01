@@ -1,5 +1,15 @@
 # 0x Tx Relay API Demo App (Next.js App Router)
 
+
+## Live Demo
+
+> [!WARNING]  
+> This is a demo, and is not ready for production use. The code has not been audited and does not account for all error handling. Use at your own risk.
+
+Checkout the live demo 👉 [here](https://0x-examples.vercel.app/)
+
+<img width="634" alt="Screenshot 2024-02-29 at 9 36 48 PM" src="https://github.com/0xProject/0x-examples/assets/8042156/9bf16fd6-a420-4373-8d1c-c37c5abc3a65">
+
 ## Overview
 
 This guide will walk-through a demo app that demonstrates best practices when implementing gasless approvals and swap functionality into your ERC-20 token swapping dApp using Tx Relay API.
@@ -10,14 +20,19 @@ The principles covered are are the same ones used by production-level dApps, suc
 
 This demo showcases trading USDC (a gasless approved token that is on the Polygon-supported sell list) for WMATIC (a non-gasless approved token). An expanded version of this app that handles more token support is coming soon. Read more about tokens supported by Tx Relay API [here](https://0x.org/docs/tx-relay-api/guides/build-a-dapp-with-tx-relay-api#-token-lists).
 
-Tx Relay API is supported on Mainnet (1) and Polygon (137), available via `https://api.0x.org/` and providing the corresponding chain id in `0x-chain-id` header. Read more the [API endpoints](https://0x.org/docs/tx-relay-api/api-references/overview).
+## Supported Networks
 
-> [!WARNING]  
-> This is a demo, and is not ready for production use. The code has not been audited and does not account for all error handling. Use at your own risk.
+Tx Relay API is supported on the following chains via https://api.0x.org/. Select the chain in your request by providing the corresponding chain id with the `0x-chain-id` header.
 
-### Live Demo
+| Chain                     | Chain ID              |
+| --------------------------| ----------------------|
+| Ethereum (Mainnet)        | 1                     |
+| Polygon                   | 137                   |
+| Arbitrum                  | 42161                 |
+| Base                      | 84531                 |
+| Optimism                  | 10                    |
 
-Checkout the live demo 👉 [here](https://0x-examples.vercel.app/)
+Read more accessing the [API endpoints](https://0x.org/docs/tx-relay-api/api-references/overview).
 
 ## Getting Started
 
@@ -48,7 +63,12 @@ open http://localhost:3000
 
 ## Resources
 
-### Tx Relay API Docs
+### 🎥 Video Walk-through
+
+https://youtu.be/0d0tVwJCbiw?si=rT5g6aX6qLJ0qgUX
+
+
+### 📚 Tx Relay API Docs
 
 Checkout this guide, for a full walk-through of this demo app [**How to build a dApp with Tx Relay API**](https://0x.org/docs/tx-relay-api/guides/build-a-dapp-with-tx-relay-api).
 
