@@ -163,7 +163,7 @@ export default function PriceView({
   console.log(data, "<--data");
 
   const inSufficientBalance =
-    data && sellAmount ? parseUnits(sellAmount, 6) > data.value : true;
+    data && sellAmount ? parseUnits(sellAmount, sellTokenDecimals) > data.value : true;
 
   const isSellTokenPermit = Boolean(permitTokensDataTyped[sellTokenAddress]);
 
