@@ -139,8 +139,8 @@ export default function QuoteView({
               width={9}
               height={9}
             />
-            <span>{formatUnits(quote.sellAmount, 6)}</span>
-            <div className="ml-2">USDC</div>
+            <span>{formatUnits(quote.sellAmount, sellTokenInfo(chainId).decimals)}</span>
+            <div className="ml-2">sellTokenInfo(chainId).symbol</div>
           </div>
         </div>
 
@@ -154,8 +154,8 @@ export default function QuoteView({
               width={9}
               height={9}
             />
-            <span>{formatUnits(quote.buyAmount, 18)}</span>
-            <div className="ml-2">WMATIC</div>
+            <span>{formatUnits(quote.buyAmount, buyTokenInfo(chainId).decimals)}</span>
+            <div className="ml-2">buyTokenInfo(chainId).symbol</div>
           </div>
         </div>
       </form>
