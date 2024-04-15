@@ -12,7 +12,7 @@ Checkout the live demo 👉 [here](https://0x-examples.vercel.app/)
 
 ## Overview
 
-This guide will walk-through a demo app that demonstrates best practices when implementing gasless approvals and swap functionality into your ERC-20 token swapping dApp using Gasless API.
+This guide will walk-through a demo app that demonstrates best practices when implementing gasless approvals and swap functionality into your ERC-20 token swapping dApp using Gasless API (formerly Tx Relay). 
 
 An example ERC-20 swap application built on [Next.js 13](https://nextjs.org/) with [0x Gasless API](https://0x.org/docs/tx-relay-api/introduction). It covers best practices when implementing gasless approvals and swap functionality into your dApp or workflow.
 
