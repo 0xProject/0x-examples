@@ -9,6 +9,9 @@ This demo app covers best practices for how to use the 0x Swap API's [/price](ht
 > [!WARNING]  
 > This is a demo, and is not ready for production use. The code has not been audited and does not account for all error handling. Use at your own risk.
 
+![final_video_2 (1)](https://github.com/0xProject/0x-examples/assets/8042156/5c1057ef-2703-488e-960a-e4127cea6cf9)
+
+
 ## Getting Started
 
 1. Setup the required API keys
