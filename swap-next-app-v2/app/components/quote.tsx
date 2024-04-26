@@ -141,28 +141,24 @@ export default function QuoteView({
           console.log("to", quote.transaction.to);
           console.log("value", quote.transaction.value);
 
-          // TODO: on click, (1) sign permit2.eip712 returned from quote (2) submit tx
+          // On click, (1) sign permit2.eip712 returned from quote (2) submit tx
 
           let coupon: Hex;
           coupon = await signTypedDataAsync(quote.permit2.eip712);
 
-          const x = {
-            account: walletClient?.account.address,
-            gas: !!quote?.transaction.gas
-              ? BigInt(quote?.transaction.gas)
-              : undefined,
-            to: quote?.transaction.to,
-
-            data: quote?.transaction.data.replace(
-              MAGIC_CALLDATA_STRING,
-              coupon.slice(2)
-            ) as Hex,
-            chainId: chainId,
-          };
-
-          console.log({ x });
-
-          sendTransaction && sendTransaction(x);
+          sendTransaction &&
+            sendTransaction({
+              account: walletClient?.account.address,
+              gas: !!quote?.transaction.gas
+                ? BigInt(quote?.transaction.gas)
+                : undefined,
+              to: quote?.transaction.to,
+              data: quote?.transaction.data.replace(
+                MAGIC_CALLDATA_STRING,
+                coupon.slice(2)
+              ) as Hex,
+              chainId: chainId,
+            });
         }}
       >
         {isPending ? "Confirming..." : "Place Order"}
