@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const res = await fetch(
-      `https://api.0x.org/swap/v2/permit2/price?${searchParams}`,
+      `https://api.0x.org/swap/permit2/price?${searchParams}`,
       {
         headers: {
           "0x-api-key": process.env.NEXT_PUBLIC_ZEROEX_API_KEY as string,
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
 
     console.log(
       "price api",
-      `https://api.0x.org/swap/v2/permit2/price?${searchParams}`
+      `https://api.0x.org/swap/permit2/price?${searchParams}`
     );
 
     console.log("price data", data);

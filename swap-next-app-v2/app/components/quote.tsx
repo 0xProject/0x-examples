@@ -42,9 +42,9 @@ export default function QuoteView({
 
   const buyTokenInfo = (chainId: number) => {
     if (chainId === 1) {
-      return MAINNET_TOKENS_BY_ADDRESS[price.sellToken.toLowerCase()];
+      return MAINNET_TOKENS_BY_ADDRESS[price.buyToken.toLowerCase()];
     }
-    return MAINNET_TOKENS_BY_ADDRESS[price.sellToken.toLowerCase()];
+    return MAINNET_TOKENS_BY_ADDRESS[price.buyToken.toLowerCase()];
   };
 
   const { signTypedDataAsync } = useSignTypedData();
