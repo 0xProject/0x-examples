@@ -1,6 +1,5 @@
 # 0x Gasless API Demo App (Next.js App Router)
 
-
 ## Live Demo
 
 > [!WARNING]  
@@ -12,7 +11,7 @@ Checkout the live demo 👉 [here](https://0x-examples.vercel.app/)
 
 ## Overview
 
-This guide will walk-through a demo app that demonstrates best practices when implementing gasless approvals and swap functionality into your ERC-20 token swapping dApp using Gasless API (formerly Tx Relay). 
+This guide will walk-through a demo app that demonstrates best practices when implementing gasless approvals and swap functionality into your ERC-20 token swapping dApp using Gasless API (formerly Tx Relay).
 
 An example ERC-20 swap application built on [Next.js 13](https://nextjs.org/) with [0x Gasless API](https://0x.org/docs/tx-relay-api/introduction). It covers best practices when implementing gasless approvals and swap functionality into your dApp or workflow.
 
@@ -24,22 +23,22 @@ This demo showcases trading USDC (a gasless approved token that is on the Polygo
 
 Gasless API is supported on the following chains via https://api.0x.org/. Select the chain in your request by providing the corresponding chain id with the `0x-chain-id` header.
 
-| Chain                     | Chain ID              |
-| --------------------------| ----------------------|
-| Ethereum (Mainnet)        | 1                     |
-| Polygon                   | 137                   |
-| Arbitrum                  | 42161                 |
-| Base                      | 84531                 |
-| Optimism                  | 10                    |
+| Chain              | Chain ID |
+| ------------------ | -------- |
+| Ethereum (Mainnet) | 1        |
+| Polygon            | 137      |
+| Arbitrum           | 42161    |
+| Base               | 84531    |
+| Optimism           | 10       |
 
 Read more accessing the [API endpoints](https://0x.org/docs/tx-relay-api/api-references/overview).
 
 ## Getting Started
 
-1. Create an `.env` file and setup the required [environment variables](https://github.com/0xProject/0x-examples/blob/main/tx-relay-next-app/.env.template)
+1. Create an `.env` file and setup the required [environment variables](https://github.com/0xProject/0x-examples/blob/main/gasless-next-app/.env.template)
 
-| **env variable**            | **Description**                                                                                                                             |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **env variable**                        | **Description**                                                                                                                             |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID` | Description: RainbowKit relies on WalletConnect. Obtain a free `projectId` from [WalletConnect Cloud](https://cloud.walletconnect.com/app). |
 | `NEXT_PUBLIC_ZEROEX_API_KEY`            | All 0x calls require an API key. Create a free one [here](https://0x.org/docs/introduction/getting-started).                                |
 
@@ -66,7 +65,6 @@ open http://localhost:3000
 ### 🎥 Video Walk-through
 
 https://youtu.be/0d0tVwJCbiw?si=rT5g6aX6qLJ0qgUX
-
 
 ### 📚 Gasless API Docs
 

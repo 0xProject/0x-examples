@@ -163,7 +163,9 @@ export default function PriceView({
   console.log(data, "<--data");
 
   const inSufficientBalance =
-    data && sellAmount ? parseUnits(sellAmount, sellTokenDecimals) > data.value : true;
+    data && sellAmount
+      ? parseUnits(sellAmount, sellTokenDecimals) > data.value
+      : true;
 
   const isSellTokenPermit = Boolean(permitTokensDataTyped[sellTokenAddress]);
 
@@ -378,7 +380,7 @@ export default function PriceView({
           </u>{" "}
           and{" "}
           <u className="underline">
-            <a href="https://github.com/0xProject/0x-examples/tree/main/tx-relay-next-app">
+            <a href="https://github.com/0xProject/0x-examples/tree/main/gasless-next-app">
               Code
             </a>
           </u>{" "}
