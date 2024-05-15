@@ -226,7 +226,6 @@ export default function PriceView({
                   value={sellAmount}
                   placeholder="Amount"
                   className="w-full p-3 bg-gray-700 text-white"
-                  type="number"
                   onChange={(e) => {
                     setSellAmount(e.target.value);
                   }}
