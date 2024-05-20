@@ -1,10 +1,10 @@
-# 0x Swap API Demo (Next.js App Router)
+# 0x Swap API v2 Demo (Next.js App Router)
 
-An example ERC-20 swap application built on [Next.js App Router](https://nextjs.org/docs) with [0x Swap API](https://0x.org/docs/0x-swap-api/introduction) and [RainbowKit](https://www.rainbowkit.com/).
+An example ERC-20 swap application built on [Next.js App Router](https://nextjs.org/docs) with 0x Swap API v2 and [RainbowKit](https://www.rainbowkit.com/).
 
 Swap API enables your users to easily and conveniently trade tokens at the best prices directly in your app. With one simple integration, 0x unlocks thousands of tokens on the most popular blockchains and aggregated liquidity from 100+ AMMs and professional market makers.
 
-This demo app covers best practices for how to use the 0x Swap API's [/price](https://0x.org/docs/0x-swap-api/api-references/get-swap-v1-price) endpoint for indicative pricing and the [/quote](https://0x.org/docs/0x-swap-api/api-references/get-swap-v1-quote) endpoint for firm quotes.
+This demo app covers best practices for how to use the 0x Swap API's price endpoint for indicative pricing and the quote endpoint for firm quotes.
 
 > [!WARNING]  
 > This is a demo, and is not ready for production use. The code has not been audited and does not account for all error handling. Use at your own risk.
@@ -18,8 +18,8 @@ This demo app covers best practices for how to use the 0x Swap API's [/price](ht
 
 | **API Keys**           | **Description**                                                                                                  | **Code**                                                                                                                                                                                                                                        |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| walletConnectProjectId | WalletConnect's SDK to help with connecting wallets (create one [here](https://cloud.walletconnect.com/sign-in)) | Add [here](https://github.com/0xProject/token-swap-dapp-course-code/blob/main/L1/app/providers.tsx#L29)                                                                                                                                         |
-| 0x                     | 0x API key (create one [here](https://0x.org/docs/introduction/getting-started))                                 | Add for /price [here](https://github.com/0xProject/token-swap-dapp-course-code/blob/main/L8/app/api/price/route.ts#L11) and for /quote [here](https://github.com/0xProject/token-swap-dapp-course-code/blob/main/L8/app/api/quote/route.ts#L10) |
+| walletConnectProjectId | WalletConnect's SDK to help with connecting wallets (create one [here](https://cloud.walletconnect.com/sign-in)) | Add [here](https://github.com/0xProject/0x-examples/blob/jlin/update-with-swap-v2/swap-next-app-v2/.env#L3)                                                                                                                                         |
+| 0x                     | 0x API key (create one [here](https://0x.org/docs/introduction/getting-started))                                 | Add [here](https://github.com/0xProject/0x-examples/blob/jlin/update-with-swap-v2/swap-next-app-v2/.env) |
 
 2. Install project dependencies
 
@@ -43,15 +43,16 @@ open http://localhost:3000
 
 Swap API is supported on the following chains. Access liquidity from the chain you want by using the corresponding chain URI when making a request:
 
-- Ethereum (Mainnet): https://api.0x.org/
-- Ethereum (Sepolia): https://sepolia.api.0x.org/
-- Arbitrum: https://arbitrum.api.0x.org/
-- Avalanche: https://avalanche.api.0x.org/
-- Base https://base.api.0x.org/
-- Binance Smart Chain: https://bsc.api.0x.org/
-- Celo: https://celo.api.0x.org/
-- Fantom: https://fantom.api.0x.org/
-- Optimism: https://optimism.api.0x.org/
-- Polygon: https://polygon.api.0x.org/
+| Chain              | Chain ID |
+| ------------------ | -------- |
+| Ethereum (Mainnet) | 1        |
+| Ethereum (Sepolia) | 11155111 |
+| Arbitrum           | 42161    |
+| Avalanche          | 43114    |
+| Base               | 84531    |
+| Binance Smart Chain| 56       |
+| Celo               | 42220    |
+| Fantom             | 250      |
+| Optimism           | 10       |
+| Polygon            | 137      |
 
-Read more accessing the [API endpoints](https://0x.org/docs/0x-swap-api/api-references/overview).
