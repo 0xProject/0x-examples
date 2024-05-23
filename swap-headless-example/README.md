@@ -9,6 +9,10 @@ Demonstrates the following on Polygon mainnet:
 3. Build quote params. Fetch quote.
 4. Send transaction.
 
+> [!WARNING]  
+> This is a demo, and is not ready for production use. The code has not been audited and does not account for all error handling. Use at your own risk.
+
+
 #### Requirements
 
 - Install [Bun](https://bun.sh/) (v1.1.0+)
