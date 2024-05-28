@@ -1,5 +1,5 @@
 {
-  "name": "0x-bt-demo",
+  "name": "swap-headless-example",
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
