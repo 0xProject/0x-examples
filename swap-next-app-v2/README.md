@@ -19,10 +19,10 @@ This demo app covers best practices for how to use the 0x Swap API's price endpo
 cp .env.example .env
 ```
 
-| **API Keys**           | **Description**                                                                                                  | **Code**                                                                                                    |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| walletConnectProjectId | WalletConnect's SDK to help with connecting wallets (create one [here](https://cloud.walletconnect.com/sign-in)) | Add [here](https://github.com/0xProject/0x-examples/blob/jlin/update-with-swap-v2/swap-next-app-v2/.env#L3) |
-| 0x                     | 0x API key (create one [here](https://0x.org/docs/introduction/getting-started))                                 | Add [here](https://github.com/0xProject/0x-examples/blob/jlin/update-with-swap-v2/swap-next-app-v2/.env)    |
+| **API Keys**            | **Description**                                                                                                  | **Code**                                                                                                    |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| WalletConnect projectId | WalletConnect's SDK to help with connecting wallets (create one [here](https://cloud.walletconnect.com/sign-in)) | Add [here](https://github.com/0xProject/0x-examples/blob/jlin/update-with-swap-v2/swap-next-app-v2/.env#L3) |
+| 0x                      | 0x API key (create one [here](https://0x.org/docs/introduction/getting-started))                                 | Add [here](https://github.com/0xProject/0x-examples/blob/jlin/update-with-swap-v2/swap-next-app-v2/.env)    |
 
 2. Install project dependencies
 
