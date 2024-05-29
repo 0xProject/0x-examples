@@ -10,9 +10,9 @@ import {
   publicActions,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { polygon } from "viem/chains";
+import { base } from "viem/chains";
 import { exchangeProxyAbi } from "./exchange-proxy-abi";
-import { maticAbi } from "./matic-abi";
+import { wethAbi } from "./weth-abi";
 
 const qs = require("qs");
 
@@ -33,9 +33,9 @@ const headers = new Headers({
 // setup wallet client
 const client = createWalletClient({
   account: privateKeyToAccount(("0x" + PRIVATE_KEY) as `0x${string}`),
-  chain: polygon,
+  chain: base,
   transport: http(
-    "https://polygon-mainnet.g.alchemy.com/v2/QFJVCr0SgJ_aUJzAvk9l0oXqEbgZ_gCK"
+    "https://base-mainnet.g.alchemy.com/v2/KAovXPNhOiUVwZapjfzTi2eP_iTlCvPg"
   ),
 }).extend(publicActions); // extend wallet client with publicActions for public client
 
@@ -48,13 +48,13 @@ const exchangeProxy = getContract({
   client,
 });
 const usdc = getContract({
-  address: "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+  address: "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
   abi: erc20Abi,
   client,
 });
-const matic = getContract({
-  address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-  abi: maticAbi,
+const weth = getContract({
+  address: "0x4200000000000000000000000000000000000006",
+  abi: wethAbi,
   client,
 });
 
@@ -64,12 +64,12 @@ const main = async () => {
   // 1. fetch price
   const priceParams = new URLSearchParams({
     sellToken: usdc.address,
-    buyToken: matic.address,
+    buyToken: weth.address,
     sellAmount: sellAmount.toString(),
   });
 
   const priceResponse = await fetch(
-    "https://polygon.api.0x.org/swap/v1/price?" + priceParams.toString(),
+    "https://base.api.0x.org/swap/v1/price?" + priceParams.toString(),
     {
       headers,
     }
@@ -111,7 +111,7 @@ const main = async () => {
 
   // 4. fetch quote
   const quoteResponse = await fetch(
-    "https://polygon.api.0x.org/swap/v1/quote?" + quoteParams.toString(),
+    "https://base.api.0x.org/swap/v1/quote?" + quoteParams.toString(),
     {
       headers,
     }
@@ -127,7 +127,7 @@ const main = async () => {
   });
 
   console.log("Tx hash: ", hash);
-  console.log(`See tx details at https://polygonscan.com/tx/${hash}`);
+  console.log(`See tx details at https://basescan.org/tx/${hash}`);
 };
 
 main();
