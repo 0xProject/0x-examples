@@ -2,7 +2,7 @@ import { Address } from "viem";
 
 export const PERMIT2_ADDRESS = "0x000000000022D473030F116dDEE9F6B43aC78BA3";
 
-export const MAGIC_CALLDATA_STRING = "f".repeat(130); // used to build permit2 coupon
+export const MAGIC_CALLDATA_STRING = "f".repeat(130); // used when signing the eip712 message
 
 export const AFFILIATE_FEE = 0.01; // Percentage of the buyAmount that should be attributed to feeRecipient as affiliate fees
 export const FEE_RECIPIENT = "0x75A94931B81d81C7a62b76DC0FcFAC77FbE1e917"; // The ETH address that should receive affiliate fees

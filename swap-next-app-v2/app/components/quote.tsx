@@ -143,8 +143,8 @@ export default function QuoteView({
 
           // On click, (1) sign permit2.eip712 returned from quote (2) submit tx
 
-          let coupon: Hex;
-          coupon = await signTypedDataAsync(quote.permit2.eip712);
+          let signature: Hex;
+          signature = await signTypedDataAsync(quote.permit2.eip712);
 
           sendTransaction &&
             sendTransaction({
@@ -155,7 +155,7 @@ export default function QuoteView({
               to: quote?.transaction.to,
               data: quote?.transaction.data.replace(
                 MAGIC_CALLDATA_STRING,
-                coupon.slice(2)
+                signature.slice(2)
               ) as Hex,
               chainId: chainId,
             });

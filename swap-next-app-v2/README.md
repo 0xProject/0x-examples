@@ -11,15 +11,18 @@ This demo app covers best practices for how to use the 0x Swap API's price endpo
 
 ![final_video_2 (1)](https://github.com/0xProject/0x-examples/assets/8042156/5c1057ef-2703-488e-960a-e4127cea6cf9)
 
-
 ## Getting Started
 
-1. Setup the required API keys
+1. Create an `.env` file and setup the required environment variables
 
-| **API Keys**           | **Description**                                                                                                  | **Code**                                                                                                                                                                                                                                        |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| walletConnectProjectId | WalletConnect's SDK to help with connecting wallets (create one [here](https://cloud.walletconnect.com/sign-in)) | Add [here](https://github.com/0xProject/0x-examples/blob/jlin/update-with-swap-v2/swap-next-app-v2/.env#L3)                                                                                                                                         |
-| 0x                     | 0x API key (create one [here](https://0x.org/docs/introduction/getting-started))                                 | Add [here](https://github.com/0xProject/0x-examples/blob/jlin/update-with-swap-v2/swap-next-app-v2/.env) |
+```
+cp .env.example .env
+```
+
+| **API Keys**           | **Description**                                                                                                  | **Code**                                                                                                    |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| walletConnectProjectId | WalletConnect's SDK to help with connecting wallets (create one [here](https://cloud.walletconnect.com/sign-in)) | Add [here](https://github.com/0xProject/0x-examples/blob/jlin/update-with-swap-v2/swap-next-app-v2/.env#L3) |
+| 0x                     | 0x API key (create one [here](https://0x.org/docs/introduction/getting-started))                                 | Add [here](https://github.com/0xProject/0x-examples/blob/jlin/update-with-swap-v2/swap-next-app-v2/.env)    |
 
 2. Install project dependencies
 
@@ -43,16 +46,15 @@ open http://localhost:3000
 
 Swap API is supported on the following chains. Access liquidity from the chain you want by using the corresponding chain URI when making a request:
 
-| Chain              | Chain ID |
-| ------------------ | -------- |
-| Ethereum (Mainnet) | 1        |
-| Ethereum (Sepolia) | 11155111 |
-| Arbitrum           | 42161    |
-| Avalanche          | 43114    |
-| Base               | 84531    |
-| Binance Smart Chain| 56       |
-| Celo               | 42220    |
-| Fantom             | 250      |
-| Optimism           | 10       |
-| Polygon            | 137      |
-
+| Chain               | Chain ID |
+| ------------------- | -------- |
+| Ethereum (Mainnet)  | 1        |
+| Ethereum (Sepolia)  | 11155111 |
+| Arbitrum            | 42161    |
+| Avalanche           | 43114    |
+| Base                | 84531    |
+| Binance Smart Chain | 56       |
+| Celo                | 42220    |
+| Fantom              | 250      |
+| Optimism            | 10       |
+| Polygon             | 137      |
