@@ -1,7 +1,6 @@
 import { config as dotenv } from "dotenv";
 import {
   createWalletClient,
-  createPublicClient,
   http,
   getContract,
   erc20Abi,
@@ -24,6 +23,7 @@ const { PRIVATE_KEY, ZERO_EX_API_KEY, ALCHEMY_HTTP_TRANSPORT_URL } =
 // validate requirements
 if (!PRIVATE_KEY) throw new Error("missing PRIVATE_KEY.");
 if (!ZERO_EX_API_KEY) throw new Error("missing ZERO_EX_API_KEY.");
+if (!ALCHEMY_HTTP_TRANSPORT_URL) throw new Error("missing ALCHEMY_HTTP_TRANSPORT_URL.");
 
 // fetch constants
 const headers = new Headers({
@@ -75,6 +75,7 @@ const main = async () => {
   );
 
   const price = await priceResponse.json();
+  console.log("Fetching price to swap 0.1 USDC for WETH");
   console.log("priceResponse: ", price);
 
   // 2. check approval for 0x Exchange Proxy to spend sellToken
@@ -87,7 +88,7 @@ const main = async () => {
         exchangeProxy.address,
         maxUint256,
       ]);
-      console.log("Approving 0x Exchange Proxy to spend USDC...", request);
+      console.log("Approving 0x Exchage Proxy to spend USDC...", request);
       // Set approval
       const hash = await usdc.write.approve(request.args);
       console.log(
@@ -117,6 +118,7 @@ const main = async () => {
   );
 
   const quote = await quoteResponse.json();
+  console.log("Fetching quote to swap 0.1 USDC for WETH");
   console.log("quoteResponse: ", quote);
 
   // 5. send txn
