@@ -115,7 +115,7 @@ bun --watch index.ts
     l1GasEstimate: 167895581470,
   },
 }
-Approving 0x Exchage Proxy to spend USDC... {
+Approving 0x Exchange Proxy to spend USDC... {
   abi: [
     {
       type: "function",
