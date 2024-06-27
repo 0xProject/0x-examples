@@ -88,7 +88,7 @@ const main = async () => {
         exchangeProxy.address,
         maxUint256,
       ]);
-      console.log("Approving 0x Exchage Proxy to spend USDC...", request);
+      console.log("Approving 0x Exchange Proxy to spend USDC...", request);
       // Set approval
       const hash = await usdc.write.approve(request.args);
       console.log(
