@@ -18,7 +18,8 @@ const qs = require("qs");
 
 // load env vars
 dotenv();
-const { PRIVATE_KEY, ZERO_EX_API_KEY } = process.env;
+const { PRIVATE_KEY, ZERO_EX_API_KEY, ALCHEMY_HTTP_TRANSPORT_URL } =
+  process.env;
 
 // validate requirements
 if (!PRIVATE_KEY) throw new Error("missing PRIVATE_KEY.");
@@ -34,9 +35,7 @@ const headers = new Headers({
 const client = createWalletClient({
   account: privateKeyToAccount(("0x" + PRIVATE_KEY) as `0x${string}`),
   chain: base,
-  transport: http(
-    "https://base-mainnet.g.alchemy.com/v2/KAovXPNhOiUVwZapjfzTi2eP_iTlCvPg"
-  ),
+  transport: http(ALCHEMY_HTTP_TRANSPORT_URL),
 }).extend(publicActions); // extend wallet client with publicActions for public client
 
 const [address] = await client.getAddresses();
