@@ -16,7 +16,7 @@ export type SignatureExtended = Signature & {
 };
 
 /**
- * Valid signature types in 0x.
+ * Valid signature types on 0x
  */
 export enum SignatureType {
   Illegal = 0,
@@ -25,8 +25,8 @@ export enum SignatureType {
   EthSign = 3,
 }
 
-export function splitSignature(signatureHex: Hex) {
-  console.log("in splitSig");
+export async function splitSignature(signatureHex: Hex) {
+  console.log("in splitSignature function");
   const { r, s } = secp256k1.Signature.fromCompact(signatureHex.slice(2, 130));
   const v = hexToNumber(`0x${signatureHex.slice(130)}`);
   const signatureType = SignatureType.EIP712;
