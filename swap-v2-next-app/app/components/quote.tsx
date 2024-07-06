@@ -58,6 +58,10 @@ export default function QuoteView({
       buyToken: price.buyToken,
       sellAmount: price.sellAmount,
       taker,
+      swapFeeRecipient: FEE_RECIPIENT,
+      swapFeeBps: AFFILIATE_FEE,
+      swapFeeToken: price.buyToken,
+      tradeSurplusRecipient: FEE_RECIPIENT,
     };
 
     async function main() {
@@ -73,6 +77,8 @@ export default function QuoteView({
     price.sellAmount,
     taker,
     setQuote,
+    FEE_RECIPIENT,
+    AFFILIATE_FEE,
   ]);
 
   const {
@@ -129,6 +135,25 @@ export default function QuoteView({
               {formatUnits(quote.buyAmount, buyTokenInfo(chainId).decimals)}
             </span>
             <div className="ml-2">{buyTokenInfo(chainId).symbol}</div>
+          </div>
+        </div>
+
+        <div className="bg-slate-200 dark:bg-slate-800 p-4 rounded-sm mb-3">
+          <div className="text-slate-400">
+            {quote &&
+            quote.fees &&
+            quote.fees.integratorFee &&
+            quote.fees.integratorFee.amount
+              ? "Affiliate Fee: " +
+                Number(
+                  formatUnits(
+                    BigInt(quote.fees.integratorFee.amount),
+                    buyTokenInfo(chainId).decimals
+                  )
+                ) +
+                " " +
+                buyTokenInfo(chainId).symbol
+              : null}
           </div>
         </div>
       </form>

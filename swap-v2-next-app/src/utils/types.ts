@@ -12,15 +12,19 @@ export interface PriceResponse {
   allowanceTarget: Address;
   route: [];
   fees: {
-    integratorFee: null;
+    integratorFee: {
+      amount: string;
+      token: string;
+      type: "volume" | "gas";
+    } | null;
     zeroExFee: {
       billingType: "on-chain" | "off-chain";
       feeAmount: string;
       feeToken: Address;
-      feeType: "gas" | "volume";
+      feeType: "volume" | "gas";
     };
     gasFee: null;
-  };
+  } | null;
   gas: string;
   gasPrice: string;
   auxiliaryChainData?: {
@@ -40,7 +44,11 @@ export interface QuoteResponse {
   allowanceTarget: Address;
   route: [];
   fees: {
-    integratorFee: null;
+    integratorFee: {
+      amount: string;
+      token: string;
+      type: "volume" | "gas";
+    } | null;
     zeroExFee: {
       billingType: "on-chain" | "off-chain";
       feeAmount: string;
@@ -48,7 +56,7 @@ export interface QuoteResponse {
       feeType: "volume" | "gas";
     };
     gasFee: null;
-  };
+  } | null;
   auxiliaryChainData: {};
   to: Address;
   data: Hex;

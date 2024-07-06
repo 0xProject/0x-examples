@@ -54,7 +54,5 @@ Swap API is supported on the following chains. Access liquidity from the chain y
 | Avalanche           | 43114    |
 | Base                | 84531    |
 | Binance Smart Chain | 56       |
-| Celo                | 42220    |
-| Fantom              | 250      |
 | Optimism            | 10       |
 | Polygon             | 137      |

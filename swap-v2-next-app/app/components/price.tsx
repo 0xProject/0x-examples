@@ -97,9 +97,10 @@ export default function PriceView({
       sellAmount: parsedSellAmount,
       buyAmount: parsedBuyAmount,
       taker,
-      feeRecipient: FEE_RECIPIENT,
-      buyTokenPercentageFee: AFFILIATE_FEE,
-      feeRecipientTradeSurplus: FEE_RECIPIENT,
+      swapFeeRecipient: FEE_RECIPIENT,
+      swapFeeBps: AFFILIATE_FEE,
+      swapFeeToken: buyTokenObject.address,
+      tradeSurplusRecipient: FEE_RECIPIENT,
     };
 
     async function main() {
@@ -260,15 +261,14 @@ export default function PriceView({
           </section>
 
           <div className="text-slate-400">
-            {price && price.grossBuyAmount
+            {price && price.fees.integratorFee.amount
               ? "Affiliate Fee: " +
                 Number(
                   formatUnits(
-                    BigInt(price.grossBuyAmount),
+                    BigInt(price.fees.integratorFee.amount),
                     MAINNET_TOKENS_BY_SYMBOL[buyToken].decimals
                   )
-                ) *
-                  AFFILIATE_FEE +
+                ) +
                 " " +
                 MAINNET_TOKENS_BY_SYMBOL[buyToken].symbol
               : null}
