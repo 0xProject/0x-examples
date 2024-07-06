@@ -9,8 +9,13 @@ This demo app covers best practices for how to use the 0x Swap API's price endpo
 > [!WARNING]  
 > This is a demo, and is not ready for production use. The code has not been audited and does not account for all error handling. Use at your own risk.
 
-![priceView](src/img/priceView.png)
-![quoteView](src/img/quoteView.png)
+### Price View
+
+![priceView](src/images/priceView.png)
+
+### Quote View
+
+![quoteView](src/images/quoteView.png)
 
 ## Getting Started
 
