@@ -2,7 +2,7 @@
 
 
 > [!NOTE]  
-> 0x API v2 is in closed beta. Get your app ready with the[v2 migration guide](https://0x.org/beta-docs/next/0x-swap-api/upgrading/upgrading_to_v2) to ensure a smooth transition.
+> 0x API v2 is in closed beta. Get your app ready with the [v2 migration guide](https://0x.org/beta-docs/next/0x-swap-api/upgrading/upgrading_to_v2) to ensure a smooth transition.
 
 An example ERC-20 swap application built on [Next.js App Router](https://nextjs.org/docs) with 0x Swap API v2 and [RainbowKit](https://www.rainbowkit.com/).
 
@@ -13,6 +13,9 @@ This demo app covers best practices for how to use the 0x Swap API's price endpo
 > [!WARNING]  
 > This is a demo, and is not ready for production use. The code has not been audited and does not account for all error handling. Use at your own risk.
 
+### Live Demo
+
+Checkout the live demo 👉 [here](https://0x-swap-v2-demo-app.vercel.app/)
 ### Price View
 
 ![priceView](src/images/priceView.png)
