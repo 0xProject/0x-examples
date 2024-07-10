@@ -1,7 +1,6 @@
 import { config as dotenv } from "dotenv";
 import {
   createWalletClient,
-  createPublicClient,
   http,
   getContract,
   erc20Abi,
@@ -18,11 +17,13 @@ const qs = require("qs");
 
 // load env vars
 dotenv();
-const { PRIVATE_KEY, ZERO_EX_API_KEY } = process.env;
+const { PRIVATE_KEY, ZERO_EX_API_KEY, ALCHEMY_HTTP_TRANSPORT_URL } =
+  process.env;
 
 // validate requirements
 if (!PRIVATE_KEY) throw new Error("missing PRIVATE_KEY.");
 if (!ZERO_EX_API_KEY) throw new Error("missing ZERO_EX_API_KEY.");
+if (!ALCHEMY_HTTP_TRANSPORT_URL) throw new Error("missing ALCHEMY_HTTP_TRANSPORT_URL.");
 
 // fetch constants
 const headers = new Headers({
@@ -34,9 +35,7 @@ const headers = new Headers({
 const client = createWalletClient({
   account: privateKeyToAccount(("0x" + PRIVATE_KEY) as `0x${string}`),
   chain: base,
-  transport: http(
-    "https://base-mainnet.g.alchemy.com/v2/KAovXPNhOiUVwZapjfzTi2eP_iTlCvPg"
-  ),
+  transport: http(ALCHEMY_HTTP_TRANSPORT_URL),
 }).extend(publicActions); // extend wallet client with publicActions for public client
 
 const [address] = await client.getAddresses();
@@ -76,6 +75,7 @@ const main = async () => {
   );
 
   const price = await priceResponse.json();
+  console.log("Fetching price to swap 0.1 USDC for WETH");
   console.log("priceResponse: ", price);
 
   // 2. check approval for 0x Exchange Proxy to spend sellToken
@@ -118,6 +118,7 @@ const main = async () => {
   );
 
   const quote = await quoteResponse.json();
+  console.log("Fetching quote to swap 0.1 USDC for WETH");
   console.log("quoteResponse: ", quote);
 
   // 5. send txn

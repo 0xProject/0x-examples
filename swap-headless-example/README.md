@@ -47,7 +47,7 @@ bun --watch index.ts
 
 ```
 
-4. Here is an example of the output. It fetches a `price` (USCD → WETH) approves token allowance (if not already granted), fetches a `quote`, and submits the transaction, and shows the transaction hash:
+4. Here is an example of the output. It fetches a `price` (USCD → WETH), approves a token allowance (if not already granted), fetches a `quote`, and submits the transaction, and shows the transaction hash:
 
 ```bash
  priceResponse:  {
@@ -115,7 +115,7 @@ bun --watch index.ts
     l1GasEstimate: 167895581470,
   },
 }
-Approving 0x Exchage Proxy to spend USDC... {
+Approving 0x Exchange Proxy to spend USDC... {
   abi: [
     {
       type: "function",
