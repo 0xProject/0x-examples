@@ -141,28 +141,37 @@ const main = async () => {
 
   // 6. submit txn with permit2 signature
   if (signature) {
-    try {
-      const hash = await client.sendTransaction({
-        account: client.account.address,
-        gas: !!quote?.transaction.gas
-          ? BigInt(quote?.transaction.gas)
-          : undefined,
-        to: quote?.transaction.to,
-        data: quote?.transaction.data.replace(
-          MAGIC_CALLDATA_STRING,
-          signature.slice(2)
-        ),
-        chainId: client.chain.id.toString(),
-      });
+    const nonce = await client.getTransactionCount({
+      address: client.account.address,
+    });
 
-      console.log("Transaction hash:", hash);
-      console.log(`See tx details at https://basescan.org/tx/${hash}`);
-    } catch (error) {
-      console.error("Error sending transaction:", error);
-    }
+    // because using a local account, need to signTransaction and sendRawTransaction separately rather than use sendTransaction directly
+    const signedTransaction = await client.signTransaction({
+      account: client.account,
+      chain: client.chain,
+      gas: !!quote?.transaction.gas
+        ? BigInt(quote?.transaction.gas)
+        : undefined,
+      to: quote?.transaction.to,
+      data: quote?.transaction.data.replace(
+        MAGIC_CALLDATA_STRING,
+        signature.slice(2)
+      ),
+      value: quote?.transaction.value,
+      gasPrice: !!quote?.transaction.gasPrice
+        ? BigInt(quote?.transaction.gasPrice)
+        : undefined,
+      nonce: nonce,
+    });
+    const hash = await client.sendRawTransaction({
+      serializedTransaction: signedTransaction,
+    });
+
+    console.log("Transaction hash:", hash);
+
+    console.log(`See tx details at https://basescan.org/tx/${hash}`);
   } else {
     console.error("Failed to obtain a signature, transaction not sent.");
   }
 };
-
 main();
