@@ -47,7 +47,7 @@ bun --watch index.ts
 
 ```
 
-4. Here is an example of the output. It fetches a `price` (USCD → WETH), approves token allowance (if not already granted), fetches a `quote`, and submits the transaction, and shows the transaction hash:
+4. Here is an example of the output. It fetches a `price` (sell 0.1 USCD → WETH), approves token allowance (if not already granted), fetches a `quote`, and submits the transaction, and shows the transaction hash:
 
 ```
 Fetching price to swap 0.1 USDC for WETH
