@@ -79,11 +79,13 @@ const main = async () => {
     }
   );
 
-  console.log(priceParams.toString(), "<-priceParams.toString()");
-
   const price = await priceResponse.json();
   console.log("Fetching price to swap 0.1 USDC for WETH with Gasless API");
+  console.log();
+  console.log(`http://api.0x.org/gasless/price?${priceParams.toString()}`);
+  console.log();
   console.log("🏷 priceResponse: ", price);
+  console.log();
 
   // 2. fetch quote
   const quoteParams = new URLSearchParams({
@@ -101,7 +103,9 @@ const main = async () => {
 
   const quote = await quoteResponse.json();
   console.log("Fetching quote to swap 0.1 USDC for WETH with Gasless API");
+  console.log();
   console.log("💸 quoteResponse: ", quote);
+  console.log();
 
   // 3. Check if token approval is required and if gasless approval is available
   const tokenApprovalRequired = quote.issues.allowance != null;
@@ -212,7 +216,7 @@ const main = async () => {
         signatureType: SignatureType.EIP712,
       },
     };
-    return approvalDataToSubmit;
+    return approvalDataToSubmit; // Return approval object with split signature
   }
 
   async function tradeSplitSigDataToSubmit(object: any): Promise<any> {
@@ -236,19 +240,21 @@ const main = async () => {
   ): Promise<void> {
     try {
       let successfulTradeHash;
+      const requestBody: any = {
+        trade: tradeDataToSubmit,
+        chainId: client.chain.id,
+      };
+      if (approvalDataToSubmit) {
+        requestBody.approval = approvalDataToSubmit;
+      }
       const response = await fetch("https://api.0x.org/gasless/submit", {
         method: "POST",
         headers: {
           "0x-api-key": process.env.ZERO_EX_API_KEY as string,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          trade: tradeDataToSubmit,
-          // approval: approvalDataToSubmit,
-          chainId: client.chain.id,
-        }),
+        body: JSON.stringify(requestBody),
       });
-      console.log("tradeDataToSubmit: ", tradeDataToSubmit);
       const data = await response.json();
       successfulTradeHash = data.tradeHash;
       console.log("#️⃣ tradeHash: ", successfulTradeHash);
