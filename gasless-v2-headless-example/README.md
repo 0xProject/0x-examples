@@ -7,12 +7,18 @@ Demonstrates the following on Base mainnet:
 1. Get an indicative price (sell 0.1 USDC → buy WETH) using `/gasless/price`
 2. Get a firm quote (sell 0.1 USDC → buy WETH) using `/gasless/quote`
 3. Submit the transaction using `/gasless/submit`
+   
    a. Sign the gasless approval object(if applicable)
+   
    b. Sign the trade object
+   
    c. Split the signatures
+   
    d. Package signed objects into a format that can be POST to `/submit`
+   
    e. Compute trade hash
-4. Check the trade status using `/gasless/status/{tradHash}`
+   
+5. Check the trade status using `/gasless/status/{tradHash}`
 
 > [!WARNING]  
 > This is a demo, and is not ready for production use. The code has not been audited and does not account for all error handling. Use at your own risk.
