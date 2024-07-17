@@ -18,7 +18,7 @@ Demonstrates the following on Base mainnet:
    
    e. Compute trade hash
    
-5. Check the trade status using `/gasless/status/{tradHash}`
+5. Check the trade status using `/gasless/status/{tradeHash}`
 
 This examples shows selling [USDC](https://basescan.org/address/0x833589fcd6edb6e08f4c7c32d4f71b54bda02913), a non-native, ERC-20 token, that supports Permit on Base to buy [WETH](https://basescan.org/token/0x4200000000000000000000000000000000000006) (a wrapped native token that does not support Permit). Since USDC, supports the Permit function, so we can perform a gasless approval. 
 
