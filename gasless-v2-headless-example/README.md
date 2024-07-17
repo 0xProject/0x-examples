@@ -14,7 +14,7 @@ Demonstrates the following on Base mainnet:
    
    c. Split the signatures
    
-   d. Package signed objects into a format that can be POST to `/submit`
+   d. Package signed objects into a format that can be POST to `/gasless/submit`
    
    e. Compute trade hash
    
