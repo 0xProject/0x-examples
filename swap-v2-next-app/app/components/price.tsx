@@ -163,8 +163,22 @@ export default function PriceView({
 
       <div className="container mx-auto p-10">
         <header className="text-center py-4">
-          <h1 className="text-3xl font-bold mb-4">0x Swap Demo</h1>
+          <h1 className="text-3xl font-bold">0x Swap Demo</h1>
         </header>
+
+        <p className="text-md text-center p-4 text-gray-500">
+          Check out the{" "}
+          <u className="underline">
+            <a href="https://0x.org/docs/">0x Docs</a>
+          </u>{" "}
+          and{" "}
+          <u className="underline">
+            <a href="https://github.com/0xProject/0x-examples/tree/main">
+              Code
+            </a>
+          </u>{" "}
+          to build your own
+        </p>
 
         <div className="bg-slate-200 dark:bg-slate-800 p-4 rounded-md mb-3">
           <label htmlFor="sell" className="text-gray-300 mb-2 mr-2">
@@ -283,6 +297,7 @@ export default function PriceView({
               setFinalize(true);
             }}
             disabled={inSufficientBalance}
+            price={price}
           />
         ) : (
           <ConnectButton.Custom>
@@ -384,26 +399,49 @@ export default function PriceView({
     onClick,
     sellTokenAddress,
     disabled,
+    price,
   }: {
     taker: Address;
     onClick: () => void;
     sellTokenAddress: Address;
     disabled?: boolean;
+    price: any;
   }) {
-    // 1. Read from erc20, check approval for permit2 to spend sellToken
+    // If price.issues.allowance is null, show the Review Trade button
+    if (price.issues.allowance === null) {
+      return (
+        <button
+          type="button"
+          disabled={disabled}
+          onClick={() => {
+            // fetch data, when finished, show quote view
+            onClick();
+          }}
+          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-700 disabled:opacity-25"
+        >
+          {disabled ? "Insufficient Balance" : "Review Trade"}
+        </button>
+      );
+    }
+
+    // Determine the spender from price.issues.allowance
+    const spender = price.issues.allowance.spender;
+
+    // 1. Read from erc20, check approval for the determined spender to spend sellToken
     const { data: allowance, refetch } = useReadContract({
       address: sellTokenAddress,
       abi: erc20Abi,
       functionName: "allowance",
-      args: [taker, PERMIT2_ADDRESS],
+      args: [taker, spender],
     });
-    console.log("checked permit2 approval");
-    // 2. (only if no allowance): write to erc20, approve token allowance for permit2
+    console.log("checked spender approval");
+
+    // 2. (only if no allowance): write to erc20, approve token allowance for the determined spender
     const { data } = useSimulateContract({
       address: sellTokenAddress,
       abi: erc20Abi,
       functionName: "approve",
-      args: [PERMIT2_ADDRESS, MAX_ALLOWANCE],
+      args: [spender, MAX_ALLOWANCE],
     });
 
     // Define useWriteContract for the 'approve' operation
@@ -441,9 +479,9 @@ export default function PriceView({
                 abi: erc20Abi,
                 address: sellTokenAddress,
                 functionName: "approve",
-                args: [PERMIT2_ADDRESS, MAX_ALLOWANCE],
+                args: [spender, MAX_ALLOWANCE],
               });
-              console.log("approving permit2 to spend sell token");
+              console.log("approving spender to spend sell token");
 
               refetch();
             }}
@@ -460,7 +498,7 @@ export default function PriceView({
         disabled={disabled}
         onClick={() => {
           // fetch data, when finished, show quote view
-          setFinalize(true);
+          onClick();
         }}
         className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-700 disabled:opacity-25"
       >

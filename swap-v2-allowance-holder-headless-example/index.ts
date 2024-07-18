@@ -10,7 +10,6 @@ import {
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { base } from "viem/chains";
-import { permit2Abi } from "./abi/permit2-abi";
 import { wethAbi } from "./abi/weth-abi";
 
 const qs = require("qs");
