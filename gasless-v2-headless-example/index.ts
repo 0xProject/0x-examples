@@ -12,7 +12,6 @@ import {
 import { privateKeyToAccount } from "viem/accounts";
 import { base } from "viem/chains";
 import { wethAbi } from "./abi/weth-abi";
-import { permit2Abi } from "./abi/permit2-abi";
 import { SignatureType, splitSignature } from "./utils/signature";
 
 const qs = require("qs");
@@ -42,11 +41,6 @@ const client = createWalletClient({
 }).extend(publicActions); // extend wallet client with publicActions for public client
 
 // set up contracts
-const permit2 = getContract({
-  address: "0x000000000022d473030f116ddee9f6b43ac78ba3",
-  abi: permit2Abi,
-  client,
-});
 const usdc = getContract({
   address: "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
   abi: erc20Abi,
@@ -180,13 +174,10 @@ const main = async () => {
   }
 
   async function standardApproval(): Promise<any> {
-    if (
-      sellAmount >
-      (await usdc.read.allowance([client.account.address, permit2.address]))
-    )
+    if (quote.issues.allowance !== null) {
       try {
         const { request } = await usdc.simulate.approve([
-          permit2.address,
+          quote.issues.allowance.spender,
           maxUint256,
         ]);
         console.log("Approving Permit2 to spend USDC...", request);
@@ -199,7 +190,7 @@ const main = async () => {
       } catch (error) {
         console.log("Error approving Permit2:", error);
       }
-    else {
+    } else {
       console.log("USDC already approved for Permit2");
     }
   }

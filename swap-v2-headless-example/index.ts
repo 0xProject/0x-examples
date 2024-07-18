@@ -10,7 +10,6 @@ import {
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { base } from "viem/chains";
-import { permit2Abi } from "./abi/permit2-abi";
 import { wethAbi } from "./abi/weth-abi";
 
 const qs = require("qs");
@@ -42,11 +41,6 @@ const client = createWalletClient({
 const [address] = await client.getAddresses();
 
 // set up contracts
-const permit2 = getContract({
-  address: "0x000000000022d473030f116ddee9f6b43ac78ba3",
-  abi: permit2Abi,
-  client,
-});
 const usdc = getContract({
   address: "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
   abi: erc20Abi,
@@ -87,14 +81,31 @@ const main = async () => {
   );
   console.log("priceResponse: ", price);
 
-  // 2. check approval for Permit2 to spend sellToken
-  if (
-    sellAmount >
-    (await usdc.read.allowance([client.account.address, permit2.address]))
-  )
+  // 2. build quote params from price params + taker
+  const quoteParams = new URLSearchParams({
+    taker: client.account.address,
+  });
+  for (const [key, value] of priceParams.entries())
+    quoteParams.append(key, value);
+
+  // 3. fetch quote
+  const quoteResponse = await fetch(
+    "https://api.0x.org/swap/permit2/quote?" + quoteParams.toString(),
+    {
+      headers,
+    }
+  );
+
+  const quote = await quoteResponse.json();
+  console.log("Fetching quote to swap 0.1 USDC for WETH");
+  console.log("quoteResponse: ", quote);
+
+  // 4. check if taker needs to set an allowance for AllowanceHolder
+
+  if (quote.issues.allowance !== null) {
     try {
       const { request } = await usdc.simulate.approve([
-        permit2.address,
+        quote.issues.allowance.spender,
         maxUint256,
       ]);
       console.log("Approving Permit2 to spend USDC...", request);
@@ -107,28 +118,9 @@ const main = async () => {
     } catch (error) {
       console.log("Error approving Permit2:", error);
     }
-  else {
+  } else {
     console.log("USDC already approved for Permit2");
   }
-
-  // 3. build quote params from price params + taker
-  const quoteParams = new URLSearchParams({
-    taker: client.account.address,
-  });
-  for (const [key, value] of priceParams.entries())
-    quoteParams.append(key, value);
-
-  // 4. fetch quote
-  const quoteResponse = await fetch(
-    "https://api.0x.org/swap/permit2/quote?" + quoteParams.toString(),
-    {
-      headers,
-    }
-  );
-
-  const quote = await quoteResponse.json();
-  console.log("Fetching quote to swap 0.1 USDC for WETH");
-  console.log("quoteResponse: ", quote);
 
   // 5. sign permit2.eip712 returned from quote
   let signature;
