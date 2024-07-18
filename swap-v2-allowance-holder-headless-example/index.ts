@@ -78,30 +78,11 @@ const main = async () => {
   );
   console.log("priceResponse: ", price);
 
-  // 2. build quote params from price params + taker
-  const quoteParams = new URLSearchParams({
-    taker: client.account.address,
-  });
-  for (const [key, value] of priceParams.entries())
-    quoteParams.append(key, value);
-
-  // 3. fetch quote
-  const quoteResponse = await fetch(
-    "https://api.0x.org/swap/allowance-holder/quote?" + quoteParams.toString(),
-    {
-      headers,
-    }
-  );
-
-  const quote = await quoteResponse.json();
-  console.log("Fetching quote to swap 0.1 USDC for WETH");
-  console.log("quoteResponse: ", quote);
-
-  // 4. check if taker needs to set an allowance for AllowanceHolder
-  if (quote.issues.allowance !== null) {
+  // 2. check if taker needs to set an allowance for AllowanceHolder
+  if (price.issues.allowance !== null) {
     try {
       const { request } = await usdc.simulate.approve([
-        quote.issues.allowance.spender,
+        price.issues.allowance.spender,
         maxUint256,
       ]);
       console.log("Approving AllowanceHolder to spend USDC...", request);
@@ -118,7 +99,24 @@ const main = async () => {
     console.log("USDC already approved for AllowanceHolder");
   }
 
-  // 5. send txn
+  // 3. fetch quote
+  const quoteParams = new URLSearchParams();
+  for (const [key, value] of priceParams.entries()) {
+    quoteParams.append(key, value);
+  }
+
+  const quoteResponse = await fetch(
+    "https://api.0x.org/swap/allowance-holder/quote?" + quoteParams.toString(),
+    {
+      headers,
+    }
+  );
+
+  const quote = await quoteResponse.json();
+  console.log("Fetching quote to swap 0.1 USDC for WETH");
+  console.log("quoteResponse: ", quote);
+
+  // 4. send txn
   const hash = await client.sendTransaction({
     to: quote?.transaction.to,
     data: quote?.transaction.data,
