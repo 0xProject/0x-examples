@@ -1,6 +1,6 @@
-# Swap v2 headless example (viem)
+# Swap v2 Permit2 headless example (viem)
 
-A headless example of how to use 0x Swap API v2 /permit2/price and /permit2/quote using [viem](https://viem.sh/)
+A headless example of how to use 0x Swap API v2 `/permit2/price` and `/permit2/quote` using [viem](https://viem.sh/)
 
 Demonstrates the following on Base mainnet:
 
@@ -8,6 +8,20 @@ Demonstrates the following on Base mainnet:
 2. Check token approval
 3. Build quote params (sell 0.1 USDC → buy WETH). Fetch quote.
 4. Send transaction.
+
+### What is the difference between Permit2 and AllowanceHolder?
+
+<details>
+
+<summary>Read more about when to use AllowanceHolder vs Permit2</summary>
+
+0x Swap API offers you the optionality to either use [Permit2](https://0x.org/docs/next/introduction/0x-cheat-sheet#permit2-contract) or [AllowanceHolder](https://0x.org/docs/next/introduction/0x-cheat-sheet#allowanceholder-contract) as the allowance target.
+
+For most applications, we recommend using the Permit2 flow for swaps and setting allowances on the Permit2 contract. This process requires collecting two signatures from your users per trade: one offchain signature for the limited approval and an onchain signature for the trade. If your integration prevents you from collecting offchain signatures, such as with smart contracts, we recommend using AllowanceHolder.
+
+Originally developed by Uniswap based on the work of 0x alumnus [Lawrence Forman](https://github.com/merklejerk), [Permit2](https://blog.uniswap.org/permit2-and-universal-router) is a token approval method that can be used to safely share and manage token approvals across different smart contracts. Permit2 is immutable, extensively audited, used by other trusted protocols in the space including Uniswap and has a [$3M bug bounty](https://uniswap.org/bug-bounty).
+
+Still have questions? [Reachout to our team](https://0x.org/docs/introduction/community#contact-support).
 
 > [!WARNING]  
 > This is a demo, and is not ready for production use. The code has not been audited and does not account for all error handling. Use at your own risk.
