@@ -18,9 +18,9 @@ Demonstrates the following on Base mainnet:
 
 0x Swap API offers you the optionality to either use [Permit2](https://0x.org/docs/next/introduction/0x-cheat-sheet#permit2-contract) or [AllowanceHolder](https://0x.org/docs/next/introduction/0x-cheat-sheet#allowanceholder-contract) as the allowance target.
 
-For most applications, we recommend using the Permit2 flow for swaps and setting allowances on the Permit2 contract. This process requires collecting two signatures from your users per trade: one offchain signature for the limited approval and an onchain signature for the trade. If your integration prevents you from collecting offchain signatures, such as with smart contracts, we recommend using AllowanceHolder.
+For most applications, we recommend using the Permit2 flow for swaps and setting allowances on the Permit2 contract. This process requires two user signatures per trade: an offchain signature for limited approval and an onchain signature for the trade. If your integration doesn't support collecting offchain signatures, such as with smart contracts, we recommend using AllowanceHolder.
 
-AllowanceHolder is an alternative to Permit2 as the allowance target, depending on your project's UX. While Permit2's single-use method provides greatly enhanced security, we recognize that some projects may not wish to have a double-signature UX (this may apply to teams that integrate Swap API into smart contracts, or teams that are aggregating across multiple sources and want to keep the UI consistent across all the integrations).
+AllowanceHolder is an alternative to Permit2 as the allowance target. While Permit2's single-use method provides enhanced security, some projects may prefer not to use a double-signature UX. This applies to teams integrating Swap API into smart contracts or aggregating across multiple sources and wanting consistent UI.
 
 Still have questions? [Reachout to our team](https://0x.org/docs/introduction/community#contact-support).
 
