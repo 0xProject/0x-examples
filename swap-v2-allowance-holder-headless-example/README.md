@@ -4,10 +4,11 @@ A headless example of how to use 0x Swap API v2 `/allowance-holder/price` and `/
 
 Demonstrates the following on Base mainnet:
 
-1. Build price params (sell 0.1 USDC → buy WETH) Fetch price.
-2. Check token approval
-3. Build quote params (sell 0.1 USDC → buy WETH). Fetch quote.
-4. Send transaction.
+1. [Get a 0x API key](https://0x.org/docs/introduction/getting-started)
+2. Get an indicative price (sell 0.1 USDC → buy WETH)
+3. (If needed) Set token allowance for AllowanceHolder
+4. Fetch a firm quote (sell 0.1 USDC → buy WETH)
+5. Send transaction.
 
 ### What is the difference between Permit2 and AllowanceHolder?
 
