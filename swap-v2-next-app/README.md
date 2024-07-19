@@ -1,6 +1,5 @@
 # 0x Swap API v2 Demo (Next.js App Router)
 
-
 > [!NOTE]  
 > 0x API v2 is in closed beta. Get your app ready with the [v2 migration guide](https://0x.org/beta-docs/next/0x-swap-api/upgrading/upgrading_to_v2) to ensure a smooth transition.
 
@@ -16,6 +15,7 @@ This demo app covers best practices for how to use the 0x Swap API's price endpo
 ### Live Demo
 
 Checkout the live demo 👉 [here](https://0x-swap-v2-demo-app.vercel.app/)
+
 ### Price View
 
 ![priceView](src/images/priceView.png)
@@ -23,6 +23,35 @@ Checkout the live demo 👉 [here](https://0x-swap-v2-demo-app.vercel.app/)
 ### Quote View
 
 ![quoteView](src/images/quoteView.png)
+
+Demonstrates the following on Base mainnet:
+
+1. [Get a 0x API key](https://0x.org/docs/introduction/getting-started)
+2. Get an indicative price (sell 0.1 USDC → buy WETH)
+3. (If needed) Set token allowance for Permit2
+4. Fetch a firm quote (sell 0.1 USDC → buy WETH)
+5. Sign the Permit2 EIP-712 message
+6. Submit the transaction with permit2 signature
+
+### What is the difference between Permit2 and AllowanceHolder?
+
+<details>
+
+<summary>Read more about when to use AllowanceHolder vs Permit2</summary>
+
+0x Swap API offers you the optionality to either use [Permit2](https://0x.org/docs/next/introduction/0x-cheat-sheet#permit2-contract) or [AllowanceHolder](https://0x.org/docs/next/introduction/0x-cheat-sheet#allowanceholder-contract) as the allowance target.
+
+For most applications, we recommend using the Permit2 flow for swaps and setting allowances on the Permit2 contract. This process requires collecting two signatures from your users per trade: one offchain signature for the limited approval and an onchain signature for the trade.
+
+While Permit2's single-use method provides greatly enhanced security, we recognize that some projects may not wish to have a double-signature UX (this may apply to teams that integrate Swap API into smart contracts, or teams that are aggregating across multiple sources and want to keep the UI consistent across all the integrations).
+
+If your integration prevents you from collecting offchain signatures, such as with smart contracts, we recommend using AllowanceHolder.
+
+Originally developed by Uniswap based on the work of 0x alumnus [Lawrence Forman](https://github.com/merklejerk), [Permit2](https://blog.uniswap.org/permit2-and-universal-router) is a token approval method that can be used to safely share and manage token approvals across different smart contracts. Permit2 is immutable, extensively audited, used by other trusted protocols in the space including Uniswap and has a [$3M bug bounty](https://uniswap.org/bug-bounty).
+
+Still have questions? [Reachout to our team](https://0x.org/docs/introduction/community#contact-support).
+
+</details>
 
 ## Getting Started
 
