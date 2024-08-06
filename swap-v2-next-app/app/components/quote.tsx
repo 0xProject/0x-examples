@@ -182,6 +182,7 @@ export default function QuoteView({
                 MAGIC_CALLDATA_STRING,
                 signature.slice(2)
               ) as Hex,
+              value: quote?.transaction.value,
               chainId: chainId,
             });
         }}
