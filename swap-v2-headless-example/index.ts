@@ -148,7 +148,9 @@ const main = async () => {
         MAGIC_CALLDATA_STRING,
         signature.slice(2)
       ),
-      value: quote?.transaction.value,
+      value: quote?.transaction.value
+        ? BigInt(quote.transaction.value)
+        : undefined, // value is used for native tokens
       gasPrice: !!quote?.transaction.gasPrice
         ? BigInt(quote?.transaction.gasPrice)
         : undefined,

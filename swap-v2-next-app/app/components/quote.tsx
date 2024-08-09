@@ -184,7 +184,7 @@ export default function QuoteView({
               ) as Hex,
               value: quote?.transaction.value
                 ? BigInt(quote.transaction.value)
-                : undefined, // Convert value to bigint
+                : undefined, // value is used for native tokens
               chainId: chainId,
             });
         }}
