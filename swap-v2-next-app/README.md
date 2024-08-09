@@ -61,10 +61,10 @@ Still have questions? [Reachout to our team](https://0x.org/docs/introduction/co
 cp .env.example .env
 ```
 
-| **API Keys**            | **Description**                                                                                                  | **Code**                                                                                                            |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| WalletConnect projectId | WalletConnect's SDK to help with connecting wallets (create one [here](https://cloud.walletconnect.com/sign-in)) | Add [here](https://github.com/0xProject/0x-examples/blob/jlin/update-with-swap-v2/swap-v2-next-app/.env.example#L3) |
-| 0x                      | 0x API key (create one [here](https://0x.org/docs/introduction/getting-started))                                 | Add [here](https://github.com/0xProject/0x-examples/blob/jlin/update-with-swap-v2/swap-v2-next-app/.env.example#L3) |
+| **API Keys**            | **Description**                                                                                                  | **Code**                                                                                     |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| WalletConnect projectId | WalletConnect's SDK to help with connecting wallets (create one [here](https://cloud.walletconnect.com/sign-in)) | Add [here](https://github.com/0xProject/0x-examples/blob/main/swap-v2-next-app/.env.example) |
+| 0x                      | 0x API key (create one [here](https://0x.org/docs/introduction/getting-started))                                 | Add [here](https://github.com/0xProject/0x-examples/blob/main/swap-v2-next-app/.env.example) |
 
 2. Install project dependencies
 

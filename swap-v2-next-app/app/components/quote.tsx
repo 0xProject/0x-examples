@@ -182,7 +182,9 @@ export default function QuoteView({
                 MAGIC_CALLDATA_STRING,
                 signature.slice(2)
               ) as Hex,
-              value: quote?.transaction.value,
+              value: quote?.transaction.value
+                ? BigInt(quote.transaction.value)
+                : undefined, // Convert value to bigint
               chainId: chainId,
             });
         }}

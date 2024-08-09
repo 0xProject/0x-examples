@@ -408,7 +408,7 @@ export default function PriceView({
     price: any;
   }) {
     // If price.issues.allowance is null, show the Review Trade button
-    if (price.issues.allowance === null) {
+    if (price?.issues.allowance === null) {
       return (
         <button
           type="button"
@@ -425,7 +425,7 @@ export default function PriceView({
     }
 
     // Determine the spender from price.issues.allowance
-    const spender = price.issues.allowance.spender;
+    const spender = price?.issues.allowance.spender;
 
     // 1. Read from erc20, check approval for the determined spender to spend sellToken
     const { data: allowance, refetch } = useReadContract({
