@@ -123,31 +123,32 @@ const main = async () => {
   console.log("quoteResponse: ", quote);
 
   // 4. sign permit2.eip712 returned from quote
-  let signature: Hex | undefined;
-  try {
-    signature = await client.signTypedData(quote.permit2.eip712);
-    console.log("Signed permit2 message from quote response");
-  } catch (error) {
-    console.error("Error signing permit2 coupon:", error);
+  if (quote.permit2?.eip712) {
+    let signature: Hex | undefined;
+    try {
+      signature = await client.signTypedData(quote.permit2.eip712);
+      console.log("Signed permit2 message from quote response");
+    } catch (error) {
+      console.error("Error signing permit2 coupon:", error);
+    }
+
+    // 5. append sig length and sig data to transaction.data
+
+    if (signature && quote?.transaction?.data) {
+      const signatureLengthInHex = numberToHex(size(signature), {
+        signed: false,
+        size: 32,
+      });
+
+      const transactionData = quote.transaction.data as Hex;
+      const sigLengthHex = signatureLengthInHex as Hex;
+      const sig = signature as Hex;
+
+      quote.transaction.data = concat([transactionData, sigLengthHex, sig]);
+    } else {
+      throw new Error("Failed to obtain signature or transaction data");
+    }
   }
-
-  // 5. append sig length and sig data to transaction.data
-
-  if (signature && quote?.transaction?.data) {
-    const signatureLengthInHex = numberToHex(size(signature), {
-      signed: false,
-      size: 32,
-    });
-
-    const transactionData = quote.transaction.data as Hex;
-    const sigLengthHex = signatureLengthInHex as Hex;
-    const sig = signature as Hex;
-
-    quote.transaction.data = concat([transactionData, sigLengthHex, sig]);
-  } else {
-    throw new Error("Failed to obtain signature or transaction data");
-  }
-
   // 6. submit txn with permit2 signature
   if (signature && quote.transaction.data) {
     const nonce = await client.getTransactionCount({
