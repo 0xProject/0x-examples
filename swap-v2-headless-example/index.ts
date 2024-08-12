@@ -131,6 +131,8 @@ const main = async () => {
     console.error("Error signing permit2 coupon:", error);
   }
 
+  // 5. append sig length and sig data to transaction.data
+
   if (signature && quote?.transaction?.data) {
     const signatureLengthInHex = numberToHex(size(signature), {
       signed: false,
@@ -146,7 +148,7 @@ const main = async () => {
     throw new Error("Failed to obtain signature or transaction data");
   }
 
-  // 5. submit txn with permit2 signature
+  // 6. submit txn with permit2 signature
   if (signature && quote.transaction.data) {
     const nonce = await client.getTransactionCount({
       address: client.account.address,
