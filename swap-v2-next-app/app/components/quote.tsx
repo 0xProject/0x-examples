@@ -7,11 +7,10 @@ import {
   useWalletClient,
   type BaseError,
 } from "wagmi";
-import { Address, type Hex } from "viem";
+import { Address, concat, numberToHex, size, type Hex } from "viem";
 import type { PriceResponse, QuoteResponse } from "../../src/utils/types";
 import {
   MAINNET_TOKENS_BY_ADDRESS,
-  MAGIC_CALLDATA_STRING,
   AFFILIATE_FEE,
   FEE_RECIPIENT,
 } from "../../src/constants";
@@ -166,10 +165,39 @@ export default function QuoteView({
           console.log("to", quote.transaction.to);
           console.log("value", quote.transaction.value);
 
-          // On click, (1) sign permit2.eip712 returned from quote (2) submit tx
+          // On click, (1) Sign the Permit2 EIP-712 message returned from quote
+          if (quote.permit2?.eip712) {
+            let signature: Hex | undefined;
+            try {
+              signature = await signTypedDataAsync(quote.permit2.eip712);
+              console.log("Signed permit2 message from quote response");
+            } catch (error) {
+              console.error("Error signing permit2 coupon:", error);
+            }
 
-          let signature: Hex;
-          signature = await signTypedDataAsync(quote.permit2.eip712);
+            // (2) Append signature length and signature data to calldata
+
+            if (signature && quote?.transaction?.data) {
+              const signatureLengthInHex = numberToHex(size(signature), {
+                signed: false,
+                size: 32,
+              });
+
+              const transactionData = quote.transaction.data as Hex;
+              const sigLengthHex = signatureLengthInHex as Hex;
+              const sig = signature as Hex;
+
+              quote.transaction.data = concat([
+                transactionData,
+                sigLengthHex,
+                sig,
+              ]);
+            } else {
+              throw new Error("Failed to obtain signature or transaction data");
+            }
+          }
+
+          // (3) Submit the transaction with Permit2 signature
 
           sendTransaction &&
             sendTransaction({
@@ -178,10 +206,7 @@ export default function QuoteView({
                 ? BigInt(quote?.transaction.gas)
                 : undefined,
               to: quote?.transaction.to,
-              data: quote?.transaction.data.replace(
-                MAGIC_CALLDATA_STRING,
-                signature.slice(2)
-              ) as Hex,
+              data: quote.transaction.data, // submit
               value: quote?.transaction.value
                 ? BigInt(quote.transaction.value)
                 : undefined, // value is used for native tokens
