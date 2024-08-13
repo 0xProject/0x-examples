@@ -7,7 +7,11 @@ import {
   parseUnits,
   maxUint256,
   publicActions,
+  concat,
+  numberToHex,
+  size,
 } from "viem";
+import type { Hex } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { base } from "viem/chains";
 import { wethAbi } from "./abi/weth-abi";
@@ -33,7 +37,7 @@ const headers = new Headers({
 
 // setup wallet client
 const client = createWalletClient({
-  account: privateKeyToAccount(("0x" + PRIVATE_KEY) as `0x${string}`),
+  account: privateKeyToAccount(`0x${PRIVATE_KEY}` as `0x${string}`),
   chain: base,
   transport: http(ALCHEMY_HTTP_TRANSPORT_URL),
 }).extend(publicActions); // extend wallet client with publicActions for public client
@@ -51,9 +55,6 @@ const weth = getContract({
   abi: wethAbi,
   client,
 });
-
-// setup constant used when signing the permit2.eip712 message
-export const MAGIC_CALLDATA_STRING = "f".repeat(130);
 
 const main = async () => {
   // specify sell amount
@@ -122,21 +123,38 @@ const main = async () => {
   console.log("quoteResponse: ", quote);
 
   // 4. sign permit2.eip712 returned from quote
-  let signature;
-  try {
-    signature = await client.signTypedData(quote.permit2.eip712);
-    console.log("Signed permit2 message from quote response");
-  } catch (error) {
-    console.error("Error signing permit2 coupon:", error);
-  }
+  if (quote.permit2?.eip712) {
+    let signature: Hex | undefined;
+    try {
+      signature = await client.signTypedData(quote.permit2.eip712);
+      console.log("Signed permit2 message from quote response");
+    } catch (error) {
+      console.error("Error signing permit2 coupon:", error);
+    }
 
-  // 5. submit txn with permit2 signature
-  if (signature) {
+    // 5. append sig length and sig data to transaction.data
+
+    if (signature && quote?.transaction?.data) {
+      const signatureLengthInHex = numberToHex(size(signature), {
+        signed: false,
+        size: 32,
+      });
+
+      const transactionData = quote.transaction.data as Hex;
+      const sigLengthHex = signatureLengthInHex as Hex;
+      const sig = signature as Hex;
+
+      quote.transaction.data = concat([transactionData, sigLengthHex, sig]);
+    } else {
+      throw new Error("Failed to obtain signature or transaction data");
+    }
+  }
+  // 6. submit txn with permit2 signature
+  if (signature && quote.transaction.data) {
     const nonce = await client.getTransactionCount({
       address: client.account.address,
     });
 
-    // because using a local account, need to signTransaction and sendRawTransaction separately rather than use sendTransaction directly
     const signedTransaction = await client.signTransaction({
       account: client.account,
       chain: client.chain,
@@ -144,10 +162,7 @@ const main = async () => {
         ? BigInt(quote?.transaction.gas)
         : undefined,
       to: quote?.transaction.to,
-      data: quote?.transaction.data.replace(
-        MAGIC_CALLDATA_STRING,
-        signature.slice(2)
-      ),
+      data: quote.transaction.data,
       value: quote?.transaction.value
         ? BigInt(quote.transaction.value)
         : undefined, // value is used for native tokens
