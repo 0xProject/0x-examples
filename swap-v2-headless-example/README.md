@@ -1,15 +1,19 @@
 # Swap v2 Permit2 headless example (viem)
 
-A headless example of how to use 0x Swap API v2 `/permit2/price` and `/permit2/quote` using [viem](https://viem.sh/)
+A headless example of how to use 0x Swap API v2 `/permit2/price` and `/permit2/quote` using [viem](https://viem.sh/). 
+See the [Get started with Swap API guide](https://0x.org/docs/0x-swap-api/guides/swap-tokens-with-0x-swap-api) to learn how to use it.
 
-Demonstrates the following on Base mainnet:
+This example demonstrates the following on Base mainnet:
 
-1. [Get a 0x API key](https://0x.org/docs/introduction/getting-started)
-2. Get an indicative price (sell 0.1 USDC → buy WETH)
-3. (If needed) Set token allowance for Permit2
-4. Fetch a firm quote (sell 0.1 USDC → buy WETH)
-5. Sign the Permit2 EIP-712 message
+0. [Get a 0x API key](https://0x.org/docs/introduction/getting-started)
+1. Get an indicative price (sell 0.1 USDC → buy WETH)
+2. (If needed) Set token allowance for Permit2
+3. Fetch a firm quote (sell 0.1 USDC → buy WETH)
+4. Sign the Permit2 EIP-712 message
+5. Append signature length and signature data to calldata
 6. Submit the transaction with permit2 signature
+
+
 
 ### What is the difference between Permit2 and AllowanceHolder?
 
