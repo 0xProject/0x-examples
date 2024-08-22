@@ -123,8 +123,8 @@ const main = async () => {
   console.log("quoteResponse: ", quote);
 
   // 4. sign permit2.eip712 returned from quote
+ let signature: Hex | undefined;
   if (quote.permit2?.eip712) {
-    let signature: Hex | undefined;
     try {
       signature = await client.signTypedData(quote.permit2.eip712);
       console.log("Signed permit2 message from quote response");
