@@ -98,6 +98,9 @@ export default function QuoteView({
 
   console.log("quote", quote);
 
+  // Helper function to format tax basis points to percentage
+  const formatTax = (taxBps: string) => (parseFloat(taxBps) / 100).toFixed(2);
+
   return (
     <div className="p-3 mx-auto max-w-screen-sm ">
       <form>
@@ -153,6 +156,27 @@ export default function QuoteView({
                 " " +
                 buyTokenInfo(chainId).symbol
               : null}
+          </div>
+          {/* Tax Information Display */}
+          <div className="text-slate-400">
+            {quote.tokenMetadata.buyToken.buyTaxBps &&
+              quote.tokenMetadata.buyToken.buyTaxBps !== "0" && (
+                <p>
+                  {buyTokenInfo(chainId).symbol +
+                    ` Buy Tax: ${formatTax(
+                      quote.tokenMetadata.buyToken.buyTaxBps
+                    )}%`}
+                </p>
+              )}
+            {quote.tokenMetadata.sellToken.sellTaxBps &&
+              quote.tokenMetadata.sellToken.sellTaxBps !== "0" && (
+                <p>
+                  {sellTokenInfo(chainId).symbol +
+                    ` Sell Tax: ${formatTax(
+                      quote.tokenMetadata.sellToken.sellTaxBps
+                    )}%`}
+                </p>
+              )}
           </div>
         </div>
       </form>
