@@ -10,10 +10,8 @@ import {
 } from "wagmi";
 import { erc20Abi, Address } from "viem";
 import {
-  PERMIT2_ADDRESS,
   MAINNET_TOKENS,
   MAINNET_TOKENS_BY_SYMBOL,
-  MAINNET_EXCHANGE_PROXY,
   MAX_ALLOWANCE,
   AFFILIATE_FEE,
   FEE_RECIPIENT,
@@ -48,6 +46,14 @@ export default function PriceView({
   const [buyAmount, setBuyAmount] = useState("");
   const [tradeDirection, setTradeDirection] = useState("sell");
   const [error, setError] = useState([]);
+  const [buyTokenTax, setBuyTokenTax] = useState({
+    buyTaxBps: "0",
+    sellTaxBps: "0",
+  });
+  const [sellTokenTax, setSellTokenTax] = useState({
+    buyTaxBps: "0",
+    sellTaxBps: "0",
+  });
 
   const handleSellTokenChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSellToken(e.target.value);
@@ -55,13 +61,6 @@ export default function PriceView({
   function handleBuyTokenChange(e: ChangeEvent<HTMLSelectElement>) {
     setBuyToken(e.target.value);
   }
-
-  const exchangeProxy = (chainId: number): Address => {
-    if (chainId === 1) {
-      return MAINNET_EXCHANGE_PROXY;
-    }
-    return MAINNET_EXCHANGE_PROXY;
-  };
 
   const tokensByChain = (chainId: number) => {
     if (chainId === 1) {
@@ -117,6 +116,11 @@ export default function PriceView({
         setBuyAmount(formatUnits(data.buyAmount, buyTokenDecimals));
         setPrice(data);
       }
+      // Set token tax information
+      if (data?.tokenMetadata) {
+        setBuyTokenTax(data.tokenMetadata.buyToken);
+        setSellTokenTax(data.tokenMetadata.sellToken);
+      }
     }
 
     if (sellAmount !== "") {
@@ -146,6 +150,9 @@ export default function PriceView({
     data && sellAmount
       ? parseUnits(sellAmount, sellTokenDecimals) > data.value
       : true;
+
+  // Helper function to format tax basis points to percentage
+  const formatTax = (taxBps: string) => (parseFloat(taxBps) / 100).toFixed(2);
 
   return (
     <div>
@@ -190,8 +197,8 @@ export default function PriceView({
               alt={sellToken}
               className="h-9 w-9 mr-2 rounded-md"
               src={MAINNET_TOKENS_BY_SYMBOL[sellToken].logoURI}
-              width={6}
-              height={6}
+              width={9}
+              height={9}
             />
 
             <div className="h-14 sm:w-full sm:mr-2">
@@ -237,8 +244,8 @@ export default function PriceView({
               alt={buyToken}
               className="h-9 w-9 mr-2 rounded-md"
               src={MAINNET_TOKENS_BY_SYMBOL[buyToken].logoURI}
-              width={6}
-              height={6}
+              width={9}
+              height={9}
             />
             <select
               name="buy-token-select"
@@ -274,6 +281,7 @@ export default function PriceView({
             />
           </section>
 
+          {/* Affiliate Fee Display */}
           <div className="text-slate-400">
             {price && price.fees.integratorFee.amount
               ? "Affiliate Fee: " +
@@ -286,6 +294,22 @@ export default function PriceView({
                 " " +
                 MAINNET_TOKENS_BY_SYMBOL[buyToken].symbol
               : null}
+          </div>
+
+          {/* Tax Information Display */}
+          <div className="text-slate-400">
+            {buyTokenTax.buyTaxBps !== "0" && (
+              <p>
+                {MAINNET_TOKENS_BY_SYMBOL[buyToken].symbol +
+                  ` Buy Tax: ${formatTax(buyTokenTax.buyTaxBps)}%`}
+              </p>
+            )}
+            {sellTokenTax.sellTaxBps !== "0" && (
+              <p>
+                {MAINNET_TOKENS_BY_SYMBOL[sellToken].symbol +
+                  ` Sell Tax: ${formatTax(sellTokenTax.sellTaxBps)}%`}
+              </p>
+            )}
           </div>
         </div>
 

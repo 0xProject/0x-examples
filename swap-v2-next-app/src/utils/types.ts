@@ -68,6 +68,16 @@ export interface QuoteResponse {
     eip712: EIP712TypedData;
   };
   transaction: V2QuoteTransaction;
+  tokenMetadata: {
+    buyToken: {
+      buyTaxBps: string | null;
+      sellTaxBps: string | null;
+    };
+    sellToken: {
+      buyTaxBps: string | null;
+      sellTaxBps: string | null;
+    };
+  };
 }
 
 export interface V2QuoteTransaction {

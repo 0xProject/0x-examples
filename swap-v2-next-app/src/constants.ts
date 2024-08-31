@@ -50,6 +50,15 @@ export const MAINNET_TOKENS: Token[] = [
     logoURI:
       "https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/dai.svg",
   },
+  {
+    chainId: 1,
+    name: "FLOKI",
+    symbol: "FLOKI",
+    decimals: 9,
+    address: "0xcf0c122c6b73ff809c693db761e7baebe62b6a2e",
+    logoURI:
+      "https://raw.githubusercontent.com/trustwallet/assets/c37119334a24f9933f373c6cc028a5bdbad2ecb4/blockchains/ethereum/assets/0xcf0C122c6b73ff809C693DB761e7BaeBe62b6a2E/logo.png",
+  },
 ];
 
 export const MAINNET_TOKENS_BY_SYMBOL: Record<string, Token> = {
@@ -80,6 +89,15 @@ export const MAINNET_TOKENS_BY_SYMBOL: Record<string, Token> = {
     logoURI:
       "https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/dai.svg",
   },
+  floki: {
+    chainId: 1,
+    name: "FLOKI",
+    symbol: "FLOKI",
+    decimals: 9,
+    address: "0xcf0c122c6b73ff809c693db761e7baebe62b6a2e",
+    logoURI:
+      "https://raw.githubusercontent.com/trustwallet/assets/c37119334a24f9933f373c6cc028a5bdbad2ecb4/blockchains/ethereum/assets/0xcf0C122c6b73ff809C693DB761e7BaeBe62b6a2E/logo.png",
+  },
 };
 
 export const MAINNET_TOKENS_BY_ADDRESS: Record<string, Token> = {
@@ -109,5 +127,14 @@ export const MAINNET_TOKENS_BY_ADDRESS: Record<string, Token> = {
     address: "0x6b175474e89094c44da98b954eedeac495271d0f",
     logoURI:
       "https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/dai.svg",
+  },
+  "0xcf0c122c6b73ff809c693db761e7baebe62b6a2e": {
+    chainId: 1,
+    name: "FLOKI",
+    symbol: "FLOKI",
+    decimals: 9,
+    address: "0xcf0c122c6b73ff809c693db761e7baebe62b6a2e",
+    logoURI:
+      "https://raw.githubusercontent.com/trustwallet/assets/c37119334a24f9933f373c6cc028a5bdbad2ecb4/blockchains/ethereum/assets/0xcf0C122c6b73ff809C693DB761e7BaeBe62b6a2E/logo.png",
   },
 };
