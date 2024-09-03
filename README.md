@@ -6,7 +6,7 @@ A collection of 0x API code examples
 
 ### v2
 
-- [Swap API v2 Demo App (Next.js App Router)](https://github.com/0xProject/0x-examples/tree/main/swap-v2-next-app)
+- [Swap API v2 Demo App (Permit2) using Next.js App Router](https://github.com/0xProject/0x-examples/tree/main/swap-v2-next-app)
 - [Swap API v2 (Permit2) Headless Example](https://github.com/0xProject/0x-examples/tree/main/swap-v2-headless-example)
 - [Swap API v2 (AllowanceHolder) Headless Example](https://github.com/0xProject/0x-examples/tree/main/swap-v2-allowance-holder-headless-example)
 
