@@ -29,6 +29,7 @@ if (!ALCHEMY_HTTP_TRANSPORT_URL)
 const headers = new Headers({
   "Content-Type": "application/json",
   "0x-api-key": ZERO_EX_API_KEY,
+  "0x-version": "v2",
 });
 
 // setup wallet client
