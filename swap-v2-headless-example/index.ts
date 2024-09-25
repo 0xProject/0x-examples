@@ -33,6 +33,7 @@ if (!ALCHEMY_HTTP_TRANSPORT_URL)
 const headers = new Headers({
   "Content-Type": "application/json",
   "0x-api-key": ZERO_EX_API_KEY,
+  "0x-version": "v2",
 });
 
 // setup wallet client
@@ -123,7 +124,7 @@ const main = async () => {
   console.log("quoteResponse: ", quote);
 
   // 4. sign permit2.eip712 returned from quote
- let signature: Hex | undefined;
+  let signature: Hex | undefined;
   if (quote.permit2?.eip712) {
     try {
       signature = await client.signTypedData(quote.permit2.eip712);
