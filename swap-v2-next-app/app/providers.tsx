@@ -3,41 +3,53 @@
 import * as React from "react";
 import {
   RainbowKitProvider,
-  getDefaultWallets,
-  getDefaultConfig,
+  connectorsForWallets,
 } from "@rainbow-me/rainbowkit";
 import {
+  coinbaseWallet,
+  metaMaskWallet,
   argentWallet,
   trustWallet,
   ledgerWallet,
+  rainbowWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import {
-  arbitrum,
-  base,
-  mainnet,
-  optimism,
-  polygon,
-  sepolia,
-} from "wagmi/chains";
+import { mainnet } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { WagmiProvider } from "wagmi";
-
-const { wallets } = getDefaultWallets();
+import { WagmiProvider, createConfig, http } from "wagmi";
 
 const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string;
+coinbaseWallet.preference = "smartWalletOnly";
 
-const config = getDefaultConfig({
-  appName: "0x Token Swap dApp",
-  projectId,
-  wallets: [
-    ...wallets,
+const connectors = connectorsForWallets(
+  [
+    {
+      groupName: "Recommended Wallet",
+      wallets: [coinbaseWallet],
+    },
     {
       groupName: "Other",
-      wallets: [argentWallet, trustWallet, ledgerWallet],
+      wallets: [
+        rainbowWallet,
+        metaMaskWallet,
+        argentWallet,
+        trustWallet,
+        ledgerWallet,
+      ],
     },
   ],
+  {
+    appName: "0x Swap Demo App",
+    projectId,
+  }
+);
+
+const config = createConfig({
   chains: [mainnet],
+  // turn off injected provider discovery
+  multiInjectedProviderDiscovery: false,
+  connectors,
   ssr: true,
+  transports: { [mainnet.id]: http() },
 });
 
 const queryClient = new QueryClient();
