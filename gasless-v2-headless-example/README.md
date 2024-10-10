@@ -18,7 +18,7 @@ Demonstrates the following on Base mainnet:
    
    e. Compute trade hash
    
-5. Check the trade status using `/gasless/status/{tradeHash}`
+4. Check the trade status using `/gasless/status/{tradeHash}`
 
 > [!WARNING]  
 > This is a demo, and is not ready for production use. The code has not been audited and does not account for all error handling. Use at your own risk.
@@ -349,3 +349,6 @@ checks:  {
 }
 🎉 Transaction Completed!
 ```
+## Supported Networks
+
+See [here](https://0x.org/docs/introduction/0x-cheat-sheet#-chain-support) for the full list of 0x API supported networks. 
