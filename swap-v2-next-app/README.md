@@ -83,14 +83,5 @@ open http://localhost:3000
 
 ## Supported Networks
 
-Swap API v2 is supported on the following chains. Access liquidity from the chain you want by using the corresponding chain URI when making a request:
+See [here](https://0x.org/docs/introduction/0x-cheat-sheet#-chain-support) for the latest list of supported networks.
 
-| Chain               | Chain ID |
-| ------------------- | -------- |
-| Ethereum (Mainnet)  | 1        |
-| Arbitrum            | 42161    |
-| Avalanche           | 43114    |
-| Base                | 84531    |
-| Binance Smart Chain | 56       |
-| Optimism            | 10       |
-| Polygon             | 137      |
