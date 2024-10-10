@@ -274,3 +274,8 @@ quoteResponse:  {
 Tx hash:  0x1bd956b246b1faf5a1cc1b3bf629be424e1bacdf803a69744c744e9e07f70463
 See tx details at https://basescan.org/tx/0x1bd956b246b1faf5a1cc1b3bf629be424e1bacdf803a69744c744e9e07f70463
 ```
+
+## Supported Networks
+
+See [here](https://0x.org/docs/introduction/0x-cheat-sheet#-chain-support) for the latest list of supported networks.
+
