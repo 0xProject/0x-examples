@@ -261,3 +261,7 @@ Signed permit2 message from quote response
 Transaction hash: 0xcb9ec3b8ef7002f9fa232fa23f16a0ba365a1c1d48580f420977a1b20c86ab78
 See tx details at https://basescan.org/tx/0xcb9ec3b8ef7002f9fa232fa23f16a0ba365a1c1d48580f420977a1b20c86ab78
 ```
+
+## Supported Networks
+
+See [here](https://0x.org/docs/introduction/0x-cheat-sheet#-chain-support) for the latest list of supported networks.
