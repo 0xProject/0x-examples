@@ -21,7 +21,7 @@ A collection of 0x API code examples
 
 ### v2
 
-- [Gasless API v2 Headless Example](https://github.com/0xProject/0x-examples/tree/jlin/gasless-v2-headless-example/gasless-v2-headless-example)
+- [Gasless API v2 Headless Example](https://github.com/0xProject/0x-examples/blob/main/gasless-v2-headless-example/README.md)
 
 ### v1
 
