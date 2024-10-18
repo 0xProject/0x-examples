@@ -65,7 +65,7 @@ const main = async () => {
     sellAmount = parseUnits("0.0001", 18); // ETH has 18 decimals
   } else {
     // specify sell amount for ERC-20 tokens
-    sellAmount = parseUnits("0.1", await eth.read.decimals());
+    sellAmount = parseUnits("0.0001", await eth.read.decimals());
   }
   // 1. fetch price
   const priceParams = new URLSearchParams({
@@ -84,7 +84,7 @@ const main = async () => {
   );
 
   const price = await priceResponse.json();
-  console.log("Fetching price to swap 0.1 ETH for USDC");
+  console.log("Fetching price to swap 0.0001 ETH for USDC");
   console.log(
     `https://api.0x.org/swap/permit2/price?${priceParams.toString()}`
   );
@@ -130,7 +130,7 @@ const main = async () => {
   );
 
   const quote = await quoteResponse.json();
-  console.log("Fetching quote to swap 0.1 ETH for USDC");
+  console.log("Fetching quote to swap 0.0001 ETH for USDC");
   console.log("quoteResponse: ", quote);
 
   // 5. sign permit2.eip712 returned from quote
