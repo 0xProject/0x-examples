@@ -62,7 +62,7 @@ const main = async () => {
 
   // handle ETH separately (no need to call decimals on ETH)
   if (eth.address === "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE") {
-    sellAmount = parseUnits("0.1", 18); // ETH has 18 decimals
+    sellAmount = parseUnits("0.0001", 18); // ETH has 18 decimals
   } else {
     // specify sell amount for ERC-20 tokens
     sellAmount = parseUnits("0.1", await eth.read.decimals());
@@ -175,6 +175,7 @@ const main = async () => {
         ? BigInt(quote?.transaction.gas)
         : undefined,
       to: quote?.transaction.to,
+      data: quote.transaction.data,
       value: BigInt(quote.transaction.value), // Ensure value is set for native tokens
       gasPrice: !!quote?.transaction.gasPrice
         ? BigInt(quote?.transaction.gasPrice)
