@@ -13,8 +13,8 @@ import {
 } from "viem";
 import type { Hex } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { base } from "viem/chains";
-import { wethAbi } from "./abi/weth-abi";
+import { scroll } from "viem/chains";
+import { usdcAbi } from "./abi/usdc-abi";
 
 const qs = require("qs");
 
@@ -39,33 +39,39 @@ const headers = new Headers({
 // setup wallet client
 const client = createWalletClient({
   account: privateKeyToAccount(`0x${PRIVATE_KEY}` as `0x${string}`),
-  chain: base,
+  chain: scroll,
   transport: http(ALCHEMY_HTTP_TRANSPORT_URL),
 }).extend(publicActions); // extend wallet client with publicActions for public client
 
 const [address] = await client.getAddresses();
 
 // set up contracts
-const usdc = getContract({
-  address: "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+const eth = getContract({
+  address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
   abi: erc20Abi,
   client,
 });
-const weth = getContract({
-  address: "0x4200000000000000000000000000000000000006",
-  abi: wethAbi,
+const usdc = getContract({
+  address: "0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4",
+  abi: usdcAbi,
   client,
 });
 
 const main = async () => {
-  // specify sell amount
-  const sellAmount = parseUnits("0.1", await usdc.read.decimals());
+  let sellAmount;
 
+  // handle ETH separately (no need to call decimals on ETH)
+  if (eth.address === "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE") {
+    sellAmount = parseUnits("0.1", 18); // ETH has 18 decimals
+  } else {
+    // specify sell amount for ERC-20 tokens
+    sellAmount = parseUnits("0.1", await eth.read.decimals());
+  }
   // 1. fetch price
   const priceParams = new URLSearchParams({
     chainId: client.chain.id.toString(),
-    sellToken: usdc.address,
-    buyToken: weth.address,
+    sellToken: eth.address,
+    buyToken: usdc.address,
     sellAmount: sellAmount.toString(),
     taker: client.account.address,
   });
@@ -78,35 +84,39 @@ const main = async () => {
   );
 
   const price = await priceResponse.json();
-  console.log("Fetching price to swap 0.1 USDC for WETH");
+  console.log("Fetching price to swap 0.1 ETH for USDC");
   console.log(
     `https://api.0x.org/swap/permit2/price?${priceParams.toString()}`
   );
   console.log("priceResponse: ", price);
 
-  // 2. check if taker needs to set an allowance for Permit2
-
-  if (price.issues.allowance !== null) {
-    try {
-      const { request } = await usdc.simulate.approve([
-        price.issues.allowance.spender,
-        maxUint256,
-      ]);
-      console.log("Approving Permit2 to spend USDC...", request);
-      // set approval
-      const hash = await usdc.write.approve(request.args);
-      console.log(
-        "Approved Permit2 to spend USDC.",
-        await client.waitForTransactionReceipt({ hash })
-      );
-    } catch (error) {
-      console.log("Error approving Permit2:", error);
-    }
+  // 2. Check if the sellToken is a native token (ETH) to skip allowance
+  if (eth.address === "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE") {
+    console.log("Native token detected, no need for allowance check");
   } else {
-    console.log("USDC already approved for Permit2");
+    // 3. Check if allowance is required
+    if (price.issues.allowance !== null) {
+      try {
+        const { request } = await eth.simulate.approve([
+          price.issues.allowance.spender,
+          maxUint256,
+        ]);
+        console.log("Approving Permit2 to spend sellToken...", request);
+        // set approval
+        const hash = await eth.write.approve(request.args);
+        console.log(
+          "Approved Permit2 to spend sellToken.",
+          await client.waitForTransactionReceipt({ hash })
+        );
+      } catch (error) {
+        console.log("Error approving Permit2:", error);
+      }
+    } else {
+      console.log("sellToken already approved for Permit2");
+    }
   }
 
-  // 3. fetch quote
+  // 4. fetch quote
   const quoteParams = new URLSearchParams();
   for (const [key, value] of priceParams.entries()) {
     quoteParams.append(key, value);
@@ -120,10 +130,10 @@ const main = async () => {
   );
 
   const quote = await quoteResponse.json();
-  console.log("Fetching quote to swap 0.1 USDC for WETH");
+  console.log("Fetching quote to swap 0.1 ETH for USDC");
   console.log("quoteResponse: ", quote);
 
-  // 4. sign permit2.eip712 returned from quote
+  // 5. sign permit2.eip712 returned from quote
   let signature: Hex | undefined;
   if (quote.permit2?.eip712) {
     try {
@@ -133,8 +143,7 @@ const main = async () => {
       console.error("Error signing permit2 coupon:", error);
     }
 
-    // 5. append sig length and sig data to transaction.data
-
+    // 6. append sig length and sig data to transaction.data
     if (signature && quote?.transaction?.data) {
       const signatureLengthInHex = numberToHex(size(signature), {
         signed: false,
@@ -150,12 +159,36 @@ const main = async () => {
       throw new Error("Failed to obtain signature or transaction data");
     }
   }
-  // 6. submit txn with permit2 signature
-  if (signature && quote.transaction.data) {
+
+  // 7. submit txn with permit2 signature
+
+  // Check if it's a native token (like ETH)
+  if (eth.address === "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE") {
     const nonce = await client.getTransactionCount({
       address: client.account.address,
     });
+    // Directly send the native token transaction (no signature needed)
+    const transaction = await client.sendTransaction({
+      account: client.account,
+      chain: client.chain,
+      gas: !!quote?.transaction.gas
+        ? BigInt(quote?.transaction.gas)
+        : undefined,
+      to: quote?.transaction.to,
+      value: BigInt(quote.transaction.value), // Ensure value is set for native tokens
+      gasPrice: !!quote?.transaction.gasPrice
+        ? BigInt(quote?.transaction.gasPrice)
+        : undefined,
+      nonce: nonce,
+    });
 
+    console.log("Transaction hash:", transaction);
+    console.log(`See tx details at https://scrollscan.com/tx/${transaction}`);
+  } else if (signature && quote.transaction.data) {
+    const nonce = await client.getTransactionCount({
+      address: client.account.address,
+    });
+    // Handle ERC-20 token case (requires signature)
     const signedTransaction = await client.signTransaction({
       account: client.account,
       chain: client.chain,
@@ -164,21 +197,18 @@ const main = async () => {
         : undefined,
       to: quote?.transaction.to,
       data: quote.transaction.data,
-      value: quote?.transaction.value
-        ? BigInt(quote.transaction.value)
-        : undefined, // value is used for native tokens
       gasPrice: !!quote?.transaction.gasPrice
         ? BigInt(quote?.transaction.gasPrice)
         : undefined,
       nonce: nonce,
     });
+
     const hash = await client.sendRawTransaction({
       serializedTransaction: signedTransaction,
     });
 
     console.log("Transaction hash:", hash);
-
-    console.log(`See tx details at https://basescan.org/tx/${hash}`);
+    console.log(`See tx details at https://scrollscan.com/tx/${hash}`);
   } else {
     console.error("Failed to obtain a signature, transaction not sent.");
   }
