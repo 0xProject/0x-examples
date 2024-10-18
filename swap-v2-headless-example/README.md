@@ -3,7 +3,7 @@
 A headless example of how to use 0x Swap API v2 `/permit2/price` and `/permit2/quote` using [viem](https://viem.sh/). 
 See the [Get started with Swap API guide](https://0x.org/docs/0x-swap-api/guides/swap-tokens-with-0x-swap-api) to learn how to use it.
 
-This example demonstrates the following on Base mainnet:
+This example demonstrates the following on Scroll mainnet:
 
 0. [Get a 0x API key](https://0x.org/docs/introduction/getting-started)
 1. Get an indicative price (sell 0.0001 ETH → buy ETH)
