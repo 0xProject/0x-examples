@@ -94,7 +94,7 @@ const main = async () => {
   if (eth.address === "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE") {
     console.log("Native token detected, no need for allowance check");
   } else {
-    // 3. Check if allowance is required
+    // Check if allowance is required
     if (price.issues.allowance !== null) {
       try {
         const { request } = await eth.simulate.approve([
@@ -116,7 +116,7 @@ const main = async () => {
     }
   }
 
-  // 4. fetch quote
+  // 3. fetch quote
   const quoteParams = new URLSearchParams();
   for (const [key, value] of priceParams.entries()) {
     quoteParams.append(key, value);
@@ -133,7 +133,7 @@ const main = async () => {
   console.log("Fetching quote to swap 0.0001 ETH for USDC");
   console.log("quoteResponse: ", quote);
 
-  // 5. sign permit2.eip712 returned from quote
+  // 4. sign permit2.eip712 returned from quote
   let signature: Hex | undefined;
   if (quote.permit2?.eip712) {
     try {
@@ -143,7 +143,7 @@ const main = async () => {
       console.error("Error signing permit2 coupon:", error);
     }
 
-    // 6. append sig length and sig data to transaction.data
+    // 5. append sig length and sig data to transaction.data
     if (signature && quote?.transaction?.data) {
       const signatureLengthInHex = numberToHex(size(signature), {
         signed: false,
@@ -160,14 +160,14 @@ const main = async () => {
     }
   }
 
-  // 7. submit txn with permit2 signature
+  // 6. submit txn with permit2 signature
 
   // Check if it's a native token (like ETH)
   if (eth.address === "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE") {
     const nonce = await client.getTransactionCount({
       address: client.account.address,
     });
-    // Directly send the native token transaction (no signature needed)
+    // Directly sign and send the native token transaction
     const transaction = await client.sendTransaction({
       account: client.account,
       chain: client.chain,
