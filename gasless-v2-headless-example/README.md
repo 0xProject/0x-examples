@@ -31,7 +31,7 @@ Demonstrates the following on Base mainnet:
 
 ## Usage
 
-1. Create an `.env` file and setup the required environment variables (your Etheruem private keys & 0x API key).
+1. Create an `.env` file and setup the required environment variables (your Ethereum private keys & 0x API key).
 
 ```sh
 cp .env.example .env
