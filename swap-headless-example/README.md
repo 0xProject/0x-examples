@@ -20,7 +20,7 @@ Demonstrates the following on Base mainnet:
 
 ## Usage
 
-1. Create an `.env` file and setup the required environment variables (your Etheruem private keys & 0x API key).
+1. Create an `.env` file and setup the required environment variables (your Ethereum private keys & 0x API key).
 
 ```sh
 cp .env.example .env
@@ -47,7 +47,7 @@ bun --watch index.ts
 
 ```
 
-4. Here is an example of the output. It fetches a `price` (USCD → WETH), approves a token allowance (if not already granted), fetches a `quote`, and submits the transaction, and shows the transaction hash:
+4. Here is an example of the output. It fetches a `price` (USDC → WETH), approves a token allowance (if not already granted), fetches a `quote`, and submits the transaction, and shows the transaction hash:
 
 ```bash
  priceResponse:  {
