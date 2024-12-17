@@ -1,6 +1,6 @@
-# Use Swap API v2 in Your Smart Contract with Foundry
+# Use Swap API in Your Smart Contract with Foundry
 
-This repository contains a toy example of the `SimpleTokenSwap` contract, designed to demonstrate ERC20 token swaps with 0x Swap API through a smart contract. The repo is built and tested using [Foundry](https://getfoundry.sh/).
+This repository contains a toy example of the `SimpleTokenSwap` contract, designed to demonstrate ERC20 token swaps with 0x Swap API v2 through a smart contract. The repo is built and tested using [Foundry](https://getfoundry.sh/).
 
 ## Installation
 
