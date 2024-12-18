@@ -85,9 +85,9 @@ Once the inputs are entered, the bot will run the following:
 1. Buys the specified ERC20 token using WETH. 
     - If not the wallet does not have enough WETH, it will try to wrap ETH for WETH.
 2. Watches for conditions:
-    - Price increases by Take Profit Percentage (e.g. 10%) → Trigger "Take Profit" → Sell.
-    - Price drops by Stop Loss Percentage (e.g. 5%) → Trigger "Stop Loss" → Sell.
-    - Timeout after Timeout Duration (e.g. 300s) → Trigger "Timeout" → Sell.
+    - Price increases by X% → Trigger "Take Profit" → Sell.
+    - Price drops by Y% → Trigger "Stop Loss" → Sell.
+    - Timeout after Z sec → Trigger "Timeout" → Sell.
 3. Updates MongoDB with trade results and PnL.
 
 
