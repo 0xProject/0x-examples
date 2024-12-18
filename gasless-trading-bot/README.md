@@ -75,7 +75,7 @@ The CLI tool will prompt you for the following inputs:
 2. **Private Key**: Enter your private key.
 3. **Stop Loss Percentage**: Enter the stop loss percentage (Range: 0 - 100).
 4. **Take Profit Percentage**: Enter the take profit percentage (Range: 0 - 1000).
-5. **Amount in ETH**: Enter the amount in ETH.
+5. **Amount in ETH**: Enter the amount in ETH that will be used to buy the ERC20.
 6. **Timeout**: Enter the timeout duration in seconds.
 
 ## 🤖 Outcome
@@ -105,37 +105,28 @@ For detailed information, refer to the [0x Gasless API documentation](https://0x
 
 ## 🤝 Contribution Guidelines
 
-#### 1. 🍴 Fork the Repository
-Start by forking the repository and creating a new branch for your contributions.
+1. **Fork the Repository:** Start by forking the repository and creating a new branch for your contributions.
 
-#### 2. 🔧 Set Up Environment
-Follow the setup guide in the README to ensure your environment matches the development requirements.
+2. **Set Up Environment:** Follow the setup guide in the README to ensure your environment matches the development requirements.
 
-#### 3. 💻 Code Standards
-- Use TypeScript
-- Adhere to the ESLint rules provided in the project
+3. **Code Standards:** Adhere to the ESLint rules provided in the project
 
-#### 4. 📄 Documentation
-Include or update relevant documentation for new features or changes.
+4. **Documentation:** Include or update relevant documentation for new features or changes.
 
-### 5. 🔍 Pull Request
+5. **Pull Request:**
 - Provide a clear description of the changes and the issue(s) addressed
 - Tag at least one maintainer for review
 - Include screenshots or logs for UI changes or CLI commands
 
 ## 📜 Code of Conduct
 
-#### 1. 🤲 Be Respectful
-Treat others with respect and kindness in all interactions.
+1. **Be Respectful:** Treat others with respect and kindness in all interactions.
 
-#### 2. 💡 Constructive Feedback
-Provide feedback that is thoughtful, helpful, and actionable.
+2. **Constructive Feedback:** Provide feedback that is thoughtful, helpful, and actionable.
 
-#### 3. 🚫 No Harassment
-Harassment, abusive language, or any form of discrimination will not be tolerated.
+3. **No Harassment:** Harassment, abusive language, or any form of discrimination will not be tolerated.
 
-#### 4. 🌈 Collaborative Environment
-Support an open and welcoming space for contributors from all backgrounds.
+4. **Collaborative Environment:** Support an open and welcoming space for contributors from all backgrounds.
 
 ## 📄 Licenses
 
@@ -147,8 +138,8 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 ## 📞 Support
 
-### 🐛 GitHub Issues
+### GitHub Issues
 For bugs, feature requests, and other inquiries related to this example, please open an issue on the GitHub repository.
 
-### 💬 Developer Support
+### Developer Support
 The 0x developer support team is available to quickly answer your technical questions. Contact the [support team](https://0x.org/docs/introduction/community#contact-support) either through the "Intercom messenger" in the bottom right corner throughout the [0x.org](https://0x.org/).

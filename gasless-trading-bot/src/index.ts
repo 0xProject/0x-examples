@@ -21,7 +21,8 @@ program
     intro(chalk.green('Welcome to the interactive terminal!'));
 
     const contractAddress = await text({
-      message: 'Enter Contract Address:',
+      message:
+        'Enter the ERC20 contract address for the token to buy (on Base):',
       validate: (value) =>
         Validator.isValidContractAddress(value)
           ? undefined
@@ -61,7 +62,8 @@ program
     if (isCancel(takeProfit)) process.exit(0);
 
     const amountETH = await text({
-      message: 'Enter Amount in ETH: (WETH on Base)',
+      message:
+        'Enter the amount in ETH (WETH on Base) that will be used to buy the ERC20:',
       validate: (value) => {
         const num = parseFloat(value);
         return Validator.isValidETHAmount(num)
