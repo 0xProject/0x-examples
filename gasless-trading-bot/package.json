@@ -1,0 +1,41 @@
+{
+  "name": "0xcli",
+  "version": "1.0.0",
+  "description": "CLI based 0x trading bot built with typescript",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc --build",
+    "start": "node ./dist/src/index.js",
+    "test": "echo \\\"Error: no test specified\\\" && exit 1",
+    "lint": "eslint ./src/**/*.{ts}",
+    "prettier": "prettier -c --write ./src/**/*.{ts}"
+  },
+  "author": "Syntax",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/figlet": "^1.7.0",
+    "@types/node": "^22.9.3",
+    "@types/yargs": "^17.0.33",
+    "@typescript-eslint/eslint-plugin": "^8.15.0",
+    "@typescript-eslint/parser": "^8.15.0",
+    "eslint": "^8.2.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.3"
+  },
+  "bin": "dist/index.js",
+  "type": "module",
+  "preferGlobal": true,
+  "dependencies": {
+    "@clack/prompts": "^0.8.2",
+    "@dotenvx/dotenvx": "^1.24.5",
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "figlet": "^1.8.0",
+    "mongoose": "^8.8.2",
+    "viem": "^2.21.50"
+  }
+}
