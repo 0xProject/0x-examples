@@ -46,7 +46,7 @@ If your integration prevents you from collecting offchain signatures, such as wi
 
 Originally developed by Uniswap based on the work of 0x alumnus [Lawrence Forman](https://github.com/merklejerk), [Permit2](https://blog.uniswap.org/permit2-and-universal-router) is a token approval method that can be used to safely share and manage token approvals across different smart contracts. Permit2 is immutable, extensively audited, used by other trusted protocols in the space including Uniswap and has a [$3M bug bounty](https://uniswap.org/bug-bounty).
 
-Still have questions? [Reachout to our team](https://0x.org/docs/introduction/community#contact-support).
+Still have questions? [Reach out to our team](https://0x.org/docs/introduction/community#contact-support).
 
 </details>
 
