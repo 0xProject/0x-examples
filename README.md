@@ -14,6 +14,7 @@ A collection of 0x API code examples
 ### Gasless API
 
 - [Gasless API v2 Headless Example](https://github.com/0xProject/0x-examples/blob/main/gasless-v2-headless-example/README.md)
+- [Gasless API v2 Trading Bot](https://github.com/0xProject/0x-examples/tree/main/gasless-v2-trading-bot)
 
 
 ## v1 (Deprecated)
