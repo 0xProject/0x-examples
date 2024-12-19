@@ -1,8 +1,8 @@
-import { secp256k1 } from '@noble/curves/secp256k1';
+import { secp256k1 } from '@noble/curves/secp256k1.js';
 import { Hex, hexToNumber, toHex } from 'viem';
 
 // Types
-import type { SignatureExtended, EIP712TypedData } from '../types/types.d.ts';
+import type { SignatureExtended, EIP712TypedData } from '../types/types.js';
 
 /**
  * Valid signature types on 0x

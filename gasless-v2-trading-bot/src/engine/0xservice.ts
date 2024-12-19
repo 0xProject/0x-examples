@@ -24,7 +24,7 @@ import type {
   TradeDataToSubmit,
   TradeDataRequestBody,
   ApprovalDataToSubmit,
-} from '../types/types.d.ts';
+} from '../types/types';
 
 const s = spinner();
 
