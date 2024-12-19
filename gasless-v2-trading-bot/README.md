@@ -90,6 +90,9 @@ Once the inputs are entered, the bot will run the following:
     - Timeout after Z sec → Trigger "Timeout" → Sell.
 3. Updates MongoDB with trade results and PnL.
 
+![trading-bot](https://github.com/user-attachments/assets/77ca2bfa-4f6b-463c-99e1-6ca1e0c2c4cc)
+
+
 
 ## 🔍 How It Works
 
@@ -121,11 +124,8 @@ For detailed information, refer to the [0x Gasless API documentation](https://0x
 ## 📜 Code of Conduct
 
 1. **Be Respectful:** Treat others with respect and kindness in all interactions.
-
 2. **Constructive Feedback:** Provide feedback that is thoughtful, helpful, and actionable.
-
 3. **No Harassment:** Harassment, abusive language, or any form of discrimination will not be tolerated.
-
 4. **Collaborative Environment:** Support an open and welcoming space for contributors from all backgrounds.
 
 ## 📄 Licenses
