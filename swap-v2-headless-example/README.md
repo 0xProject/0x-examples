@@ -51,7 +51,7 @@ If you're concerned about upgrade speed, consider using AllowanceHolder, as it c
 
 For more details, check out the [Permit2 and AllowanceHolder contracts](https://0x.org/docs/introduction/0x-cheat-sheet#permit2-contract)
 
-Still have questions? [Reachout to our team](https://0x.org/docs/introduction/community#contact-support).
+Still have questions? [Reach out to our team](https://0x.org/docs/introduction/community#contact-support).
 
 
 </details>
@@ -67,7 +67,7 @@ Still have questions? [Reachout to our team](https://0x.org/docs/introduction/co
 
 ## Usage
 
-1. Create an `.env` file and setup the required environment variables (your Etheruem private keys & 0x API key).
+1. Create an `.env` file and setup the required environment variables (your Ethereum private keys & 0x API key).
 
 ```sh
 cp .env.example .env
@@ -94,7 +94,7 @@ bun --watch index.ts
 
 ```
 
-4. Here is an example of the output. It fetches a `price` (sell 0.1 USCD → WETH), approves token allowance (if not already granted), fetches a `quote`, and submits the transaction, and shows the transaction hash:
+4. Here is an example of the output. It fetches a `price` (sell 0.1 USDC → WETH), approves token allowance (if not already granted), fetches a `quote`, and submits the transaction, and shows the transaction hash:
 
 ```
 ➜  swap-v2-headless-example git:(jlin/add-eth-support-to-headless-example) ✗ bun run index.ts
