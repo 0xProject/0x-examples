@@ -4,7 +4,7 @@
 > [!WARNING]  
 > This is a demo, and is not ready for production use. The code has not been audited and does not account for all error handling. Use at your own risk.
 
-This demo showcases a TypeScript-based CLI trading bot that automates ERC20 token trades using the [0x Gasless API](https://0x.org/docs/gasless-api/introduction) on [Base](https://www.base.org/) network. The bot is designed to help traders execute gasless trades with intelligent, risk-managed strategies.
+This demo showcases a TypeScript-based CLI trading bot that automates ERC20 token trades using the [0x Gasless API](https://0x.org/docs/gasless-api/introduction) on [Base](https://www.base.org/) network. The bot executes gasless trades with Stop Loss and Take Profit strategies.
 
 
 ## 🌟 Features
