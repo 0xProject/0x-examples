@@ -102,6 +102,9 @@ const main = async () => {
 
   // 3. fetch quote
   const quoteParams = new URLSearchParams();
+
+  quoteParams.append("taker", client.account.address);
+
   for (const [key, value] of priceParams.entries()) {
     quoteParams.append(key, value);
   }
