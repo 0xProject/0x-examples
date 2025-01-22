@@ -62,7 +62,7 @@ Still have questions? [Reachout to our team](https://0x.org/docs/introduction/co
 
 ## Usage
 
-1. Create an `.env` file and setup the required environment variables (your Ethereum private keys & 0x API key).
+1. Create a `.env` file and setup the required environment variables (your Ethereum private keys & 0x API key).
 
 ```sh
 cp .env.example .env
