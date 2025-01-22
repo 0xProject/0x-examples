@@ -31,7 +31,7 @@ Gasless API is supported on the following chains via https://api.0x.org/. Select
 | Base               | 84531    |
 | Optimism           | 10       |
 
-Read more accessing the [API endpoints](https://0x.org/docs/tx-relay-api/api-references/overview).
+Read more by accessing the [API endpoints](https://0x.org/docs/tx-relay-api/api-references/overview).
 
 ## Getting Started
 
