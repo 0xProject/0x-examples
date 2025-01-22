@@ -52,7 +52,7 @@ Still have questions? [Reach out to our team](https://0x.org/docs/introduction/c
 
 ## Getting Started
 
-1. Create an `.env` file and setup the required environment variables
+1. Create a `.env` file and setup the required environment variables
 
 ```
 cp .env.example .env
