@@ -20,7 +20,7 @@ A collection of 0x API code examples
 ## v1 (Deprecated)
 
 > [!WARNING]  
-> We will sunset 0x API v1 on April 11, 2025. Please migrate to v2 before this date to avoid service distruptions. For details, see the [migration guide](https://0x.org/docs/upgrading).
+> We will sunset 0x API v1 on April 11, 2025. Please migrate to v2 before this date to avoid service disruptions. For details, see the [migration guide](https://0x.org/docs/upgrading).
 
 ### Swap API
 
