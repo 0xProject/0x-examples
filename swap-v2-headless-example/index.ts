@@ -13,7 +13,7 @@ import {
 } from "viem";
 import type { Hex } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { scroll } from "viem/chains";
+import { base } from "viem/chains";
 import { usdcAbi } from "./abi/usdc-abi";
 
 const qs = require("qs");
@@ -39,71 +39,87 @@ const headers = new Headers({
 // setup wallet client
 const client = createWalletClient({
   account: privateKeyToAccount(`0x${PRIVATE_KEY}` as `0x${string}`),
-  chain: scroll,
+  chain: base,
   transport: http(ALCHEMY_HTTP_TRANSPORT_URL),
-}).extend(publicActions); // extend wallet client with publicActions for public client
+}).extend(publicActions);
 
 const [address] = await client.getAddresses();
 
+// Contract addresses for Base network
+const CONTRACTS = {
+  ETH: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+  WETH: "0x4200000000000000000000000000000000000006",
+  USDC: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+} as const;
+
 // set up contracts
 const eth = getContract({
-  address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+  address: CONTRACTS.ETH,
   abi: erc20Abi,
   client,
 });
+
+const weth = getContract({
+  address: CONTRACTS.WETH,
+  abi: erc20Abi,
+  client,
+});
+
 const usdc = getContract({
-  address: "0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4",
+  address: CONTRACTS.USDC,
   abi: usdcAbi,
   client,
 });
 
-const main = async () => {
+type TokenType = "ETH" | "WETH";
+
+const executeSwap = async (sellTokenType: TokenType) => {
+  const sellToken = sellTokenType === "ETH" ? eth : weth;
   let sellAmount;
 
   // handle ETH separately (no need to call decimals on ETH)
-  if (eth.address === "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE") {
+  if (sellToken.address === CONTRACTS.ETH) {
     sellAmount = parseUnits("0.0001", 18); // ETH has 18 decimals
   } else {
     // specify sell amount for ERC-20 tokens
-    sellAmount = parseUnits("0.0001", await eth.read.decimals());
+    sellAmount = parseUnits("0.0001", await sellToken.read.decimals());
   }
+
   // 1. fetch price
   const priceParams = new URLSearchParams({
     chainId: client.chain.id.toString(),
-    sellToken: eth.address,
-    buyToken: usdc.address,
+    sellToken: sellToken.address,
+    buyToken: CONTRACTS.USDC,
     sellAmount: sellAmount.toString(),
     taker: client.account.address,
   });
 
   const priceResponse = await fetch(
     "https://api.0x.org/swap/permit2/price?" + priceParams.toString(),
-    {
-      headers,
-    }
+    { headers }
   );
 
   const price = await priceResponse.json();
-  console.log("Fetching price to swap 0.0001 ETH for USDC");
+  console.log(`Fetching price to swap 0.0001 ${sellTokenType} for USDC`);
   console.log(
     `https://api.0x.org/swap/permit2/price?${priceParams.toString()}`
   );
   console.log("priceResponse: ", price);
 
   // 2. Check if the sellToken is a native token (ETH) to skip allowance
-  if (eth.address === "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE") {
+  if (sellToken.address === CONTRACTS.ETH) {
     console.log("Native token detected, no need for allowance check");
   } else {
     // Check if allowance is required
     if (price.issues.allowance !== null) {
       try {
-        const { request } = await eth.simulate.approve([
+        const { request } = await sellToken.simulate.approve([
           price.issues.allowance.spender,
           maxUint256,
         ]);
         console.log("Approving Permit2 to spend sellToken...", request);
         // set approval
-        const hash = await eth.write.approve(request.args);
+        const hash = await sellToken.write.approve(request.args);
         console.log(
           "Approved Permit2 to spend sellToken.",
           await client.waitForTransactionReceipt({ hash })
@@ -124,13 +140,11 @@ const main = async () => {
 
   const quoteResponse = await fetch(
     "https://api.0x.org/swap/permit2/quote?" + quoteParams.toString(),
-    {
-      headers,
-    }
+    { headers }
   );
 
   const quote = await quoteResponse.json();
-  console.log("Fetching quote to swap 0.0001 ETH for USDC");
+  console.log(`Fetching quote to swap 0.0001 ${sellTokenType} for USDC`);
   console.log("quoteResponse: ", quote);
 
   // 4. sign permit2.eip712 returned from quote
@@ -161,12 +175,12 @@ const main = async () => {
   }
 
   // 6. submit txn with permit2 signature
+  const nonce = await client.getTransactionCount({
+    address: client.account.address,
+  });
 
   // Check if it's a native token (like ETH)
-  if (eth.address === "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE") {
-    const nonce = await client.getTransactionCount({
-      address: client.account.address,
-    });
+  if (sellToken.address === CONTRACTS.ETH) {
     // Directly sign and send the native token transaction
     const transaction = await client.sendTransaction({
       account: client.account,
@@ -176,7 +190,7 @@ const main = async () => {
         : undefined,
       to: quote?.transaction.to,
       data: quote.transaction.data,
-      value: BigInt(quote.transaction.value), // Ensure value is set for native tokens
+      value: BigInt(quote.transaction.value),
       gasPrice: !!quote?.transaction.gasPrice
         ? BigInt(quote?.transaction.gasPrice)
         : undefined,
@@ -184,11 +198,8 @@ const main = async () => {
     });
 
     console.log("Transaction hash:", transaction);
-    console.log(`See tx details at https://scrollscan.com/tx/${transaction}`);
+    console.log(`See tx details at https://basescan.org/tx/${transaction}`);
   } else if (signature && quote.transaction.data) {
-    const nonce = await client.getTransactionCount({
-      address: client.account.address,
-    });
     // Handle ERC-20 token case (requires signature)
     const signedTransaction = await client.signTransaction({
       account: client.account,
@@ -209,9 +220,28 @@ const main = async () => {
     });
 
     console.log("Transaction hash:", hash);
-    console.log(`See tx details at https://scrollscan.com/tx/${hash}`);
+    console.log(`See tx details at https://basescan.org/tx/${hash}`);
   } else {
     console.error("Failed to obtain a signature, transaction not sent.");
   }
 };
+
+const main = async () => {
+  try {
+    // Execute ETH to USDC swap
+    console.log("Executing ETH to USDC swap...");
+    await executeSwap("ETH");
+
+    // Wait a few blocks before executing the next transaction
+    console.log("Waiting before executing next swap...");
+    await new Promise((resolve) => setTimeout(resolve, 15000)); // Wait 15 seconds
+
+    // Execute WETH to USDC swap
+    console.log("\nExecuting WETH to USDC swap...");
+    await executeSwap("WETH");
+  } catch (error) {
+    console.error("Error executing swaps:", error);
+  }
+};
+
 main();

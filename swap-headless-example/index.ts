@@ -23,7 +23,8 @@ const { PRIVATE_KEY, ZERO_EX_API_KEY, ALCHEMY_HTTP_TRANSPORT_URL } =
 // validate requirements
 if (!PRIVATE_KEY) throw new Error("missing PRIVATE_KEY.");
 if (!ZERO_EX_API_KEY) throw new Error("missing ZERO_EX_API_KEY.");
-if (!ALCHEMY_HTTP_TRANSPORT_URL) throw new Error("missing ALCHEMY_HTTP_TRANSPORT_URL.");
+if (!ALCHEMY_HTTP_TRANSPORT_URL)
+  throw new Error("missing ALCHEMY_HTTP_TRANSPORT_URL.");
 
 // fetch constants
 const headers = new Headers({
