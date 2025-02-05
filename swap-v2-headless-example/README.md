@@ -15,6 +15,7 @@ This example demonstrates how to perform token swaps on Base mainnet, specifical
    - swap 0.0001 WETH → USDC
 2. (If needed) Set token allowance for Permit2
 3. Fetch a firm quote
+   - swap 0.0001 ETH → USDC
    - swap 0.0001 WETH →  USDC
 4. Sign the Permit2 EIP-712 message (for ERC-20 tokens)
 5. Append signature length and signature data to calldata
