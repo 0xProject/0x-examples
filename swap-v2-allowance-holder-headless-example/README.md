@@ -1,6 +1,6 @@
 # Swap v2 AllowanceHolder headless example (viem)
 
-A headless example of how to use 0x Swap API v2 `/allowance-holder/price` and `/allowance-holder/quote` using [viem](https://viem.sh/)
+A headless example of how to use 0x Swap API v2 `/allowance-holder/price` and `/allowance-holder/quote` using [viem](https://viem.sh/).
 
 Demonstrates the following on Base mainnet:
 
@@ -8,12 +8,15 @@ Demonstrates the following on Base mainnet:
 2. Get an indicative price (sell 0.1 USDC → buy WETH)
 3. (If needed) Set token allowance for AllowanceHolder
 4. Fetch a firm quote (sell 0.1 USDC → buy WETH)
-5. Send transaction.
+5. Send transaction
 
-### What is the difference between Permit2 and AllowanceHolder?
+> [!WARNING]  
+> This is a demo, and is not ready for production use. The code has not been audited and does not account for all error handling. Use at your own risk.
+
+## What is the difference between Permit2 and AllowanceHolder?
 
 <details>
-<summary>What is the difference between using Permit2 and AllowanceHolder for Swap API?</summary>
+<summary>Expand to read about the difference between using Permit2 and AllowanceHolder for Swap API.</summary>
 
 0x Swap API allows you to choose between two allowance methods: [Permit2](https://0x.org/docs/introduction/0x-cheat-sheet#permit2-contractcontract) or [AllowanceHolder]([../introduction/0x-cheat-sheet#allowanceholder-contract](https://0x.org/docs/introduction/0x-cheat-sheet#allowanceholder-contract)).
 
@@ -51,10 +54,7 @@ Still have questions? [Reachout to our team](https://0x.org/docs/introduction/co
 </details>
 
 
-> [!WARNING]  
-> This is a demo, and is not ready for production use. The code has not been audited and does not account for all error handling. Use at your own risk.
-
-### Requirements
+## Requirements
 
 - Install [Bun](https://bun.sh/) (v1.1.0+)
 - An Ethereum private key
