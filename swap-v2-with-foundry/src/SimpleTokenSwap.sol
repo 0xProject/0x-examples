@@ -15,18 +15,15 @@ contract SimpleTokenSwap {
     IWETH public immutable WETH;
     address public immutable owner;
     address public immutable allowanceHolder;
-    address public immutable permit2;
 
     /**
-     * @dev Initializes the contract with WETH, AllowanceHolder, and Permit2 addresses.
+     * @dev Initializes the contract with WETH and AllowanceHolder addresses.
      * @param _weth Address of the WETH contract.
      * @param _allowanceHolder Address of the AllowanceHolder contract (for 0x API v2).
-     * @param _permit2 Address of the Permit2 contract (for gasless approvals).
      */
-    constructor(IWETH _weth, address _allowanceHolder, address _permit2) {
+    constructor(IWETH _weth, address _allowanceHolder) {
         WETH = _weth;
         allowanceHolder = _allowanceHolder;
-        permit2 = _permit2;
         owner = msg.sender;
     }
 
@@ -77,10 +74,7 @@ contract SimpleTokenSwap {
         address payable swapTarget,
         bytes calldata swapCallData
     ) external payable onlyOwner {
-        require(
-            swapTarget == allowanceHolder || swapTarget == permit2,
-            "INVALID_SWAP_TARGET"
-        );
+        require(swapTarget == allowanceHolder, "INVALID_SWAP_TARGET");
 
         uint256 balanceBefore = buyToken.balanceOf(address(this));
 
