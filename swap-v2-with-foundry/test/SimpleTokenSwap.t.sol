@@ -28,7 +28,6 @@ contract SimpleTokenSwapTest is Test {
 
     address public owner = address(this);
     address public allowanceHolder = address(0x123456);
-    address public permit2 = address(0xabcdef);
 
     function setUp() public {
         weth = new MockWETH();
@@ -36,8 +35,7 @@ contract SimpleTokenSwapTest is Test {
 
         swapContract = new SimpleTokenSwap(
             IWETH(address(weth)),
-            allowanceHolder,
-            permit2
+            allowanceHolder
         );
     }
 
@@ -90,35 +88,6 @@ contract SimpleTokenSwapTest is Test {
             IERC20(address(dai)),
             address(weth),
             payable(allowanceHolder),
-            data
-        );
-
-        assertEq(dai.balanceOf(address(swapContract)), buyAmount);
-    }
-
-    function testPermit2Swap() public {
-        uint256 sellAmount = 1 ether;
-        uint256 buyAmount = 2 ether;
-
-        weth.deposit{value: sellAmount}();
-        weth.transfer(address(swapContract), sellAmount);
-
-        bytes memory data = abi.encodeWithSignature(
-            "mockPermit2Swap(address,address,uint256,uint256)",
-            address(weth),
-            address(dai),
-            sellAmount,
-            buyAmount
-        );
-
-        vm.mockCall(permit2, data, abi.encode(true));
-        dai.mint(address(swapContract), buyAmount);
-
-        swapContract.fillQuote(
-            IERC20(address(weth)),
-            IERC20(address(dai)),
-            address(weth),
-            payable(permit2),
             data
         );
 
