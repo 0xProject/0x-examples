@@ -1,4 +1,8 @@
-# 0x Gasless API Demo App (Next.js App Router)
+# [Deprecated] 0x Gasless API Demo App (Next.js App Router)
+
+> [!WARNING]  
+> 0x API v1 was sunset on April 11, 2025. Please migrate to v2. For details, see the [migration guide](https://0x.org/docs/upgrading).
+
 
 ## Live Demo
 

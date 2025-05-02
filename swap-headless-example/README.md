@@ -1,4 +1,8 @@
-# Swap v1 headless example (viem)
+# [Deprecated] Swap v1 headless example (viem)
+
+> [!WARNING]  
+> 0x API v1 was sunset on April 11, 2025. Please migrate to v2. For details, see the [migration guide](https://0x.org/docs/upgrading).
+
 
 A headless example of how to use 0x Swap [/price](https://0x.org/docs/0x-swap-api/api-references/get-swap-v1-price) and [/quote](https://0x.org/docs/0x-swap-api/api-references/get-swap-v1-quote) using [viem](https://viem.sh/)
 

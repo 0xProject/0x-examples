@@ -20,7 +20,7 @@ A collection of 0x API code examples
 ## v1 (Deprecated)
 
 > [!WARNING]  
-> We will sunset 0x API v1 on April 11, 2025. Please migrate to v2 before this date to avoid service disruptions. For details, see the [migration guide](https://0x.org/docs/upgrading).
+> 0x API v1 was sunset on April 11, 2025. Please migrate to v2. For details, see the [migration guide](https://0x.org/docs/upgrading).
 
 ### Swap API
 
@@ -32,7 +32,6 @@ A collection of 0x API code examples
 ### Gasless API
 
 - [Gasless API v1 Demo App using Next.js App Router](https://github.com/0xProject/0x-examples/tree/main/gasless-next-app)
-
 
 
 ## Contribution Guidelines
