@@ -1,4 +1,8 @@
-# 0x Swap API Demo (Next.js App Router)
+# [Deprecated] 0x Swap API Demo (Next.js App Router)
+
+> [!WARNING]  
+> 0x API v1 was sunset on April 11, 2025. Please migrate to v2. For details, see the [migration guide](https://0x.org/docs/upgrading).
+
 
 An example ERC-20 swap application built on [Next.js App Router](https://nextjs.org/docs) with [0x Swap API](https://0x.org/docs/0x-swap-api/introduction) and [RainbowKit](https://www.rainbowkit.com/).
 
