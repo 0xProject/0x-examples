@@ -6,11 +6,11 @@ A collection of 0x API code examples
 
 > ⚠️ **WARNING — READ BEFORE USING 0x API**
 >
-> - **NEVER** set an allowance on the [Settler contract](/introduction/0x-cheat-sheet#0x-settler-contracts).  
+> - **NEVER** set an allowance on the [Settler contract](https://0x.org/docs/introduction/0x-cheat-sheet#0x-settler-contracts).  
 >   Doing so may lead to **loss of tokens** or **security risks**.  
 >   The Settler contract does **not** require allowances — setting one enables misuse by other parties.
 >
-> - **ONLY** set allowances on [Permit2](/introduction/0x-cheat-sheet#permit2-contract) or [AllowanceHolder](/introduction/0x-cheat-sheet#allowanceholder-contract) — as specified by API responses.
+> - **ONLY** set allowances on [Permit2](https://0x.org/docs/introduction/0x-cheat-sheet#permit2-contract) or [AllowanceHolder](https://0x.org/docs/introduction/0x-cheat-sheet#allowanceholder-contract) contracts, as indicated by the API response.
 >
 > - The correct allowance target is returned in `issues.allowance.spender`.
 
