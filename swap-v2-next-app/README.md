@@ -1,13 +1,26 @@
 # 0x Swap API v2 Demo App (Next.js App Router)
 
+---
+
+> ⚠️ **WARNING — READ BEFORE USING 0x API**
+>
+> - **NEVER** set an allowance on the [Settler contract](/introduction/0x-cheat-sheet#0x-settler-contracts).  
+>   Doing so may lead to **loss of tokens** or **security risks**.  
+>   The Settler contract does **not** require allowances — setting one enables misuse by other parties.
+>
+> - **ONLY** set allowances on [Permit2](/introduction/0x-cheat-sheet#permit2-contract) or [AllowanceHolder](/introduction/0x-cheat-sheet#allowanceholder-contract) — as specified by API responses.
+>
+> - The correct allowance target is returned in `issues.allowance.spender`.
+
+> - This is a demo, and is not ready for production use. The code has not been audited and does not account for all error handling. Use at your own risk.
+
+---
+
 An example ERC-20 swap application built on [Next.js App Router](https://nextjs.org/docs) with 0x Swap API v2 (Permit2) and [RainbowKit](https://www.rainbowkit.com/).
 
 Swap API enables your users to easily and conveniently trade tokens at the best prices directly in your app. With one simple integration, 0x unlocks thousands of tokens on the most popular blockchains and aggregated liquidity from 100+ AMMs and professional market makers.
 
 This demo app covers best practices for how to use the 0x Swap API's price endpoint for indicative pricing and the quote endpoint for firm quotes.
-
-> [!WARNING]  
-> This is a demo, and is not ready for production use. The code has not been audited and does not account for all error handling. Use at your own risk.
 
 ### Live Demo
 

@@ -14,6 +14,8 @@ A collection of 0x API code examples
 >
 > - The correct allowance target is returned in `issues.allowance.spender`.
 
+> - The examples in this repo are demos, and are not ready for production use. The code has not been audited and does not account for all error handling. Use at your own risk.
+
 ---
 
 ## v2 (Latest)
