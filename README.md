@@ -2,6 +2,15 @@
 
 A collection of 0x API code examples
 
+**⚠️ WARNING**
+
+-   NEVER set an allowance on the [Settler contract](/introduction/0x-cheat-sheet#0x-settler-contracts). Doing so may result in unintended consequences, including potential loss of tokens or exposure to security risks. The Settler contract does not support or require token allowances for its operation. Setting an allowance on the Settler contract will lead to misuse by other parties.
+
+-   ONLY set allowances on [Permit2](/introduction/0x-cheat-sheet#permit2-contract) or [AllowanceHolder](/introduction/0x-cheat-sheet#allowanceholder-contract) contracts, as indicated by the API responses.
+
+-   The correct allowance target is returned in `issues.allowance.spender`.
+
+
 ## v2 (Latest)
 
 ### Swap API
