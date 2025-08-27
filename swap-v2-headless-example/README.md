@@ -58,36 +58,53 @@ Note: There's a 15-second delay between swaps to allow for block confirmation fr
 <details>
 <summary>Expand to read about the difference between using Permit2 and AllowanceHolder for Swap API.</summary>
 
-0x Swap API allows you to choose between two allowance methods: [Permit2](https://0x.org/docs/introduction/0x-cheat-sheet#permit2-contractcontract) or [AllowanceHolder]([../introduction/0x-cheat-sheet#allowanceholder-contract](https://0x.org/docs/introduction/0x-cheat-sheet#allowanceholder-contract)).
+The 0x Swap API supports two allowance methods: [AllowanceHolder (recommended)](https://0x.org/docs/developer-resources/core-concepts/contracts#allowanceholder-contract) and [Permit2 (advanced use only)](https://0x.org/docs/developer-resources/core-concepts/contracts#permit2-contract).
 
-The decision when choosing between Permit2 or AllowanceHolder boils down to mainly UX and integration type.
+The main differences come down to **UX, gas costs, integration complexity, and integration type**.
 
-**When to Use Permit2**
+**When to Use AllowanceHolder (Recommended)**
 
-For most applications, we recommend using Permit2. This method requires two user signatures per trade:
+AllowanceHolder is the default and recommended choice for most integrators. It provides:
 
--   A signature for limited approval
--   A signature for the trade itself
+-   ✅ **Gas efficiency:** Lower approval and execution costs than Permit2.
+-   ✅ **Safer defaults:** Reduces the chance of errors during integration.
+-   ✅ **Simple UX:** Works with standard approval flows without requiring double signatures, unlike Permit2.
+-   ✅ **Equal Safety:** Security guarantees are equivalent to Permit2.
 
-Permit2 is also recommended for setups involving multisig or smart contract wallets, as long as the smart contract supports [EIP-1271](https://eips.ethereum.org/EIPS/eip-1271), which most do.
+AllowanceHolder is especially well-suited for:
 
-Additionally, Permit2 is a standard that allows users to share token approvals across smart contracts. If a user has an infinite allowance set on Permite2 via another app, they don't need to reset the allowance.
+-   Projects integrating the Swap API into smart contracts that don’t support [EIP-1271](https://eips.ethereum.org/EIPS/eip-1271).
+-   Teams aggregating multiple liquidity sources and aiming for a consistent user experience across wallets.
+-   Developers upgrading from Swap v1 — AllowanceHolder closely resembles the v1 integration flow.
 
-**When to Use AllowanceHolder**
+Endpoints & Resources
 
-We recommend using Permit2 for most situations. However, if your integration doesn't support a double-signature flow, such as with smart contracts that aren't compatible with [EIP-1271](https://eips.ethereum.org/EIPS/eip-1271), AllowanceHolder is a better choice. It works best for single-signature use cases, including:
+-   [/swap/allowance-holder/price](https://0x.org/docs/api#tag/Swap/operation/swap::allowanceHolder::getPrice)
+-   [AllowanceHolder Contract details](https://0x.org/docs/developer-resources/core-concepts/contracts#allowanceholder-contract)
+-   [AllowanceHolder headless example](https://github.com/0xProject/0x-examples/tree/main/swap-v2-headless-example)
 
--   Projects integrating the Swap API into smart contracts without EIP-1271 support.
--   Teams aggregating across multiple sources and aiming for a consistent user experience across all integrations.
 
-If you're concerned about upgrade speed, consider using AllowanceHolder, as it closely resembles the 0x Swap v1 integration. This approach can help streamline the upgrade process for teams that previously used Swap v1.
+**When to Use Permit2 (Advanced Integrators Only)**
 
-**Key Points:**
+Permit2, developed by Uniswap, enables gas-efficient, flexible approvals with features like time-limited and granular allowances. It can be powerful, but it introduces **risks that new integrators must be careful with**.
 
--   **Permit2:** Ideal for for most applications. Involves two signatures, one signature for limited approval and one signature for the trade itself. Also recommended for multisig or smart contract wallets.
--   **AllowanceHolder:** Best for single-signature use cases, especially in smart contracts that don't support [EIP-1271](https://eips.ethereum.org/EIPS/eip-1271) or meta-aggregators.
+**⚠️ Permit2 is for advanced integrators only.**
 
-For more details, check out the [Permit2 and AllowanceHolder contracts](https://0x.org/docs/introduction/0x-cheat-sheet#permit2-contract)
+Key considerations:
+
+-   Requires a double-signature flow. This is more complex to integrate but allows for features like time-limited approvals.
+-   Recommended for multisig or smart contract wallets that support [EIP-1271](https://eips.ethereum.org/EIPS/eip-1271), which most do.
+
+Permit2 is also useful if:
+
+-   Your app needs time-limited or granular approvals not supported by AllowanceHolder.
+-   Users already have infinite allowances set on Permit2 via another app — no reset is needed.
+
+Endpoints & Resources
+
+-   [/swap/permit2/price](https://0x.org/docs/api#tag/Swap/operation/swap::permit2::getPrice)
+-   [Permit2 Contract details](https://0x.org/docs/developer-resources/core-concepts/contracts#permit2-contract)
+-   [Permit2 headless example](https://github.com/0xProject/0x-examples/tree/main/swap-v2-headless-example)
 
 Still have questions? [Reach out to our team](https://0x.org/docs/introduction/community#contact-support).
 
@@ -100,7 +117,6 @@ Still have questions? [Reach out to our team](https://0x.org/docs/introduction/c
 
 - Install [Bun](https://bun.sh/) (v1.1.0+)
 - An Ethereum private key
-- Setup a wallet with min 0.1 USDC and some ETH for gas
 - A wallet with min 0.0001 ETH and WETH for swaps. Some additional ETH for gas fees.
 
 
