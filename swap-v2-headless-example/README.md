@@ -1,4 +1,4 @@
-# Swap v2 Permit2 headless example (viem)
+# Swap v2 (Permit2) headless example
 
 ---
 
