@@ -22,10 +22,10 @@ A collection of 0x API code examples
 
 ### Swap API
 
-- [Swap API v2 Demo App (AllowanceHolder) using Next.js App Router](https://github.com/0xProject/0x-examples/tree/main/swap-v2-allowance-holder-next-app)
-- [Swap API v2 (AllowanceHolder) Headless Example](https://github.com/0xProject/0x-examples/tree/main/swap-v2-allowance-holder-headless-example)
-- [Swap API v2 Demo App (Permit2) using Next.js App Router](https://github.com/0xProject/0x-examples/tree/main/swap-v2-next-app)
-- [Swap API v2 (Permit2) Headless Example](https://github.com/0xProject/0x-examples/tree/main/swap-v2-headless-example)
+- [Swap API v2 Next.js Demo App (AllowanceHolder)](https://github.com/0xProject/0x-examples/tree/main/swap-v2-allowance-holder-next-app)
+- [Swap API v2 Headless Example (AllowanceHolder)](https://github.com/0xProject/0x-examples/tree/main/swap-v2-allowance-holder-headless-example)
+- [Swap API v2 Next.js Demo App (Permit2)](https://github.com/0xProject/0x-examples/tree/main/swap-v2-next-app)
+- [Swap API v2 Headless Example (Permit2)](https://github.com/0xProject/0x-examples/tree/main/swap-v2-headless-example)
 - [Use Swap API v2 in Your Smart Contract with Foundry](https://github.com/0xProject/0x-examples/tree/main/swap-v2-with-foundry)
 
 ### Gasless API
