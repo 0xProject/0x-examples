@@ -34,23 +34,6 @@ A collection of 0x API code examples
 - [Gasless API v2 Trading Bot](https://github.com/0xProject/0x-examples/tree/main/gasless-v2-trading-bot)
 
 
-## v1 (Deprecated)
-
-> [!WARNING]  
-> 0x API v1 was sunset on April 11, 2025. Please migrate to v2. For details, see the [migration guide](https://0x.org/docs/upgrading).
-
-### Swap API
-
-- [Swap API v1 Demo App using Next.js App Router](https://github.com/0xProject/0x-examples/tree/main/swap-next-app)
-- [Swap API v1 Demo App using Next.js Pages Router](https://github.com/0xProject/0x-nextjs-demo-app/tree/main)
-- [Swap API v1 Demo App using HTML/CSS/JavaScript](https://github.com/0xProject/swap-demo-tutorial)
-- [Swap API v1 Headless Example](https://github.com/0xProject/0x-examples/tree/main/swap-headless-example)
-
-### Gasless API
-
-- [Gasless API v1 Demo App using Next.js App Router](https://github.com/0xProject/0x-examples/tree/main/gasless-next-app)
-
-
 ## Contribution Guidelines
 
 1. **Fork the Repository:** Start by forking the repository and creating a new branch for your contributions.

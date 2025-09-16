@@ -4,7 +4,9 @@
     "type": "module",
     "devDependencies": {
         "@types/bun": "latest",
-        "@types/dotenv": "^8.2.0"
+        "@types/dotenv": "^8.2.0",
+        "@types/node": "^22"
+
     },
     "peerDependencies": {
         "typescript": "^5.0.0"
@@ -13,5 +15,8 @@
         "dotenv": "^16.4.5",
         "qs": "^6.12.1",
         "viem": "^2.17.3"
+    },
+    "engines": {
+    "node": "22.x"
     }
 }
