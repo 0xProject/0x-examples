@@ -12,6 +12,8 @@ import { erc20Abi, Address } from "viem";
 import {
   MAINNET_TOKENS,
   MAINNET_TOKENS_BY_SYMBOL,
+  BASE_TOKENS,
+  BASE_TOKENS_BY_SYMBOL,
   MAX_ALLOWANCE,
   AFFILIATE_FEE,
   FEE_RECIPIENT,
@@ -66,7 +68,7 @@ function useTokenBalance({
 }
 
 export const DEFAULT_BUY_TOKEN = (chainId: number) => {
-  if (chainId === 1) {
+  if (chainId === 1 || chainId === 8453) {
     return "weth";
   }
 };
@@ -109,6 +111,9 @@ export default function PriceView({
   const tokensByChain = (chainId: number) => {
     if (chainId === 1) {
       return MAINNET_TOKENS_BY_SYMBOL;
+    }
+    if (chainId == 8453) {
+      return BASE_TOKENS_BY_SYMBOL;
     }
     return MAINNET_TOKENS_BY_SYMBOL;
   };

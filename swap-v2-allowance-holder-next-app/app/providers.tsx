@@ -13,7 +13,7 @@ import {
   ledgerWallet,
   rainbowWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import { mainnet } from "wagmi/chains";
+import { mainnet, base } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider, createConfig, http } from "wagmi";
 
@@ -44,24 +44,34 @@ const connectors = connectorsForWallets(
 );
 
 // Get RPC URL from environment variables with fallback
-const getRpcUrl = () => {
-  // If user has provided Alchemy RPC URL, use that
-  if (process.env.NEXT_PUBLIC_ALCHEMY_RPC_URL) {
-    return `${process.env.NEXT_PUBLIC_ALCHEMY_RPC_URL}`;
+const getRpcUrl = (chainId: number) => {
+  // Check for chain-specific environment variables first
+  const chainEnvVar = `NEXT_PUBLIC_${
+    chainId === 1 ? "ETHEREUM" : "BASE"
+  }_RPC_URL`;
+  const chainRpcUrl = process.env[chainEnvVar];
+
+  if (chainRpcUrl) {
+    return chainRpcUrl;
   }
 
-  // Fallback to free public endpoint
-  return "https://eth.llamarpc.com";
+  // Default fallbacks for each chain
+  if (chainId === 1) {
+    return "https://eth.llamarpc.com";
+  } else if (chainId === 8453) {
+    return "https://mainnet.base.org";
+  }
 };
 
 const config = createConfig({
-  chains: [mainnet],
+  chains: [mainnet, base],
   // turn off injected provider discovery
   multiInjectedProviderDiscovery: false,
   connectors,
   ssr: true,
   transports: {
-    [mainnet.id]: http(getRpcUrl()),
+    [mainnet.id]: http(getRpcUrl(mainnet.id)),
+    [base.id]: http(getRpcUrl(base.id)),
   },
 });
 
