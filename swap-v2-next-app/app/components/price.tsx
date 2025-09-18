@@ -16,10 +16,54 @@ import {
   AFFILIATE_FEE,
   FEE_RECIPIENT,
 } from "../../src/constants";
-import { permit2Abi } from "../../src/utils/permit2abi";
 import ZeroExLogo from "../../src/images/white-0x-logo.png";
 import Image from "next/image";
 import qs from "qs";
+
+// Helper function to check if token is native ETH
+const isNative = (tokenAddress: string) => {
+  return tokenAddress === "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+};
+
+// Custom hook for getting token balance
+function useTokenBalance({
+  address,
+  tokenAddress,
+  enabled = true,
+}: {
+  address: Address | undefined;
+  tokenAddress: string;
+  enabled?: boolean;
+}) {
+  const isNativeToken = isNative(tokenAddress);
+
+  // Get native ETH balance
+  const nativeResult = useBalance({
+    address,
+    query: {
+      enabled: isNativeToken && enabled && !!address,
+    },
+  });
+
+  // Get ERC-20 token balance
+  const tokenResult = useReadContract({
+    address: tokenAddress as Address,
+    abi: erc20Abi,
+    functionName: "balanceOf",
+    args: address ? [address] : undefined,
+    query: {
+      enabled: !isNativeToken && enabled && !!address,
+    },
+  });
+
+  const isLoading = isNativeToken
+    ? nativeResult.isLoading
+    : tokenResult.isLoading;
+  const error = isNativeToken ? nativeResult.error : tokenResult.error;
+  const balance = isNativeToken ? nativeResult.data?.value : tokenResult.data;
+
+  return { balance, isLoading, error };
+}
 
 export const DEFAULT_BUY_TOKEN = (chainId: number) => {
   if (chainId === 1) {
@@ -138,18 +182,33 @@ export default function PriceView({
     AFFILIATE_FEE,
   ]);
 
-  // Hook for fetching balance information for specified token for a specific taker address
-  const { data, isError, isLoading } = useBalance({
+  // Use the custom hook to get token balance
+  const {
+    balance,
+    isLoading: balanceLoading,
+    error: balanceError,
+  } = useTokenBalance({
     address: taker,
-    token: sellTokenObject.address,
+    tokenAddress: sellTokenAddress,
+    enabled: !!taker,
   });
 
-  console.log("taker sellToken balance: ", data);
+  // Handle successful balance fetch
+  useEffect(() => {
+    if (balance) {
+      console.log("Success", balance);
+    }
+  }, [balance, balanceLoading, balanceError, taker, sellTokenObject.address]);
 
   const inSufficientBalance =
-    data && sellAmount
-      ? parseUnits(sellAmount, sellTokenDecimals) > data.value
+    balance && sellAmount
+      ? parseUnits(sellAmount, sellTokenDecimals) > balance
       : true;
+
+  console.log("data", balance);
+  console.log("inSufficientBalance", inSufficientBalance);
+  console.log("sellAmount", sellAmount);
+  console.log("sellTokenDecimals", sellTokenDecimals);
 
   // Helper function to format tax basis points to percentage
   const formatTax = (taxBps: string) => (parseFloat(taxBps) / 100).toFixed(2);

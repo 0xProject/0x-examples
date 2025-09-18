@@ -75,6 +75,7 @@ cp .env.example .env
 | ----------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | WalletConnect projectId | WalletConnect's SDK to help with connecting wallets (create one [here](https://cloud.walletconnect.com/sign-in)) | Add [here](https://github.com/0xProject/0x-examples/blob/main/swap-v2-next-app/.env.example) |
 | 0x                      | 0x API key (create one [here](https://0x.org/docs/introduction/getting-started))                                 | Add [here](https://github.com/0xProject/0x-examples/blob/main/swap-v2-next-app/.env.example) |
+| RPC Endpoint            | Ethereum RPC endpoint (Alchemy recommended, create one [here](https://www.alchemy.com/))                         | Add [here](https://github.com/0xProject/0x-examples/blob/main/swap-v2-next-app/.env.example) |
 
 2. Install project dependencies
 
