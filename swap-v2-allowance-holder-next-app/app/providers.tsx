@@ -43,13 +43,26 @@ const connectors = connectorsForWallets(
   }
 );
 
+// Get RPC URL from environment variables with fallback
+const getRpcUrl = () => {
+  // If user has provided Alchemy RPC URL, use that
+  if (process.env.NEXT_PUBLIC_ALCHEMY_RPC_URL) {
+    return `${process.env.NEXT_PUBLIC_ALCHEMY_RPC_URL}`;
+  }
+
+  // Fallback to free public endpoint
+  return "https://eth.llamarpc.com";
+};
+
 const config = createConfig({
   chains: [mainnet],
   // turn off injected provider discovery
   multiInjectedProviderDiscovery: false,
   connectors,
   ssr: true,
-  transports: { [mainnet.id]: http() },
+  transports: {
+    [mainnet.id]: http(getRpcUrl()),
+  },
 });
 
 const queryClient = new QueryClient();
