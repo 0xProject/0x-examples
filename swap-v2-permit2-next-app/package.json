@@ -1,5 +1,5 @@
 {
-  "name": "0x-token-swap-dapp",
+  "name": "swap-v2-permit2-next-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
