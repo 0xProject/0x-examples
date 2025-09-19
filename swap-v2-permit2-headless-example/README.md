@@ -53,7 +53,7 @@ The script performs two sequential swaps:
 
 Note: There's a 15-second delay between swaps to allow for block confirmation from the same wallet between transactions
 
-### What is the difference between Permit2 and AllowanceHolder?
+### What is the difference between AllowanceHolder and Permit2?
 
 <details>
 <summary>Expand to read about the difference between using Permit2 and AllowanceHolder for Swap API.</summary>

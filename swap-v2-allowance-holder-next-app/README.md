@@ -16,7 +16,7 @@
 
 ---
 
-An example ERC-20 swap application built on [Next.js App Router](https://nextjs.org/docs) with 0x Swap API v2 (Permit2) and [RainbowKit](https://www.rainbowkit.com/).
+An example ERC-20 swap application built on [Next.js App Router](https://nextjs.org/docs) with 0x Swap API v2 (AllowanceHolder) and [RainbowKit](https://www.rainbowkit.com/).
 
 Swap API enables your users to easily and conveniently trade tokens at the best prices directly in your app. With one simple integration, 0x unlocks thousands of tokens on the most popular blockchains and aggregated liquidity from 100+ AMMs and professional market makers.
 
@@ -43,23 +43,61 @@ Demonstrates the following on Base mainnet:
 5. Sign the Permit2 EIP-712 message
 6. Submit the transaction with permit2 signature
 
-### What is the difference between Permit2 and AllowanceHolder?
+### What is the difference between AllowanceHolder and Permit2?
 
 <details>
+<summary>Expand to read about the difference between using Permit2 and AllowanceHolder for Swap API.</summary>
 
-<summary>Read more about when to use AllowanceHolder vs Permit2</summary>
+The 0x Swap API supports two allowance methods: [AllowanceHolder (recommended)](https://0x.org/docs/developer-resources/core-concepts/contracts#allowanceholder-contract) and [Permit2 (advanced use only)](https://0x.org/docs/developer-resources/core-concepts/contracts#permit2-contract).
 
-0x Swap API offers you the optionality to either use [Permit2](https://0x.org/docs/next/introduction/0x-cheat-sheet#permit2-contract) or [AllowanceHolder](https://0x.org/docs/next/introduction/0x-cheat-sheet#allowanceholder-contract) as the allowance target.
+The main differences come down to **UX, gas costs, integration complexity, and integration type**.
 
-For most applications, we recommend using the Permit2 flow for swaps and setting allowances on the Permit2 contract. This process requires collecting two signatures from your users per trade: one offchain signature for the limited approval and an onchain signature for the trade.
+**When to Use AllowanceHolder (Recommended)**
 
-While Permit2's single-use method provides greatly enhanced security, we recognize that some projects may not wish to have a double-signature UX (this may apply to teams that integrate Swap API into smart contracts, or teams that are aggregating across multiple sources and want to keep the UI consistent across all the integrations).
+AllowanceHolder is the default and recommended choice for most integrators. It provides:
 
-If your integration prevents you from collecting offchain signatures, such as with smart contracts, we recommend using AllowanceHolder.
+-   ✅ **Gas efficiency:** Lower approval and execution costs than Permit2.
+-   ✅ **Safer defaults:** Reduces the chance of errors during integration.
+-   ✅ **Simple UX:** Works with standard approval flows without requiring double signatures, unlike Permit2.
+-   ✅ **Equal Safety:** Security guarantees are equivalent to Permit2.
 
-Originally developed by Uniswap based on the work of 0x alumnus [Lawrence Forman](https://github.com/merklejerk), [Permit2](https://blog.uniswap.org/permit2-and-universal-router) is a token approval method that can be used to safely share and manage token approvals across different smart contracts. Permit2 is immutable, extensively audited, used by other trusted protocols in the space including Uniswap and has a [$3M bug bounty](https://uniswap.org/bug-bounty).
+AllowanceHolder is especially well-suited for:
+
+-   Projects integrating the Swap API into smart contracts that don’t support [EIP-1271](https://eips.ethereum.org/EIPS/eip-1271).
+-   Teams aggregating multiple liquidity sources and aiming for a consistent user experience across wallets.
+-   Developers upgrading from Swap v1 — AllowanceHolder closely resembles the v1 integration flow.
+
+Endpoints & Resources
+
+-   [/swap/allowance-holder/price](https://0x.org/docs/api#tag/Swap/operation/swap::allowanceHolder::getPrice)
+-   [AllowanceHolder Contract details](https://0x.org/docs/developer-resources/core-concepts/contracts#allowanceholder-contract)
+-   [AllowanceHolder headless example](https://github.com/0xProject/0x-examples/tree/main/swap-v2-headless-example)
+
+
+**When to Use Permit2 (Advanced Integrators Only)**
+
+Permit2, developed by Uniswap, enables gas-efficient, flexible approvals with features like time-limited and granular allowances. It can be powerful, but it introduces **risks that new integrators must be careful with**.
+
+**⚠️ Permit2 is for advanced integrators only.**
+
+Key considerations:
+
+-   Requires a double-signature flow. This is more complex to integrate but allows for features like time-limited approvals.
+-   Recommended for multisig or smart contract wallets that support [EIP-1271](https://eips.ethereum.org/EIPS/eip-1271), which most do.
+
+Permit2 is also useful if:
+
+-   Your app needs time-limited or granular approvals not supported by AllowanceHolder.
+-   Users already have infinite allowances set on Permit2 via another app — no reset is needed.
+
+Endpoints & Resources
+
+-   [/swap/permit2/price](https://0x.org/docs/api#tag/Swap/operation/swap::permit2::getPrice)
+-   [Permit2 Contract details](https://0x.org/docs/developer-resources/core-concepts/contracts#permit2-contract)
+-   [Permit2 headless example](https://github.com/0xProject/0x-examples/tree/main/swap-v2-headless-example)
 
 Still have questions? [Reach out to our team](https://0x.org/docs/introduction/community#contact-support).
+
 
 </details>
 
@@ -71,10 +109,12 @@ Still have questions? [Reach out to our team](https://0x.org/docs/introduction/c
 cp .env.example .env
 ```
 
-| **API Keys**            | **Description**                                                                                                  | **Code**                                                                                     |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| WalletConnect projectId | WalletConnect's SDK to help with connecting wallets (create one [here](https://cloud.walletconnect.com/sign-in)) | Add [here](https://github.com/0xProject/0x-examples/blob/main/swap-v2-next-app/.env.example) |
-| 0x                      | 0x API key (create one [here](https://0x.org/docs/introduction/getting-started))                                 | Add [here](https://github.com/0xProject/0x-examples/blob/main/swap-v2-next-app/.env.example) |
+| **API Keys** | **Description** | **Code** |
+| ------------ | --------------- | -------- |
+| WalletConnect projectId | WalletConnect's SDK to help with connecting wallets (create one [here](https://cloud.walletconnect.com/sign-in)) | Add [here](https://github.com/0xProject/0x-examples/blob/main/swap-v2-allowance-holder-next-app/.env.example) |
+| 0x | 0x API key (create one [here](https://0x.org/docs/introduction/getting-started)) | Add [here](https://github.com/0xProject/0x-examples/blob/main/swap-v2-allowance-holder-next-app/.env.example) |
+| Ethereum RPC URL | Custom RPC URL for Ethereum mainnet (e.g., Alchemy) | Add [here](https://github.com/0xProject/0x-examples/blob/main/swap-v2-allowance-holder-next-app/.env.example) |
+| Base RPC URL | Custom RPC URL for Base mainnet (e.g., Alchemy) | Add [here](https://github.com/0xProject/0x-examples/blob/main/swap-v2-allowance-holder-next-app/.env.example) |
 
 2. Install project dependencies
 

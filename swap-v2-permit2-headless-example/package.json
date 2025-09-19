@@ -1,5 +1,5 @@
 {
-    "name": "swap-v2-headless-example",
+    "name": "swap-v2-permit2-headless-example",
     "module": "index.ts",
     "type": "module",
     "devDependencies": {
