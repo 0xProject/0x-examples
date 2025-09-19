@@ -22,16 +22,22 @@ A collection of 0x API code examples
 
 ### Swap API
 
-- [Swap API v2 Next.js Demo App (AllowanceHolder)](https://github.com/0xProject/0x-examples/tree/main/swap-v2-allowance-holder-next-app)
-- [Swap API v2 Headless Example (AllowanceHolder)](https://github.com/0xProject/0x-examples/tree/main/swap-v2-allowance-holder-headless-example)
-- [Swap API v2 Next.js Demo App (Permit2)](https://github.com/0xProject/0x-examples/tree/main/swap-v2-next-app)
-- [Swap API v2 Headless Example (Permit2)](https://github.com/0xProject/0x-examples/tree/main/swap-v2-headless-example)
-- [Use Swap API v2 in Your Smart Contract with Foundry](https://github.com/0xProject/0x-examples/tree/main/swap-v2-with-foundry)
+#### Next.js Demo Apps
+- [AllowanceHolder](https://github.com/0xProject/0x-examples/tree/main/swap-v2-allowance-holder-next-app) — Next.js demo app
+- [Permit2](https://github.com/0xProject/0x-examples/tree/main/swap-v2-permit2-next-app) — Next.js demo app
+
+#### Headless Examples
+- [AllowanceHolder](https://github.com/0xProject/0x-examples/tree/main/swap-v2-allowance-holder-headless-example) — Command-line example
+- [Permit2](https://github.com/0xProject/0x-examples/tree/main/swap-v2-permit2-headless-example) — Command-line example
+
+#### Smart Contract Integration
+- [Foundry Integration](https://github.com/0xProject/0x-examples/tree/main/swap-v2-with-foundry) — Use Swap API v2 in your smart contracts  
+
 
 ### Gasless API
+- [Headless Example](https://github.com/0xProject/0x-examples/blob/main/gasless-v2-headless-example/README.md) — Command-line example
+- [Trading Bot](https://github.com/0xProject/0x-examples/tree/main/gasless-v2-trading-bot) — Simple trading bot script with Gasless API v2  
 
-- [Gasless API v2 Headless Example](https://github.com/0xProject/0x-examples/blob/main/gasless-v2-headless-example/README.md)
-- [Gasless API v2 Trading Bot](https://github.com/0xProject/0x-examples/tree/main/gasless-v2-trading-bot)
 
 
 ## Contribution Guidelines
