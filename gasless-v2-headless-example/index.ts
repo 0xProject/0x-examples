@@ -27,10 +27,10 @@ if (!ZERO_EX_API_KEY) throw new Error("missing ZERO_EX_API_KEY.");
 if (!ALCHEMY_HTTP_TRANSPORT_URL)
   throw new Error("missing ALCHEMY_HTTP_TRANSPORT_URL.");
 
-// fetch headers
+// fetch headers (shared)
 const headers = new Headers({
   "Content-Type": "application/json",
-  "0x-api-key": ZERO_EX_API_KEY,
+  "0x-api-key": ZERO_EX_API_KEY!,
   "0x-version": "v2",
 });
 
@@ -54,9 +54,23 @@ const weth = getContract({
   client,
 });
 
+// Small helper to safely parse JSON (and surface non-JSON errors)
+async function fetchJsonOrThrow(res: Response) {
+  const ct = res.headers.get("content-type") || "";
+  if (!res.ok || !ct.includes("application/json")) {
+    const bodyText = await res.text().catch(() => "<unreadable body>");
+    throw new Error(
+      `HTTP ${res.status} ${res.statusText}\n` +
+        `Content-Type: ${ct}\n` +
+        `Body:\n${bodyText}`
+    );
+  }
+  return res.json();
+}
+
 const main = async () => {
   // specify sell amount
-  // USDC supports gasless approvals because it is an ERC-20 that supports the Permit function
+  // USDC supports gasless approvals because it is an ERC-20 that supports Permit/Permit2
   const sellAmount = parseUnits("0.1", await usdc.read.decimals());
 
   // 1. fetch price
@@ -67,43 +81,28 @@ const main = async () => {
     sellAmount: sellAmount.toString(),
   });
 
-  const priceResponse = await fetch(
-    "http://api.0x.org/gasless/price?" + priceParams.toString(),
-    {
-      headers,
-    }
-  );
+  const priceUrl = "https://api.0x.org/gasless/price?" + priceParams.toString();
+  const priceResponse = await fetch(priceUrl, { headers });
+  const price = await fetchJsonOrThrow(priceResponse);
 
-  const price = await priceResponse.json();
-  console.log("Fetching price to swap 0.1 USDC for WETH with Gasless API");
-  console.log();
-  console.log(`http://api.0x.org/gasless/price?${priceParams.toString()}`);
-  console.log();
-  console.log("🏷 priceResponse: ", price);
-  console.log();
+  console.log("Fetching price to swap 0.1 USDC for WETH with Gasless API\n");
+  console.log(priceUrl + "\n");
+  console.log("🏷 priceResponse: ", price, "\n");
 
   // 2. fetch quote
-  const quoteParams = new URLSearchParams({
-    taker: client.account.address,
-  });
+  const quoteParams = new URLSearchParams({ taker: client.account.address });
   for (const [key, value] of priceParams.entries())
     quoteParams.append(key, value);
 
-  const quoteResponse = await fetch(
-    "http://api.0x.org/gasless/quote?" + quoteParams.toString(),
-    {
-      headers,
-    }
-  );
+  const quoteUrl = "https://api.0x.org/gasless/quote?" + quoteParams.toString();
+  const quoteResponse = await fetch(quoteUrl, { headers });
+  const quote = await fetchJsonOrThrow(quoteResponse);
 
-  const quote = await quoteResponse.json();
-  console.log("Fetching quote to swap 0.1 USDC for WETH with Gasless API");
-  console.log();
-  console.log("💸 quoteResponse: ", quote);
-  console.log();
+  console.log("Fetching quote to swap 0.1 USDC for WETH with Gasless API\n");
+  console.log("💸 quoteResponse: ", quote, "\n");
 
   // 3. Check if token approval is required and if gasless approval is available
-  const tokenApprovalRequired = quote.issues.allowance != null;
+  const tokenApprovalRequired = quote.issues?.allowance != null;
   const gaslessApprovalAvailable = quote.approval != null;
 
   console.log("🪙 tokenApprovalRequired: ", tokenApprovalRequired);
@@ -142,16 +141,15 @@ const main = async () => {
     tradeSignature = await signTradeObject(); // Function to sign trade object
     tradeDataToSubmit = await tradeSplitSigDataToSubmit(tradeSignature);
 
-    successfulTradeHash = await submitTrade(
+    const tradeHash = await submitTrade(
       tradeDataToSubmit,
       approvalDataToSubmit
     ); // Function to submit trade
-    return successfulTradeHash;
+    return tradeHash;
   }
 
   // Helper functions
   async function signTradeObject(): Promise<any> {
-    // Logic to sign trade object
     const tradeSignature = await client.signTypedData({
       types: quote.trade.eip712.types,
       domain: quote.trade.eip712.domain,
@@ -163,7 +161,6 @@ const main = async () => {
   }
 
   async function signApprovalObject(): Promise<any> {
-    // Logic to sign approval object
     const approvalSignature = await client.signTypedData({
       types: quote.approval.eip712.types,
       domain: quote.approval.eip712.domain,
@@ -197,41 +194,39 @@ const main = async () => {
   }
 
   async function approvalSplitSigDataToSubmit(object: any): Promise<any> {
-    // split approval signature and package data to submit
     const approvalSplitSig = await splitSignature(object);
-    let approvalDataToSubmit = {
+    const approvalDataToSubmit = {
       type: quote.approval.type,
       eip712: quote.approval.eip712,
       signature: {
         ...approvalSplitSig,
         v: Number(approvalSplitSig.v),
-        signatureType: SignatureType.EIP712,
+        signatureType: SignatureType.EIP712, // 2
       },
     };
-    return approvalDataToSubmit; // Return approval object with split signature
+    return approvalDataToSubmit;
   }
 
   async function tradeSplitSigDataToSubmit(object: any): Promise<any> {
-    // split trade signature and package data to submit
     const tradeSplitSig = await splitSignature(object);
-    let tradeDataToSubmit = {
-      type: quote.trade.type,
+    const tradeDataToSubmit = {
+      type: quote.trade.type, // "settler_metatransaction"
       eip712: quote.trade.eip712,
       signature: {
         ...tradeSplitSig,
         v: Number(tradeSplitSig.v),
-        signatureType: SignatureType.EIP712,
+        signatureType: SignatureType.EIP712, // 2
       },
     };
-    return tradeDataToSubmit; // Return trade object with split signature
+    return tradeDataToSubmit;
   }
+
   // 4. Make a POST request to submit trade with tradeObject (and approvalObject if available)
   async function submitTrade(
     tradeDataToSubmit: any,
     approvalDataToSubmit: any
-  ): Promise<void> {
+  ): Promise<string | undefined> {
     try {
-      let successfulTradeHash;
       const requestBody: any = {
         trade: tradeDataToSubmit,
         chainId: client.chain.id,
@@ -239,59 +234,61 @@ const main = async () => {
       if (approvalDataToSubmit) {
         requestBody.approval = approvalDataToSubmit;
       }
+
       const response = await fetch("https://api.0x.org/gasless/submit", {
         method: "POST",
         headers: {
-          "0x-api-key": process.env.ZERO_EX_API_KEY as string,
+          "0x-api-key": ZERO_EX_API_KEY!,
+          "0x-version": "v2",
           "Content-Type": "application/json",
         },
         body: JSON.stringify(requestBody),
       });
-      const data = await response.json();
-      successfulTradeHash = data.tradeHash;
+
+      const data = await fetchJsonOrThrow(response);
+      const successfulTradeHash = data.tradeHash as string | undefined;
       console.log("#️⃣ tradeHash: ", successfulTradeHash);
       return successfulTradeHash;
     } catch (error) {
-      console.error("Error submitting the gasless swap", error);
+      console.error("Error submitting the gasless swap\n", error);
     }
   }
 
   // 5. Check trade status
   async function fetchStatus(tradeHash: string) {
-    const response = await fetch(
-      "http://api.0x.org/gasless/status/" +
-        tradeHash +
-        "?" +
-        "chainId=" +
-        client.chain.id.toString(),
-      {
-        headers,
-      }
-    );
-    const data = await response.json();
-    return data;
+    const url =
+      "https://api.0x.org/gasless/status/" +
+      tradeHash +
+      "?" +
+      "chainId=" +
+      client.chain.id.toString();
+
+    const response = await fetch(url, { headers });
+    return fetchJsonOrThrow(response);
   }
 
   async function fetchStatusPeriodically(tradeHash: string) {
     const intervalId = setInterval(async () => {
-      const data = await fetchStatus(tradeHash);
-      console.log("checks: ", data); // Handle or log the fetched data as needed
+      try {
+        const data = await fetchStatus(tradeHash);
+        console.log("checks: ", data); // Handle or log the fetched data as needed
 
-      if (data.status === "confirmed") {
-        clearInterval(intervalId); // Stop interval if status is confirmed
-        console.log("🎉 Transaction Completed!");
+        if (data.status === "confirmed") {
+          clearInterval(intervalId); // Stop interval if status is confirmed
+          console.log("🎉 Transaction Completed!");
+        }
+      } catch (e) {
+        // Surface intermittent API errors but keep polling for a bit
+        console.error("status poll error:", e);
       }
     }, 3000);
     console.log("⏳ Transaction Pending");
-    // Return intervalId to enable clearing the interval if needed externally
     return intervalId;
   }
 
-  async function startStatusCheck(successfulTradeHash: string) {
+  async function startStatusCheck(successfulTradeHash: string | undefined) {
     if (successfulTradeHash) {
       const intervalId = await fetchStatusPeriodically(successfulTradeHash);
-
-      // Optionally, clear the interval after 60 seconds
       setTimeout(() => clearInterval(intervalId), 60000); // Stop after 60 seconds
     } else {
       console.log(
@@ -299,6 +296,8 @@ const main = async () => {
       );
     }
   }
+
   startStatusCheck(successfulTradeHash);
 };
+
 main();
