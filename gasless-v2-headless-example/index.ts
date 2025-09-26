@@ -10,7 +10,7 @@ import {
   Hex,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { base } from "viem/chains";
+import { plasma } from "viem/chains";
 import { wethAbi } from "./abi/weth-abi";
 import { SignatureType, splitSignature } from "./utils/signature";
 
@@ -37,38 +37,37 @@ const headers = new Headers({
 // setup wallet client
 const client = createWalletClient({
   account: privateKeyToAccount(("0x" + PRIVATE_KEY) as `0x${string}`),
-  chain: base,
+  chain: plasma,
   transport: http(ALCHEMY_HTTP_TRANSPORT_URL),
 }).extend(publicActions); // extend wallet client with publicActions for public client
 
 // set up contracts
-const usdc = getContract({
-  address: "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+const usdt = getContract({
+  address: "0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb",
   abi: erc20Abi,
   client,
 });
 
-const weth = getContract({
-  address: "0x4200000000000000000000000000000000000006",
+const wxpl = getContract({
+  address: "0x6100E367285b01F48D07953803A2d8dCA5D19873",
   abi: wethAbi,
   client,
 });
 
 const main = async () => {
   // specify sell amount
-  // USDC supports gasless approvals because it is an ERC-20 that supports the Permit function
-  const sellAmount = parseUnits("0.1", await usdc.read.decimals());
+  const sellAmount = 1_000_000_000_000_000_000;
 
   // 1. fetch price
   const priceParams = new URLSearchParams({
     chainId: client.chain.id.toString(),
-    sellToken: usdc.address,
-    buyToken: weth.address,
+    sellToken: wxpl.address,
+    buyToken: usdt.address,
     sellAmount: sellAmount.toString(),
   });
 
   const priceResponse = await fetch(
-    "http://api.0x.org/gasless/price?" + priceParams.toString(),
+    "http://staging.api.0x.org/gasless/price?" + priceParams.toString(),
     {
       headers,
     }
@@ -77,7 +76,9 @@ const main = async () => {
   const price = await priceResponse.json();
   console.log("Fetching price to swap 0.1 USDC for WETH with Gasless API");
   console.log();
-  console.log(`http://api.0x.org/gasless/price?${priceParams.toString()}`);
+  console.log(
+    `http://staging.api.0x.org/gasless/price?${priceParams.toString()}`
+  );
   console.log();
   console.log("🏷 priceResponse: ", price);
   console.log();
@@ -90,14 +91,14 @@ const main = async () => {
     quoteParams.append(key, value);
 
   const quoteResponse = await fetch(
-    "http://api.0x.org/gasless/quote?" + quoteParams.toString(),
+    "http://staging.api.0x.org/gasless/quote?" + quoteParams.toString(),
     {
       headers,
     }
   );
 
   const quote = await quoteResponse.json();
-  console.log("Fetching quote to swap 0.1 USDC for WETH with Gasless API");
+  console.log("Fetching quote to swap 0.1 USDT for WXPL with Gasless API");
   console.log();
   console.log("💸 quoteResponse: ", quote);
   console.log();
@@ -176,23 +177,9 @@ const main = async () => {
 
   async function standardApproval(): Promise<any> {
     if (quote.issues.allowance !== null) {
-      try {
-        const { request } = await usdc.simulate.approve([
-          quote.issues.allowance.spender,
-          maxUint256,
-        ]);
-        console.log("Approving Permit2 to spend USDC...", request);
-        // set approval
-        const hash = await usdc.write.approve(request.args);
-        console.log(
-          "Approved Permit2 to spend USDC.",
-          await client.waitForTransactionReceipt({ hash })
-        );
-      } catch (error) {
-        console.log("Error approving Permit2:", error);
-      }
+      console.log("WXPL needs to be approved for Permit2");
     } else {
-      console.log("USDC already approved for Permit2");
+      console.log("WXPL already approved for Permit2");
     }
   }
 
@@ -239,14 +226,17 @@ const main = async () => {
       if (approvalDataToSubmit) {
         requestBody.approval = approvalDataToSubmit;
       }
-      const response = await fetch("https://api.0x.org/gasless/submit", {
-        method: "POST",
-        headers: {
-          "0x-api-key": process.env.ZERO_EX_API_KEY as string,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
+      const response = await fetch(
+        "https://staging.api.0x.org/gasless/submit",
+        {
+          method: "POST",
+          headers: {
+            "0x-api-key": process.env.ZERO_EX_API_KEY as string,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
       const data = await response.json();
       successfulTradeHash = data.tradeHash;
       console.log("#️⃣ tradeHash: ", successfulTradeHash);
@@ -259,7 +249,7 @@ const main = async () => {
   // 5. Check trade status
   async function fetchStatus(tradeHash: string) {
     const response = await fetch(
-      "http://api.0x.org/gasless/status/" +
+      "http://staging.api.0x.org/gasless/status/" +
         tradeHash +
         "?" +
         "chainId=" +
