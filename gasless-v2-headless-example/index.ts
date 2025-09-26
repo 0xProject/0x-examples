@@ -70,7 +70,7 @@ async function fetchJsonOrThrow(res: Response) {
 
 const main = async () => {
   // specify sell amount
-  // USDC supports gasless approvals because it is an ERC-20 that supports Permit/Permit2
+  // USDC supports gasless approvals because it is an ERC-20 that supports the Permit function
   const sellAmount = parseUnits("0.1", await usdc.read.decimals());
 
   // 1. fetch price
@@ -193,6 +193,7 @@ const main = async () => {
     }
   }
 
+  // Split approval signature and package data to submit
   async function approvalSplitSigDataToSubmit(object: any): Promise<any> {
     const approvalSplitSig = await splitSignature(object);
     const approvalDataToSubmit = {
@@ -201,16 +202,16 @@ const main = async () => {
       signature: {
         ...approvalSplitSig,
         v: Number(approvalSplitSig.v),
-        signatureType: SignatureType.EIP712, // 2
+        signatureType: SignatureType.EIP712,
       },
     };
-    return approvalDataToSubmit;
+    return approvalDataToSubmit; // Return approval object with split signature
   }
 
   async function tradeSplitSigDataToSubmit(object: any): Promise<any> {
     const tradeSplitSig = await splitSignature(object);
     const tradeDataToSubmit = {
-      type: quote.trade.type, // "settler_metatransaction"
+      type: quote.trade.type,
       eip712: quote.trade.eip712,
       signature: {
         ...tradeSplitSig,
