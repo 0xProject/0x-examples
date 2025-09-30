@@ -74,7 +74,7 @@ const main = async () => {
   );
 
   const price = await priceResponse.json();
-  console.log("Fetching price to swap 0.1 USDC for WETH with Gasless API");
+  console.log("Fetching price to swap 1 WXPL for USDT with Gasless API");
   console.log();
   console.log(
     `http://staging.api.0x.org/gasless/price?${priceParams.toString()}`
@@ -98,7 +98,7 @@ const main = async () => {
   );
 
   const quote = await quoteResponse.json();
-  console.log("Fetching quote to swap 0.1 USDT for WXPL with Gasless API");
+  console.log("Fetching quote to swap 1 WXPL for USDT with Gasless API");
   console.log();
   console.log("💸 quoteResponse: ", quote);
   console.log();
@@ -226,6 +226,7 @@ const main = async () => {
       if (approvalDataToSubmit) {
         requestBody.approval = approvalDataToSubmit;
       }
+      console.log(requestBody);
       const response = await fetch(
         "https://staging.api.0x.org/gasless/submit",
         {
@@ -237,6 +238,7 @@ const main = async () => {
           body: JSON.stringify(requestBody),
         }
       );
+      console.log(response);
       const data = await response.json();
       successfulTradeHash = data.tradeHash;
       console.log("#️⃣ tradeHash: ", successfulTradeHash);
