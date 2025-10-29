@@ -28,6 +28,7 @@ A collection of 0x API code examples
 
 #### Headless Examples
 - [AllowanceHolder](https://github.com/0xProject/0x-examples/tree/main/swap-v2-allowance-holder-headless-example) — Command-line example
+- [AllowanceHolder](https://github.com/0xProject/0x-examples/tree/main/swap-v2-allowance-holder-quicknode-headless-example) — Command-line example with Quicknode Marketplace 0x Addon
 - [Permit2](https://github.com/0xProject/0x-examples/tree/main/swap-v2-permit2-headless-example) — Command-line example
 
 #### Smart Contract Integration
