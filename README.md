@@ -41,6 +41,11 @@ A collection of 0x API code examples
 - [Trading Bot](https://github.com/0xProject/0x-examples/tree/main/gasless-v2-trading-bot) — Simple trading bot script with Gasless API v2  
 
 
+### Cross-Chain API
+- [Headless Example](https://github.com/0xProject/0x-examples/tree/main/cross-chain-headless-example) — TypeScript examples for EVM↔Solana, EVM↔EVM, and EVM↔Tron cross-chain swaps with real-time transaction monitoring
+- [Streaming Next.js App](https://github.com/0xProject/0x-examples/tree/main/cross-chain-streaming-next-app) — Next.js app with live streaming cross-chain quotes via Server-Sent Events
+
+
 
 ## Contribution Guidelines
 
