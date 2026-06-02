@@ -1,0 +1,17 @@
+{
+    "name": "swap-v2-headless-example",
+    "module": "index.ts",
+    "type": "module",
+    "devDependencies": {
+        "@types/bun": "latest",
+        "@types/dotenv": "^8.2.0"
+    },
+    "peerDependencies": {
+        "typescript": "^5.0.0"
+    },
+    "dependencies": {
+        "dotenv": "^16.4.5",
+        "qs": "^6.12.1",
+        "viem": "^2.17.3"
+    }
+}

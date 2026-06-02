@@ -1,0 +1,31 @@
+{
+  "name": "0x-cross-chain-headless-example",
+  "version": "1.0.0",
+  "description": "TypeScript examples for cross-chain swaps",
+  "main": "index.ts",
+  "scripts": {
+    "evm-to-solana": "tsx src/fromEvmToSolana.ts",
+    "solana-to-evm": "tsx src/fromSolanaToEvm.ts",
+    "solana-to-evm-with-gas-payer": "tsx src/fromSolanaToEvmWithGasPayer.ts",
+    "evm-to-evm": "tsx src/fromEvmToEvm.ts",
+    "tron-to-evm": "tsx src/fromTronToEvm.ts",
+    "evm-to-tron": "tsx src/fromEvmToTron.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^24.2.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@solana/addresses": "^2.3.0",
+    "@solana/web3.js": "^1.98.4",
+    "bs58": "^6.0.0",
+    "dotenv": "^17.2.1",
+    "tronweb": "^6.2.2",
+    "viem": "^2.33.2",
+    "zod": "^4.0.15"
+  }
+}
