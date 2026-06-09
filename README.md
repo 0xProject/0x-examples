@@ -20,26 +20,29 @@ A collection of 0x API code examples
 
 ## v2 (Latest)
 
-### Swap API
+### EVM Swap API
 
 #### Next.js Demo Apps
-- [AllowanceHolder](https://github.com/0xProject/0x-examples/tree/main/swap-v2-allowance-holder-next-app) — Next.js demo app
-- [Permit2](https://github.com/0xProject/0x-examples/tree/main/swap-v2-permit2-next-app) — Next.js demo app
+- [AllowanceHolder](https://github.com/0xProject/0x-examples/tree/main/swap-v2-allowance-holder-next-app) — Next.js app with RainbowKit demonstrating indicative pricing and firm quotes using the AllowanceHolder flow
+- [Permit2](https://github.com/0xProject/0x-examples/tree/main/swap-v2-permit2-next-app) — Next.js app with RainbowKit demonstrating indicative pricing and firm quotes using the Permit2 flow
 
 #### Headless Examples
-- [AllowanceHolder](https://github.com/0xProject/0x-examples/tree/main/swap-v2-allowance-holder-headless-example) — Command-line example
-- [AllowanceHolder](https://github.com/0xProject/0x-examples/tree/main/swap-v2-allowance-holder-quicknode-headless-example) — Command-line example with Quicknode Marketplace 0x Addon
-- [Permit2](https://github.com/0xProject/0x-examples/tree/main/swap-v2-permit2-headless-example) — Command-line example
+- [AllowanceHolder](https://github.com/0xProject/0x-examples/tree/main/swap-v2-allowance-holder-headless-example) — TypeScript script to get a price, set an AllowanceHolder approval, fetch a firm quote, and execute a swap
+- [AllowanceHolder](https://github.com/0xProject/0x-examples/tree/main/swap-v2-allowance-holder-quicknode-headless-example) — TypeScript script using the QuickNode Marketplace 0x Addon — no separate API key, all calls routed through your QuickNode endpoint
+- [Permit2](https://github.com/0xProject/0x-examples/tree/main/swap-v2-permit2-headless-example) — TypeScript script demonstrating Permit2 EIP-712 signing for both native ETH and ERC-20 token swaps
 
 #### Smart Contract Integration
-- [Foundry Integration](https://github.com/0xProject/0x-examples/tree/main/swap-v2-with-foundry) — Use Swap API v2 in your smart contracts  
+- [Foundry Integration](https://github.com/0xProject/0x-examples/tree/main/swap-v2-with-foundry) — `SimpleTokenSwap` contract example showing how to call Swap API v2 from a smart contract, built and tested with Foundry
 
 
-### Gasless API
+### EVM Gasless API
 - [Headless Example](https://github.com/0xProject/0x-examples/blob/main/gasless-v2-headless-example/README.md) — Command-line example
 - [ERC-4337 Smart Account](https://github.com/0xProject/0x-examples/tree/main/gasless-v2-erc4337-smart-account) — Gasless swaps from an ERC-4337 smart wallet (Alchemy Modular Account v2) using EIP-1271 raw signatures
 - [Trading Bot](https://github.com/0xProject/0x-examples/tree/main/gasless-v2-trading-bot) — Simple trading bot script with Gasless API v2  
 
+
+### Solana Swap API
+- [Headless Example](https://github.com/0xProject/0x-examples/tree/main/solana-example) — TypeScript script to get a Solana swap quote, build instructions, and execute the swap
 
 ### Cross-Chain API
 - [Headless Example](https://github.com/0xProject/0x-examples/tree/main/cross-chain-headless-example) — TypeScript examples for EVM↔Solana, EVM↔EVM, and EVM↔Tron cross-chain swaps with real-time transaction monitoring
