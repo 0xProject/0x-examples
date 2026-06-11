@@ -19,7 +19,7 @@ import Trade from './models/model.trade';
  * @throws Will terminate the process if the database URI is not defined or if the connection attempt fails.
  */
 
-const connect = (): void => {
+const connect = async (): Promise<void> => {
   const dbUri = url;
 
   if (!dbUri) {
@@ -29,7 +29,7 @@ const connect = (): void => {
 
   try {
     mongoose.set('strictQuery', false);
-    mongoose.connect(dbUri, {
+    await mongoose.connect(dbUri, {
       retryWrites: true,
       w: 'majority',
     });
