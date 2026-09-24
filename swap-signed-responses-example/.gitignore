@@ -1,0 +1,10 @@
+# Environment variables
+.env*
+!.env.example
+
+# TypeScript
+node_modules/
+*.tsbuildinfo
+
+# Misc
+.DS_Store
