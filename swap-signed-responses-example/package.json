@@ -1,0 +1,19 @@
+{
+  "name": "0x-swap-signed-responses-example",
+  "version": "1.0.0",
+  "description": "Verify RFC 9421 signatures on 0x Swap API responses",
+  "type": "module",
+  "scripts": {
+    "evm": "tsx src/evm.ts",
+    "solana": "tsx src/solana.ts"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^24.1.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.0"
+  }
+}
