@@ -1,6 +1,6 @@
 # 0x Signed Responses Example
 
-This TypeScript project shows how to request and verify signed responses from the 0x Swap API. A valid signature proves that the response came from 0x and that it answers the exact request you sent, so a quote cannot be altered in transit or reused for a different order.
+This TypeScript project shows how to request and verify signed responses from the 0x Swap, Solana and Cross-Chain APIs. A valid signature proves that the response came from 0x and that it answers the exact request you sent, so a quote cannot be altered in transit or reused for a different order.
 
 Responses are signed with [RFC 9421 HTTP Message Signatures](https://www.rfc-editor.org/rfc/rfc9421) using Ed25519.
 
@@ -26,10 +26,21 @@ Responses are signed with [RFC 9421 HTTP Message Signatures](https://www.rfc-edi
 🛡️ Different order rejected: request body does not match its Content-Digest
 ```
 
+```bash
+➜  swap-signed-responses-example git:(main) npm run cross-chain
+
+📦 Cross-chain quotes received: HTTP 200, 16336 bytes
+🔏 Signature-Input: sig=("@status" "content-type" "content-digest" "@method";req "@authority";req "@path";req "@query";req);created=1790346365;keyid="0x-signing-key-prod-24092026";alg="ed25519";tag="0x-swap-api"
+✅ Signature valid, keyid 0x-signing-key-prod-24092026, created 1790346365
+💰 Verified 3 quotes, best: 4986045 USDC base units on Arbitrum for 5 USDC on Base
+🛡️ Tampered request rejected: signature is invalid
+```
+
 ## What It Does
 
 - `npm run evm` requests an AllowanceHolder quote on Base, verifies its signature, and shows that changing `sellAmount` afterwards breaks verification.
 - `npm run solana` requests Solana swap instructions, binds the request body with a `Content-Digest` header, verifies the signature, and shows that the response cannot be reused for a different order.
+- `npm run cross-chain` requests cross-chain quotes from Base to Arbitrum, verifies their signature, and shows that changing `sellAmount` afterwards breaks verification.
 
 [`src/verify.ts`](./src/verify.ts) has no dependencies beyond `node:crypto` and can be copied into your own project.
 
@@ -54,6 +65,7 @@ Copy the example from [.env.example](./.env.example) into a new `.env` file:
 ```bash
 npm run evm
 npm run solana
+npm run cross-chain
 ```
 
 ## How Signing Works
@@ -98,4 +110,5 @@ Keys are rotated. Always check the [0x docs](https://0x.org/docs) for the curren
 ## 📝 Notes
 
 - Responses rejected before reaching the API, such as invalid API keys or rate limits, are not signed.
+- Streaming endpoints such as `/cross-chain/quotes/stream` are not signed. Do not send `Accept-Signature` to them.
 - Token addresses and amounts are hardcoded for simplicity.

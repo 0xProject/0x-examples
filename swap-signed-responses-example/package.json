@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "evm": "tsx src/evm.ts",
-    "solana": "tsx src/solana.ts"
+    "solana": "tsx src/solana.ts",
+    "cross-chain": "tsx src/crosschain.ts"
   },
   "license": "ISC",
   "devDependencies": {

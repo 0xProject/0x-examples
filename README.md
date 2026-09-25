@@ -49,7 +49,7 @@ A collection of 0x API code examples
 
 | Example | Description |
 |---------|-------------|
-| [Signed Responses — Headless](https://github.com/0xProject/0x-examples/tree/main/swap-signed-responses-example) | TypeScript scripts to request and verify RFC 9421 signed responses for EVM Swap API quotes and Solana swap instructions |
+| [Signed Responses — Headless](https://github.com/0xProject/0x-examples/tree/main/swap-signed-responses-example) | TypeScript scripts to request and verify RFC 9421 signed responses for EVM Swap API quotes, Solana swap instructions and cross-chain quotes |
 
 ### Cross-Chain API
 
