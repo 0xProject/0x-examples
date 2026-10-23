@@ -55,7 +55,7 @@ A collection of 0x API code examples
 
 | Example | Description |
 |---------|-------------|
-| [Headless Example](https://github.com/0xProject/0x-examples/tree/main/cross-chain-headless-example) | TypeScript examples for EVM↔Solana, EVM↔EVM, and EVM↔Tron cross-chain swaps with real-time transaction monitoring |
+| [Headless Example](https://github.com/0xProject/0x-examples/tree/main/cross-chain-headless-example) | TypeScript examples for EVM↔Solana, EVM↔EVM, EVM↔Tron, and EVM↔Bitcoin cross-chain swaps with real-time transaction monitoring |
 | [Streaming — Next.js App](https://github.com/0xProject/0x-examples/tree/main/cross-chain-streaming-next-app) | Next.js app with live streaming cross-chain quotes via Server-Sent Events |
 
 
