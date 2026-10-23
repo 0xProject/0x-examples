@@ -128,10 +128,13 @@ async function bitcoinToArbitrumExample() {
 
     if (quote.transaction.chainType === "btc" && privateKey) {
       console.log("\n🚀 Executing transaction on Bitcoin...");
-      const tx = Transaction.fromPSBT(
-        Buffer.from(quote.transaction.details.psbt, "hex"),
-        { allowUnknownOutputs: true },
-      );
+      const psbtHex = quote.transaction.details.psbt;
+      if (!/^[0-9a-fA-F]+$/.test(psbtHex) || psbtHex.length % 2 !== 0) {
+        throw new Error("Quote PSBT is not hex");
+      }
+      const tx = Transaction.fromPSBT(Buffer.from(psbtHex, "hex"), {
+        allowUnknownOutputs: true,
+      });
       console.log("✍️  Signing PSBT...");
       tx.sign(privateKey);
       tx.finalize();
