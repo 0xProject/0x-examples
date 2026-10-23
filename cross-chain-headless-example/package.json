@@ -9,7 +9,9 @@
     "solana-to-evm-with-gas-payer": "tsx src/fromSolanaToEvmWithGasPayer.ts",
     "evm-to-evm": "tsx src/fromEvmToEvm.ts",
     "tron-to-evm": "tsx src/fromTronToEvm.ts",
-    "evm-to-tron": "tsx src/fromEvmToTron.ts"
+    "evm-to-tron": "tsx src/fromEvmToTron.ts",
+    "bitcoin-to-evm": "tsx src/fromBitcoinToEvm.ts",
+    "evm-to-bitcoin": "tsx src/fromEvmToBitcoin.ts"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +22,7 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
+    "@scure/btc-signer": "~1.8",
     "@solana/addresses": "^2.3.0",
     "@solana/web3.js": "^1.98.4",
     "bs58": "^6.0.0",
