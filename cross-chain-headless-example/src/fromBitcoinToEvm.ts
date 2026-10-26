@@ -1,6 +1,7 @@
 import { config as dotenv } from "dotenv";
-import { Transaction, WIF, p2wpkh } from "@scure/btc-signer";
-import { pubECDSA } from "@scure/btc-signer/utils";
+import * as bitcoin from "bitcoinjs-lib";
+import * as ecc from "tiny-secp256k1";
+import { ECPairFactory, type ECPairInterface } from "ecpair";
 import { CrossChainClient } from "./crossChainClient";
 import {
   loadConfig,
@@ -14,6 +15,9 @@ dotenv({ quiet: true });
 
 const configuration = loadConfig();
 
+bitcoin.initEccLib(ecc);
+const ECPair = ECPairFactory(ecc);
+
 /**
  * Example: Bitcoin to Arbitrum cross-chain swap
  * Swaps native BTC to USDC on Arbitrum
@@ -24,19 +28,16 @@ async function bitcoinToArbitrumExample() {
 
   const crossChainClient = new CrossChainClient(configuration.zeroexApiKey);
 
-  let privateKey: Uint8Array | null = null;
+  // Setup Bitcoin wallet if private key is provided
+  let keyPair: ECPairInterface | null = null;
   let userAddress: string;
 
   if (configuration.bitcoinPrivateKey) {
-    privateKey = WIF().decode(configuration.bitcoinPrivateKey);
-    const address = p2wpkh(pubECDSA(privateKey, true)).address;
-    if (!address) {
-      throw new Error(
-        "Failed to derive a P2WPKH address from BITCOIN_PRIVATE_KEY",
-      );
-    }
-    userAddress = address;
+    keyPair = ECPair.fromWIF(configuration.bitcoinPrivateKey);
+    userAddress = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey })
+      .address as string;
   } else {
+    // Use default address for quote-only mode
     userAddress = DEFAULT_ADDRESSES.BITCOIN;
     console.log(
       "⚠️  No BITCOIN_PRIVATE_KEY provided - running in quote-only mode",
@@ -45,9 +46,11 @@ async function bitcoinToArbitrumExample() {
 
   const sellAmount = "50000"; // 0.0005 BTC (8 decimals)
 
+  // Get receiver address or use default
   const receiverAddress =
     configuration.evmReceiverAddress || DEFAULT_ADDRESSES.EVM;
 
+  // Safety check: if executing transactions, require explicit receiver address
   if (configuration.bitcoinPrivateKey && !configuration.evmReceiverAddress) {
     console.log(
       "❌ SAFETY: EVM_RECEIVER_ADDRESS must be set when executing transactions",
@@ -63,6 +66,7 @@ async function bitcoinToArbitrumExample() {
   console.log(`🎯 Receiver (Arbitrum): ${receiverAddress}`);
 
   try {
+    // Step 1: Get the best quote
     console.log("\n📊 Getting cross-chain quote...");
     const quoteResponse = await crossChainClient.getQuotes({
       originChain: CHAIN_IDS.bitcoin,
@@ -89,6 +93,7 @@ async function bitcoinToArbitrumExample() {
     console.log(`  🛡️ Min Receive: ${Number(quote.minBuyAmount) / 1e6} USDC`);
     console.log(`  ⏱️ Estimated Time: ${quote.estimatedTimeSeconds}s`);
 
+    // Display quote steps and bridge provider
     console.log(`  🔄 Steps: ${quote.steps.length}`);
     const bridgeStep = quote.steps.find((step) => step.type === "bridge");
     if (bridgeStep && bridgeStep.provider) {
@@ -115,6 +120,7 @@ async function bitcoinToArbitrumExample() {
       );
     }
 
+    // Check for balance issues first - skip everything if insufficient balance
     if (quote.issues.balance) {
       console.log("❌ Insufficient balance detected");
       console.log(`  🔧 Token: ${quote.issues.balance.token}`);
@@ -126,35 +132,36 @@ async function bitcoinToArbitrumExample() {
       return;
     }
 
-    if (quote.transaction.chainType === "btc" && privateKey) {
+    // Step 2: Execute transaction (only if private key provided)
+    if (quote.transaction.chainType === "btc" && keyPair) {
       console.log("\n🚀 Executing transaction on Bitcoin...");
-      const psbtHex = quote.transaction.details.psbt;
-      if (!/^[0-9a-fA-F]+$/.test(psbtHex) || psbtHex.length % 2 !== 0) {
-        throw new Error("Quote PSBT is not hex");
-      }
-      const tx = Transaction.fromPSBT(Buffer.from(psbtHex, "hex"), {
-        allowUnknownOutputs: true,
-      });
-      console.log("✍️  Signing PSBT...");
-      tx.sign(privateKey);
-      tx.finalize();
 
+      // Sign the PSBT from the quote
+      console.log("✍️  Signing PSBT...");
+      const psbt = bitcoin.Psbt.fromHex(
+        quote.transaction.details.psbt.replace(/^0x/, ""),
+      );
+      psbt.signAllInputs(keyPair);
+      psbt.finalizeAllInputs();
+      const rawTx = psbt.extractTransaction().toHex();
+
+      // Broadcast
       console.log("📤 Broadcasting transaction...");
       const response = await fetch(`${configuration.rpcUrls.bitcoin}/tx`, {
         method: "POST",
-        body: tx.hex,
+        headers: { "Content-Type": "text/plain" },
+        body: rawTx,
       });
-      if (!response.ok) {
-        throw new Error(
-          `Broadcast failed: ${response.status} ${await response.text()}`,
-        );
-      }
       const txid = (await response.text()).trim();
+      if (!response.ok) {
+        throw new Error(`Broadcast failed: ${response.status} ${txid}`);
+      }
       console.log(`📝 Transaction broadcast: ${txid}`);
       console.log(`🔗 View on mempool.space: https://mempool.space/tx/${txid}`);
 
+      // Step 3: Monitor cross-chain transaction
       console.log("\n👀 Monitoring cross-chain transaction...");
-      console.log("This may take about an hour...");
+      console.log("This may take several minutes...");
 
       try {
         const finalStatus = await crossChainClient.monitorTransaction(
@@ -222,7 +229,7 @@ async function bitcoinToArbitrumExample() {
     } else if (quote.transaction.chainType === "btc") {
       const psbt = quote.transaction.details.psbt;
       console.log("\n💡 Transaction ready for execution:");
-      console.log(`  📝 PSBT (${psbt.length} hex chars): ${psbt.slice(0, 20)}...`);
+      console.log(`  📝 PSBT: ${psbt.slice(0, 20)}...`);
       console.log(
         "\n💡 To execute this transaction, provide BITCOIN_PRIVATE_KEY in your environment",
       );

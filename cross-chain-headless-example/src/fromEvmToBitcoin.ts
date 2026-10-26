@@ -26,6 +26,7 @@ async function arbitrumToBitcoinExample() {
 
   const crossChainClient = new CrossChainClient(configuration.zeroexApiKey);
 
+  // Setup wallet if private key is provided
   let account = null;
   let walletClient = null;
   let userAddress: string;
@@ -42,6 +43,7 @@ async function arbitrumToBitcoinExample() {
     }).extend(publicActions);
     userAddress = account.address;
   } else {
+    // Use default address for quote-only mode
     userAddress = DEFAULT_ADDRESSES.EVM;
     console.log(
       "⚠️  No EVM_PRIVATE_KEY provided - running in quote-only mode",
@@ -50,9 +52,11 @@ async function arbitrumToBitcoinExample() {
 
   const sellAmount = "4000000"; // 4 USDC (6 decimals)
 
+  // Get receiver address or use default
   const receiverAddress =
     configuration.bitcoinReceiverAddress || DEFAULT_ADDRESSES.BITCOIN;
 
+  // Safety check: if executing transactions, require explicit receiver address
   if (configuration.evmPrivateKey && !configuration.bitcoinReceiverAddress) {
     console.log(
       "❌ SAFETY: BITCOIN_RECEIVER_ADDRESS must be set when executing transactions",
@@ -70,6 +74,7 @@ async function arbitrumToBitcoinExample() {
   console.log(`🎯 Receiver (Bitcoin): ${receiverAddress}`);
 
   try {
+    // Step 1: Get the best quote
     console.log("\n📊 Getting cross-chain quote...");
     const quoteResponse = await crossChainClient.getQuotes({
       originChain: CHAIN_IDS.arbitrum,
@@ -96,6 +101,7 @@ async function arbitrumToBitcoinExample() {
     console.log(`  🛡️ Min Receive: ${Number(quote.minBuyAmount) / 1e8} BTC`);
     console.log(`  ⏱️ Estimated Time: ${quote.estimatedTimeSeconds}s`);
 
+    // Display quote steps and bridge provider
     console.log(`  🔄 Steps: ${quote.steps.length}`);
     const bridgeStep = quote.steps.find((step) => step.type === "bridge");
     if (bridgeStep && bridgeStep.provider) {
@@ -116,6 +122,7 @@ async function arbitrumToBitcoinExample() {
       }
     });
 
+    // Check for balance issues first - skip everything if insufficient balance
     if (quote.issues.balance) {
       console.log("❌ Insufficient balance detected");
       console.log(`  🔧 Token: ${quote.issues.balance.token}`);
@@ -127,6 +134,7 @@ async function arbitrumToBitcoinExample() {
       return;
     }
 
+    // Check for issues and handle allowance
     if (quote.issues.allowance) {
       console.log("⚠️  Allowance issue detected - approval needed");
       console.log(`  📍 Spender: ${quote.issues.allowance.spender}`);
@@ -162,6 +170,7 @@ async function arbitrumToBitcoinExample() {
       }
     }
 
+    // Step 2: Execute transaction (only if private key provided)
     if (quote.transaction.chainType === "evm" && walletClient) {
       console.log("\n🚀 Executing transaction on Arbitrum...");
 
@@ -179,6 +188,7 @@ async function arbitrumToBitcoinExample() {
       console.log(`  💎 Value: ${txRequest.value} wei`);
       console.log(`  ⛽ Gas: ${txRequest.gas?.toString() || "estimated"}`);
 
+      // Send transaction directly (API already simulated)
       console.log("📤 Sending transaction...");
       const txHash = await walletClient.sendTransaction(txRequest);
       console.log(`📝 Transaction sent: ${txHash}`);
@@ -193,6 +203,7 @@ async function arbitrumToBitcoinExample() {
       );
       console.log(`🔗 View on Arbiscan: https://arbiscan.io/tx/${txHash}`);
 
+      // Step 3: Monitor cross-chain transaction
       console.log("\n👀 Monitoring cross-chain transaction...");
       console.log(
         "This may take several minutes for the bridge to complete...",

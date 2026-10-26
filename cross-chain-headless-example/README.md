@@ -95,16 +95,16 @@ Copy the example from [.env.example](./.env.example) into a new `.env` file:
 | `SOLANA_PRIVATE_KEY`           | Solana private key (44-character base58 format)       | ❌       | _Quote-only mode_                             |
 | `SOLANA_GAS_PAYER_PRIVATE_KEY` | Solana private key for custom gas payer (base58)      | ❌       | _Only used by `solana-to-evm-with-gas-payer`_ |
 | `TRON_PRIVATE_KEY`             | Tron private key (64 hex chars, no 0x prefix)         | ❌       | _Quote-only mode_                             |
-| `BITCOIN_PRIVATE_KEY`          | Bitcoin mainnet WIF. Signs as a P2WPKH (`bc1q`) address | ❌     | _Quote-only mode_                             |
+| `BITCOIN_PRIVATE_KEY`          | Bitcoin private key (mainnet WIF, `bc1q` address)     | ❌       | _Quote-only mode_                             |
 | `SOLANA_RECEIVER_ADDRESS`      | Solana address to receive tokens (base58 format)      | ❌\*     | _Uses default address_                        |
 | `EVM_RECEIVER_ADDRESS`         | EVM address to receive tokens (hex format)            | ❌\*     | _Uses default address_                        |
 | `TRON_RECEIVER_ADDRESS`        | Tron address to receive tokens (Base58Check format)   | ❌\*     | _Uses default address_                        |
-| `BITCOIN_RECEIVER_ADDRESS`     | Bitcoin address to receive BTC (`bc1q` or `bc1p`)     | ❌\*     | _Uses default address_                        |
+| `BITCOIN_RECEIVER_ADDRESS`     | Bitcoin address to receive BTC                        | ❌\*     | _Uses default address_                        |
 | `BASE_RPC_URL`                 | Base network RPC endpoint                             | ❌       | `https://mainnet.base.org`                    |
 | `ARBITRUM_RPC_URL`             | Arbitrum network RPC endpoint                         | ❌       | `https://arb1.arbitrum.io/rpc`                |
 | `SOLANA_RPC_URL`               | Solana RPC endpoint                                   | ❌       | `https://api.mainnet-beta.solana.com`         |
 | `TRON_RPC_URL`                 | Tron full-node RPC endpoint                           | ❌       | `https://api.trongrid.io`                     |
-| `BITCOIN_RPC_URL`              | Esplora API base URL                                  | ❌       | `https://mempool.space/api`                   |
+| `BITCOIN_RPC_URL`              | Bitcoin API endpoint (mempool.space format)           | ❌       | `https://mempool.space/api`                   |
 
 _\*Required when executing transactions to prevent accidental sends to default addresses_
 
@@ -142,6 +142,6 @@ npm run evm-to-bitcoin
 - **Slippage**: Set to 1% (100 basis points) - adjustable per swap
 - **Monitoring**: 10-minute timeout with 5-second polling intervals. Bitcoin origin polls for 60 minutes
 - **Validation**: Strict private key format validation (64-char hex for EVM/Tron, 44-char base58 for Solana, mainnet WIF for Bitcoin)
-- **Bitcoin**: Native BTC only. The fee is in satoshis. The script signs and broadcasts the PSBT from the API as-is. A quote can return 4xx until Bitcoin routes are enabled
 - **Tron fees**: Tron uses energy + bandwidth instead of gas. Ensure your wallet has sufficient TRX to cover transaction fees
 - **Tron approvals**: Unlike EVM-origin swaps, Tron-origin swaps do not require a separate TRC-20 token approval step. The integrated bridge providers use direct TRC-20 transfers rather than contract-based spending patterns
+- **Bitcoin fees**: The PSBT from the quote already includes the miner fee. Your wallet needs the sell amount plus that fee in a confirmed UTXO

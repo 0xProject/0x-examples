@@ -1,7 +1,12 @@
 import { z } from "zod";
 import { isAddress as isEvmAddress } from "viem";
 import { isAddress as isSolanaAddress } from "@solana/addresses";
-import { Address, NETWORK, WIF } from "@scure/btc-signer";
+import * as bitcoin from "bitcoinjs-lib";
+import * as ecc from "tiny-secp256k1";
+import { ECPairFactory } from "ecpair";
+
+bitcoin.initEccLib(ecc);
+const ECPair = ECPairFactory(ecc);
 
 const EnvironmentConfigurationSchema = z.object({
   ZEROEX_API_KEY: z.string(),
@@ -46,9 +51,9 @@ const EnvironmentConfigurationSchema = z.object({
     .string()
     .optional()
     .refine((key) => {
-      if (!key) return true;
+      if (!key) return true; // Optional field
       try {
-        WIF().decode(key);
+        ECPair.fromWIF(key);
         return true;
       } catch {
         return false;
@@ -83,9 +88,9 @@ const EnvironmentConfigurationSchema = z.object({
     .string()
     .optional()
     .refine((address) => {
-      if (!address) return true;
+      if (!address) return true; // Optional field
       try {
-        Address(NETWORK).decode(address);
+        bitcoin.address.toOutputScript(address);
         return true;
       } catch {
         return false;
@@ -174,7 +179,7 @@ export const TOKEN_ADDRESSES = {
   // Tron
   USDT_TRON: "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
 
-  // Bitcoin. API id for native BTC. Not a receive address.
+  // Bitcoin
   BTC: "bc1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqmql8k8",
 } as const;
 
