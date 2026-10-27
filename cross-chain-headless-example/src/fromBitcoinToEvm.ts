@@ -37,14 +37,15 @@ async function bitcoinToArbitrumExample() {
     userAddress = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey })
       .address as string;
   } else {
-    // Use default address for quote-only mode
-    userAddress = DEFAULT_ADDRESSES.BITCOIN;
+    // Quote-only mode. The API builds the payment from coins at this address.
+    userAddress =
+      configuration.bitcoinSenderAddress || DEFAULT_ADDRESSES.BITCOIN;
     console.log(
       "⚠️  No BITCOIN_PRIVATE_KEY provided - running in quote-only mode",
     );
   }
 
-  const sellAmount = "50000"; // 0.0005 BTC (8 decimals)
+  const sellAmount = "5000"; // 0.00005 BTC (8 decimals)
 
   // Get receiver address or use default
   const receiverAddress =
@@ -83,6 +84,12 @@ async function bitcoinToArbitrumExample() {
 
     if (!quoteResponse.liquidityAvailable) {
       console.log("❌ No liquidity available");
+      console.log(
+        "A Bitcoin sell quote is built from coins at the sender address.",
+      );
+      console.log(
+        "Set BITCOIN_SENDER_ADDRESS to an address that holds BTC, or set BITCOIN_PRIVATE_KEY.",
+      );
       return;
     }
 

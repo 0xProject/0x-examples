@@ -96,6 +96,18 @@ const EnvironmentConfigurationSchema = z.object({
         return false;
       }
     }, "Invalid Bitcoin address format"),
+  BITCOIN_SENDER_ADDRESS: z
+    .string()
+    .optional()
+    .refine((address) => {
+      if (!address) return true; // Optional field
+      try {
+        bitcoin.address.toOutputScript(address);
+        return true;
+      } catch {
+        return false;
+      }
+    }, "Invalid Bitcoin address format"),
   BASE_RPC_URL: z.string().url().default("https://mainnet.base.org"),
   ARBITRUM_RPC_URL: z.string().url().default("https://arb1.arbitrum.io/rpc"),
   SOLANA_RPC_URL: z
@@ -117,6 +129,7 @@ export interface Config {
   solanaReceiverAddress?: string;
   tronReceiverAddress?: string;
   bitcoinReceiverAddress?: string;
+  bitcoinSenderAddress?: string;
   rpcUrls: {
     base: string;
     arbitrum: string;
@@ -142,6 +155,7 @@ export function loadConfig(): Config {
     solanaReceiverAddress: environmentConfiguration.SOLANA_RECEIVER_ADDRESS,
     tronReceiverAddress: environmentConfiguration.TRON_RECEIVER_ADDRESS,
     bitcoinReceiverAddress: environmentConfiguration.BITCOIN_RECEIVER_ADDRESS,
+    bitcoinSenderAddress: environmentConfiguration.BITCOIN_SENDER_ADDRESS,
     rpcUrls: {
       base: environmentConfiguration.BASE_RPC_URL,
       arbitrum: environmentConfiguration.ARBITRUM_RPC_URL,

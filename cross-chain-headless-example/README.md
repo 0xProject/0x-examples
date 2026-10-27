@@ -96,6 +96,7 @@ Copy the example from [.env.example](./.env.example) into a new `.env` file:
 | `SOLANA_GAS_PAYER_PRIVATE_KEY` | Solana private key for custom gas payer (base58)      | ❌       | _Only used by `solana-to-evm-with-gas-payer`_ |
 | `TRON_PRIVATE_KEY`             | Tron private key (64 hex chars, no 0x prefix)         | ❌       | _Quote-only mode_                             |
 | `BITCOIN_PRIVATE_KEY`          | Bitcoin private key (mainnet WIF, `bc1q` address)     | ❌       | _Quote-only mode_                             |
+| `BITCOIN_SENDER_ADDRESS`       | Bitcoin address to quote from when no private key is set | ❌    | _Uses default address_                        |
 | `SOLANA_RECEIVER_ADDRESS`      | Solana address to receive tokens (base58 format)      | ❌\*     | _Uses default address_                        |
 | `EVM_RECEIVER_ADDRESS`         | EVM address to receive tokens (hex format)            | ❌\*     | _Uses default address_                        |
 | `TRON_RECEIVER_ADDRESS`        | Tron address to receive tokens (Base58Check format)   | ❌\*     | _Uses default address_                        |
@@ -145,3 +146,4 @@ npm run evm-to-bitcoin
 - **Tron fees**: Tron uses energy + bandwidth instead of gas. Ensure your wallet has sufficient TRX to cover transaction fees
 - **Tron approvals**: Unlike EVM-origin swaps, Tron-origin swaps do not require a separate TRC-20 token approval step. The integrated bridge providers use direct TRC-20 transfers rather than contract-based spending patterns
 - **Bitcoin fees**: The PSBT from the quote already includes the miner fee. Your wallet needs the sell amount plus that fee in a confirmed UTXO
+- **Bitcoin quotes**: A sell quote is built from coins at the sender address. With only an API key, set `BITCOIN_SENDER_ADDRESS` to an address that holds BTC
