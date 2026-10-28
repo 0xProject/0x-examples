@@ -54,7 +54,7 @@ export const FeesSchema = z.object({
   reimbursementFee: ReimbursementFeeSchema,
 });
 
-// Gas costs — discriminated on chainType: evm | svm | tvm
+// Gas costs — discriminated on chainType: evm | svm | tvm | btc
 export const EvmGasCostsSchema = z.object({
   chainType: z.literal("evm"),
   gasPrice: z.string().nullable(),
@@ -76,10 +76,16 @@ export const TvmGasCostsSchema = z.object({
   total: z.string(),
 });
 
+export const BtcGasCostsSchema = z.object({
+  chainType: z.literal("btc"),
+  total: z.string(),
+});
+
 export const GasCostsSchema = z.discriminatedUnion("chainType", [
   EvmGasCostsSchema,
   SvmGasCostsSchema,
   TvmGasCostsSchema,
+  BtcGasCostsSchema,
 ]);
 
 // Quote steps — discriminated on type: wrap | unwrap | swap | bridge
@@ -129,7 +135,7 @@ export const StepSchema = z.discriminatedUnion("type", [
   BridgeStepSchema,
 ]);
 
-// Transaction schemas — discriminated on chainType: evm | svm | tvm
+// Transaction schemas — discriminated on chainType: evm | svm | tvm | btc
 export const EvmTransactionSchema = z.object({
   chainType: z.literal("evm"),
   details: z.object({
@@ -159,10 +165,18 @@ export const TvmTransactionSchema = z.object({
   }),
 });
 
+export const BtcTransactionSchema = z.object({
+  chainType: z.literal("btc"),
+  details: z.object({
+    psbt: z.string(),
+  }),
+});
+
 export const TransactionSchema = z.discriminatedUnion("chainType", [
   EvmTransactionSchema,
   SvmTransactionSchema,
   TvmTransactionSchema,
+  BtcTransactionSchema,
 ]);
 
 // Issues schemas

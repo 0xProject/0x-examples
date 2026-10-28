@@ -1,6 +1,12 @@
 import { z } from "zod";
 import { isAddress as isEvmAddress } from "viem";
 import { isAddress as isSolanaAddress } from "@solana/addresses";
+import * as bitcoin from "bitcoinjs-lib";
+import * as ecc from "tiny-secp256k1";
+import { ECPairFactory } from "ecpair";
+
+bitcoin.initEccLib(ecc);
+const ECPair = ECPairFactory(ecc);
 
 const EnvironmentConfigurationSchema = z.object({
   ZEROEX_API_KEY: z.string(),
@@ -41,6 +47,18 @@ const EnvironmentConfigurationSchema = z.object({
       const cleanKey = key.startsWith("0x") ? key.slice(2) : key;
       return /^[0-9a-fA-F]{64}$/.test(cleanKey);
     }, "Invalid Tron private key format (must be 64 hex characters)"),
+  BITCOIN_PRIVATE_KEY: z
+    .string()
+    .optional()
+    .refine((key) => {
+      if (!key) return true; // Optional field
+      try {
+        ECPair.fromWIF(key);
+        return true;
+      } catch {
+        return false;
+      }
+    }, "Invalid Bitcoin private key format (must be a mainnet WIF)"),
   EVM_RECEIVER_ADDRESS: z
     .string()
     .optional()
@@ -66,6 +84,30 @@ const EnvironmentConfigurationSchema = z.object({
       if (!address) return true; // Optional field
       return /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(address);
     }, "Invalid Tron address format (must be Base58Check starting with T)"),
+  BITCOIN_RECEIVER_ADDRESS: z
+    .string()
+    .optional()
+    .refine((address) => {
+      if (!address) return true; // Optional field
+      try {
+        bitcoin.address.toOutputScript(address);
+        return true;
+      } catch {
+        return false;
+      }
+    }, "Invalid Bitcoin address format"),
+  BITCOIN_SENDER_ADDRESS: z
+    .string()
+    .optional()
+    .refine((address) => {
+      if (!address) return true; // Optional field
+      try {
+        bitcoin.address.toOutputScript(address);
+        return true;
+      } catch {
+        return false;
+      }
+    }, "Invalid Bitcoin address format"),
   BASE_RPC_URL: z.string().url().default("https://mainnet.base.org"),
   ARBITRUM_RPC_URL: z.string().url().default("https://arb1.arbitrum.io/rpc"),
   SOLANA_RPC_URL: z
@@ -73,6 +115,7 @@ const EnvironmentConfigurationSchema = z.object({
     .url()
     .default("https://api.mainnet-beta.solana.com"),
   TRON_RPC_URL: z.string().url().default("https://api.trongrid.io"),
+  BITCOIN_RPC_URL: z.string().url().default("https://mempool.space/api"),
 });
 
 export interface Config {
@@ -81,14 +124,18 @@ export interface Config {
   solanaPrivateKey?: string;
   solanaGasPayerPrivateKey?: string;
   tronPrivateKey?: string;
+  bitcoinPrivateKey?: string;
   evmReceiverAddress?: string;
   solanaReceiverAddress?: string;
   tronReceiverAddress?: string;
+  bitcoinReceiverAddress?: string;
+  bitcoinSenderAddress?: string;
   rpcUrls: {
     base: string;
     arbitrum: string;
     solana: string;
     tron: string;
+    bitcoin: string;
   };
 }
 
@@ -103,14 +150,18 @@ export function loadConfig(): Config {
     solanaPrivateKey: environmentConfiguration.SOLANA_PRIVATE_KEY,
     solanaGasPayerPrivateKey: environmentConfiguration.SOLANA_GAS_PAYER_PRIVATE_KEY,
     tronPrivateKey: environmentConfiguration.TRON_PRIVATE_KEY,
+    bitcoinPrivateKey: environmentConfiguration.BITCOIN_PRIVATE_KEY,
     evmReceiverAddress: environmentConfiguration.EVM_RECEIVER_ADDRESS,
     solanaReceiverAddress: environmentConfiguration.SOLANA_RECEIVER_ADDRESS,
     tronReceiverAddress: environmentConfiguration.TRON_RECEIVER_ADDRESS,
+    bitcoinReceiverAddress: environmentConfiguration.BITCOIN_RECEIVER_ADDRESS,
+    bitcoinSenderAddress: environmentConfiguration.BITCOIN_SENDER_ADDRESS,
     rpcUrls: {
       base: environmentConfiguration.BASE_RPC_URL,
       arbitrum: environmentConfiguration.ARBITRUM_RPC_URL,
       solana: environmentConfiguration.SOLANA_RPC_URL,
       tron: environmentConfiguration.TRON_RPC_URL,
+      bitcoin: environmentConfiguration.BITCOIN_RPC_URL,
     },
   };
 }
@@ -120,6 +171,7 @@ export const CHAIN_IDS = {
   arbitrum: 42161,
   solana: "solana",
   tron: "tron",
+  bitcoin: "bitcoin",
 } as const;
 
 export const TOKEN_ADDRESSES = {
@@ -140,6 +192,9 @@ export const TOKEN_ADDRESSES = {
 
   // Tron
   USDT_TRON: "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+
+  // Bitcoin
+  BTC: "bc1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqmql8k8",
 } as const;
 
 // Numeric chain IDs returned in status API responses
@@ -149,10 +204,12 @@ export const STATUS_CHAIN_IDS = {
   arbitrum: 42161,
   solana: 999999999991,
   tron: 999999999993,
+  bitcoin: 999999999994,
 } as const;
 
 export const DEFAULT_ADDRESSES = {
   EVM: "0xABf40AADf960e20B4283dc5A06387A429Ba02456",
   SOLANA: "9FzTJNUfMVSPPNEsUDfUHuE1gSE7uDBamcGHq1CseUUZ",
   TRON: "TJnN6n7T3KTSzEyUMUcHeq3J4gwSDmUuZv",
+  BITCOIN: "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4",
 } as const;

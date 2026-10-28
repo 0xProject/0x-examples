@@ -1,6 +1,6 @@
 # Cross-Chain Swap Examples
 
-This TypeScript project demonstrates how to interact with the [0x Cross-Chain API](https://docs.0x.org) to perform cross-chain token swaps between EVM chains, Solana, and Tron. It includes six complete examples with real-time transaction monitoring.
+This TypeScript project demonstrates how to interact with the [0x Cross-Chain API](https://docs.0x.org) to perform cross-chain token swaps between EVM chains, Solana, Tron, and Bitcoin. It includes eight complete examples with real-time transaction monitoring.
 
 ## Example Output
 
@@ -51,7 +51,7 @@ This may take several minutes...
 
 ## What It Does
 
-This project provides six cross-chain swap examples that demonstrate the complete flow from quote to execution:
+This project provides eight cross-chain swap examples that demonstrate the complete flow from quote to execution:
 
 ### Available Scripts
 
@@ -61,6 +61,8 @@ This project provides six cross-chain swap examples that demonstrate the complet
 - **`npm run evm-to-evm`** - WETH on Base → USDC on Arbitrum
 - **`npm run tron-to-evm`** - USDT on Tron → USDC on Arbitrum
 - **`npm run evm-to-tron`** - USDC on Arbitrum → USDT on Tron
+- **`npm run bitcoin-to-evm`** - BTC on Bitcoin → USDC on Arbitrum
+- **`npm run evm-to-bitcoin`** - USDC on Arbitrum → BTC on Bitcoin
 
 ### Process Flow (All Examples)
 
@@ -93,13 +95,17 @@ Copy the example from [.env.example](./.env.example) into a new `.env` file:
 | `SOLANA_PRIVATE_KEY`           | Solana private key (44-character base58 format)       | ❌       | _Quote-only mode_                             |
 | `SOLANA_GAS_PAYER_PRIVATE_KEY` | Solana private key for custom gas payer (base58)      | ❌       | _Only used by `solana-to-evm-with-gas-payer`_ |
 | `TRON_PRIVATE_KEY`             | Tron private key (64 hex chars, no 0x prefix)         | ❌       | _Quote-only mode_                             |
+| `BITCOIN_PRIVATE_KEY`          | Bitcoin private key (mainnet WIF, `bc1q` address)     | ❌       | _Quote-only mode_                             |
+| `BITCOIN_SENDER_ADDRESS`       | Bitcoin address to quote from when no private key is set | ❌    | _Uses default address_                        |
 | `SOLANA_RECEIVER_ADDRESS`      | Solana address to receive tokens (base58 format)      | ❌\*     | _Uses default address_                        |
 | `EVM_RECEIVER_ADDRESS`         | EVM address to receive tokens (hex format)            | ❌\*     | _Uses default address_                        |
 | `TRON_RECEIVER_ADDRESS`        | Tron address to receive tokens (Base58Check format)   | ❌\*     | _Uses default address_                        |
+| `BITCOIN_RECEIVER_ADDRESS`     | Bitcoin address to receive BTC                        | ❌\*     | _Uses default address_                        |
 | `BASE_RPC_URL`                 | Base network RPC endpoint                             | ❌       | `https://mainnet.base.org`                    |
 | `ARBITRUM_RPC_URL`             | Arbitrum network RPC endpoint                         | ❌       | `https://arb1.arbitrum.io/rpc`                |
 | `SOLANA_RPC_URL`               | Solana RPC endpoint                                   | ❌       | `https://api.mainnet-beta.solana.com`         |
 | `TRON_RPC_URL`                 | Tron full-node RPC endpoint                           | ❌       | `https://api.trongrid.io`                     |
+| `BITCOIN_RPC_URL`              | Bitcoin API endpoint (mempool.space format)           | ❌       | `https://mempool.space/api`                   |
 
 _\*Required when executing transactions to prevent accidental sends to default addresses_
 
@@ -123,13 +129,21 @@ npm run tron-to-evm
 
 # EVM to Tron (USDC on Arbitrum → USDT on Tron)
 npm run evm-to-tron
+
+# Bitcoin to EVM (BTC → USDC on Arbitrum)
+npm run bitcoin-to-evm
+
+# EVM to Bitcoin (USDC on Arbitrum → BTC)
+npm run evm-to-bitcoin
 ```
 
 ## Notes
 
-- **Token amounts**: Hardcoded to small amounts for safety (0.001 WETH for EVM, 10 USDT for Tron, 5 USDC for EVM→Tron) - modify in source files
+- **Token amounts**: Hardcoded to small amounts for safety. Change them in each source file
 - **Slippage**: Set to 1% (100 basis points) - adjustable per swap
-- **Monitoring**: 10-minute timeout with 5-second polling intervals
-- **Validation**: Strict private key format validation (64-char hex for EVM/Tron, 44-char base58 for Solana)
+- **Monitoring**: 10-minute timeout with 5-second polling intervals. Swaps that start or end on Bitcoin poll for 60 minutes
+- **Validation**: Strict private key format validation (64-char hex for EVM/Tron, 44-char base58 for Solana, mainnet WIF for Bitcoin)
 - **Tron fees**: Tron uses energy + bandwidth instead of gas. Ensure your wallet has sufficient TRX to cover transaction fees
 - **Tron approvals**: Unlike EVM-origin swaps, Tron-origin swaps do not require a separate TRC-20 token approval step. The integrated bridge providers use direct TRC-20 transfers rather than contract-based spending patterns
+- **Bitcoin fees**: The PSBT from the quote already includes the miner fee. Your wallet needs the sell amount plus that fee in a confirmed UTXO
+- **Bitcoin quotes**: A sell quote is built from coins at the sender address. With only an API key, set `BITCOIN_SENDER_ADDRESS` to an address that holds BTC
