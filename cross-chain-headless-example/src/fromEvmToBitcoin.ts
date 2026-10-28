@@ -216,8 +216,8 @@ async function arbitrumToBitcoinExample() {
             originTxHash: txHash,
           },
           {
-            maxAttempts: 120, // 10 minutes
-            intervalMs: 5000,
+            maxAttempts: 240, // 60 minutes. A Bitcoin payout waits for a block.
+            intervalMs: 15_000,
             onUpdate: (status) => {
               const timestamp = new Date().toLocaleTimeString();
               console.log(`[${timestamp}] 📊 Status: ${status.status}`);
