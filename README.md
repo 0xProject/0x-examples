@@ -60,6 +60,13 @@ A collection of 0x API code examples
 
 
 
+### Agent Payments
+
+| Example | Description |
+|---------|-------------|
+| [x402 — Headless](./x402-headless-example) | TypeScript examples for paying for 0x price and quote requests with standard x402 payments or batch settlement through Alchemy AgentPay |
+| [MPP — Headless](./mpp-headless-example) | TypeScript examples for paying for 0x price and quote requests with MPP on Tempo testnet or mainnet |
+
 ## Contribution Guidelines
 
 1. **Fork the Repository:** Start by forking the repository and creating a new branch for your contributions.

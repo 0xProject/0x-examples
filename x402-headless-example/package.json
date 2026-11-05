@@ -1,0 +1,26 @@
+{
+  "name": "0x-x402-headless-example",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Standard x402 and batch settlement payments through Alchemy AgentPay",
+  "scripts": {
+    "standard": "node --import tsx src/standard.ts",
+    "batch": "node --import tsx src/batch.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test test/*.test.ts"
+  },
+  "engines": { "node": ">=22" },
+  "dependencies": {
+    "@x402/core": "2.30.0",
+    "@x402/evm": "2.30.0",
+    "@x402/fetch": "2.30.0",
+    "dotenv": "^17.2.0",
+    "viem": "^2.38.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
+}
