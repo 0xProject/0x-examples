@@ -2,21 +2,23 @@ import { isAddress } from "viem";
 import type { Config } from "./config.js";
 
 export type Resource = "price" | "quote";
+export type Command = Resource | "swap";
 
 export function parseArgs(args: string[], allowRefund = false) {
-  let resource: Resource = "price";
+  let resource: Command = "price";
   let selected = false;
   let refund = false;
   for (const arg of args) {
-    if ((arg === "price" || arg === "quote") && !selected) {
+    if ((arg === "price" || arg === "quote" || arg === "swap") && !selected) {
       resource = arg;
       selected = true;
     } else if (arg === "--refund" && allowRefund && !refund) {
       refund = true;
     } else {
-      throw new Error(`Unexpected argument: ${arg}. Usage: npm run ${allowRefund ? "batch" : "standard"} -- [price|quote]${allowRefund ? " [--refund]" : ""}`);
+      throw new Error(`Unexpected argument: ${arg}. Usage: npm run ${allowRefund ? "batch" : "standard"} -- [price|quote|swap]${allowRefund ? " [--refund]" : ""}`);
     }
   }
+  if (resource === "swap" && refund) throw new Error("Use price --refund or quote --refund to refund a batch channel.");
   return { resource, refund };
 }
 
