@@ -1,0 +1,24 @@
+{
+  "name": "0x-mpp-headless-example",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Pay for 0x price and quote requests with MPP on Tempo",
+  "scripts": {
+    "price": "node --import tsx src/price.ts",
+    "quote": "node --import tsx src/quote.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test test/*.test.ts"
+  },
+  "engines": { "node": ">=22.12" },
+  "dependencies": {
+    "dotenv": "^17.2.0",
+    "mppx": "0.17.1",
+    "viem": "^2.57.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
+}
