@@ -39,7 +39,7 @@ export function paymentClient(config: Config, scheme: SchemeNetworkClient, sessi
   });
   client.onBeforePaymentCreation(async ({ paymentRequired, selectedRequirements }) => {
     if (!(session.urls ?? [config.url]).includes(paymentRequired.resource?.url ?? "")) {
-      throw new Error("The payment resource URL must exactly match AGENTPAY_URL.");
+      throw new Error("The payment resource URL must exactly match the selected request URL.");
     }
     const next = authorized + BigInt(selectedRequirements.amount);
     if (session.maxTotalPayment !== undefined && next > session.maxTotalPayment) {

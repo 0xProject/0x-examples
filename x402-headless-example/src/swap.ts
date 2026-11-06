@@ -18,7 +18,7 @@ const sameAddress = (a: string, b: string) => a.toLowerCase() === b.toLowerCase(
 type Mode = "standard" | "batch";
 
 export function swapSettings(config: Config, env: NodeJS.ProcessEnv = process.env) {
-  const url = new URL(config.url);
+  const url = new URL(selectResource(config, "price").url);
   if (url.hostname !== "agent.api.0x.org" || url.port ||
       !new RegExp(`^/v1/${config.chain.id === 84532 ? "x402-testnet" : "x402"}/swap-allowance-holder-(price|quote)/?$`).test(url.pathname)) {
     throw new Error("Swap execution requires a 0x agent.api.0x.org URL matching the payment chain.");
@@ -45,7 +45,8 @@ export function swapSettings(config: Config, env: NodeJS.ProcessEnv = process.en
   url.searchParams.set("slippageBps", slippage);
   // Include taker in price too, so the API can report allowance and balance issues.
   url.searchParams.set("taker", config.account.address);
-  const selected = { ...config, url: url.href, taker: config.account.address };
+  // Parameters are now finalized; subsequent route selection must preserve these checks.
+  const selected = { ...config, baseUrl: undefined, url: url.href, taker: config.account.address };
   return {
     price: selectResource(selected, "price"), quote: selectResource(selected, "quote"),
     sellAmount, slippageBps: BigInt(slippage),

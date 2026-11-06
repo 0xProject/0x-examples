@@ -3,13 +3,14 @@ import { toClientEvmSigner } from "@x402/evm";
 import { FileClientChannelStorage } from "@x402/evm/batch-settlement/client/file-storage";
 import { loadConfig } from "./config.js";
 import { batchClient, paidGet } from "./client.js";
-import { parseArgs, selectResource } from "./commands.js";
+import { parseArgs, selectRequest } from "./commands.js";
+import { paidQuoteStream } from "./stream.js";
 import { runSwap } from "./swap.js";
 
 async function main() {
   const { resource, refund } = parseArgs(process.argv.slice(2), true);
   if (resource === "swap") return runSwap(loadConfig(), "batch");
-  const config = selectResource(loadConfig(), resource);
+  const config = selectRequest(loadConfig(), resource);
   const publicClient = createPublicClient({ chain: config.chain, transport: http(config.rpcUrl) });
   const signer = toClientEvmSigner(config.account, publicClient);
   const { client, scheme } = batchClient(config, signer,
@@ -28,7 +29,8 @@ async function main() {
   // Keep calls sequential so each voucher incorporates the previous receipt.
   for (let i = 0; i < config.requestCount; i++) {
     console.log(`Request ${i + 1}/${config.requestCount}`);
-    await paidGet(config.url, client);
+    if (resource === "cross-chain-quotes-stream") await paidQuoteStream(config.url, client);
+    else await paidGet(config.url, client);
   }
 }
 
