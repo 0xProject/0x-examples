@@ -1,6 +1,6 @@
 # x402 payments — headless TypeScript
 
-Pay for 0x AllowanceHolder price/quote requests and Cross-Chain API requests using either standard x402 settlement or the `batch-settlement` preview. Optionally execute the complete price → approve → quote → swap flow on Base. No 0x API key is needed for these payment-protected URLs.
+Pay for 0x Same Chain AllowanceHolder price/quote requests and Cross-Chain API requests using either standard x402 settlement or the `batch-settlement` preview. Optionally execute the complete price → approve → quote → swap flow on Base. No 0x API key is needed for these payment-protected URLs.
 
 | Script | What it shows |
 | --- | --- |
@@ -34,7 +34,7 @@ cp .env.example .env
 
 Set `PRIVATE_KEY` in `.env` to a dedicated test wallet's private key. The provided configuration calls the **real 0x testnet payment URL** and needs Base Sepolia test USDC. You can obtain test USDC from the [Circle faucet](https://faucet.circle.com/).
 
-The sample asks for a price for 1 USDC → WETH on Base. The query's `chainId=8453` selects the **swap network**; `CHAIN_ID=84532` selects the **payment network**. Testnet payment does not turn the underlying swap into a testnet swap.
+The sample asks for a price for 1 USDC → WETH on Base. `SWAP_PARAMS.chainId=8453` selects the **swap network**; `CHAIN_ID=84532` selects the **payment network**. Testnet payment does not turn the underlying swap into a testnet swap.
 
 Check `PAY_TO` against the recipient published by 0x before paying. Each paid API request must match the configured chain, USDC asset, recipient, and resource URL, with a positive price within `MAX_PAYMENT_AMOUNT`.
 
@@ -88,7 +88,7 @@ The refund command uses the SDK's cooperative refund flow. Consult the [batch se
 
 ## Cross-chain API access
 
-Keep `AGENTPAY_URL` set to the sample price URL. The commands automatically select the cross-chain route under the same `/v1/x402-testnet/` or `/v1/x402/` payment channel. Their query parameters come from separate settings, so the same-chain `chainId`, tokens, and amount do not leak into cross-chain requests.
+Set `X402_BASE_URL` to `https://agent.api.0x.org/v1/x402-testnet` (or `/v1/x402` for production). This URL contains no resource or query parameters. Each command appends its endpoint and reads only the relevant settings: `SWAP_PARAMS` for same-chain requests, `CROSS_CHAIN_PARAMS` for cross-chain quotes, and `CROSS_CHAIN_STATUS_PARAMS` for status. Cross-chain commands do not require `SWAP_PARAMS`.
 
 | Command resource | Production URL | Testnet payment URL |
 | --- | --- | --- |
@@ -163,16 +163,16 @@ npm run batch -- swap
 
 ### Swap configuration and funding
 
-Keep the sample `AGENTPAY_URL` and its swap parameters to sell 1 Base USDC for WETH, or reduce `sellAmount` in its query. Add the new settings from `.env.example` to your existing `.env`; do not overwrite your private key file.
+Keep the sample `X402_BASE_URL` and `SWAP_PARAMS` to sell 1 Base USDC for WETH, or reduce `sellAmount` in `SWAP_PARAMS`. Add the new settings from `.env.example` to your existing `.env`; do not overwrite your private key file.
 
 | Setting | Default | Purpose |
 | --- | --- | --- |
 | `SWAP_RPC_URL` | Base public RPC | Swap execution RPC, separate from the payment `RPC_URL`. |
 | `MAX_SELL_AMOUNT` | `1000000` | Maximum sell amount in USDC base units (1 USDC). |
-| `SLIPPAGE_BPS` | `100` | 1% slippage; values from 0 to 500 accepted. This overrides any URL `slippageBps`. |
+| `SLIPPAGE_BPS` | `100` | 1% slippage; values from 0 to 500 accepted. This overrides `slippageBps` in `SWAP_PARAMS` or the legacy URL. |
 | `MAX_GAS_COST_WEI` | `1000000000000000` | Maximum `gas × maxFeePerGas` per approval or swap (0.001 ETH). |
 
-For full swaps, the URL accepts only `chainId`, `sellToken`, `buyToken`, `sellAmount`, `taker`, and `slippageBps`; the scripts add the payer as taker for both requests. Custom recipients, integrator fees, and other swap parameters are outside this example's execution scope. Standalone price and quote commands retain their existing behavior.
+For full swaps, `SWAP_PARAMS` accepts only `chainId`, `sellToken`, `buyToken`, `sellAmount`, `taker`, and `slippageBps`; the scripts add the payer as taker for both requests. Custom recipients, integrator fees, and other swap parameters are outside this example's execution scope. Standalone price and quote commands retain their existing behavior.
 
 The preflight deliberately reserves the configured maximum API funding amount, rather than assuming an advertised price or deposit size:
 
@@ -200,11 +200,20 @@ The `swap` command itself requests execution; it does not prompt between steps. 
 | Indicative price | `https://agent.api.0x.org/v1/x402-testnet/swap-allowance-holder-price` | `https://agent.api.0x.org/v1/x402/swap-allowance-holder-price` |
 | Firm quote | `https://agent.api.0x.org/v1/x402-testnet/swap-allowance-holder-quote` | `https://agent.api.0x.org/v1/x402/swap-allowance-holder-quote` |
 
-Set `AGENTPAY_URL` in `.env` to a full price or quote URL including `chainId`, `sellToken`, `buyToken`, and `sellAmount`. The command selects the price or quote route automatically, preserving the payment channel and swap parameters. You do not need to edit the URL to switch resources.
+Set `X402_BASE_URL` in `.env` to the payment channel base URL, and put the same-chain request parameters in `SWAP_PARAMS`:
 
-For quotes, the script adds the `taker` address that would execute the swap. It uses `TAKER` from `.env` if set, otherwise an existing `taker` query parameter, otherwise the payment wallet's address. The API payment wallet and swap taker can differ. The taker needs the appropriate swap-chain balances and allowances to execute the returned transaction; the scripts only print it.
+```dotenv
+X402_BASE_URL=https://agent.api.0x.org/v1/x402-testnet
+SWAP_PARAMS='{"chainId":"8453","sellToken":"0x833589fcd6edb6e08f4c7c32d4f71b54bda02913","buyToken":"0x4200000000000000000000000000000000000006","sellAmount":"1000000"}'
+```
 
-For example, keep the sample `AGENTPAY_URL` and optionally add `TAKER=0xYourSwapWalletAddress` to `.env`, replacing the placeholder with a valid address. Then use `npm run standard -- quote` or `npm run batch -- quote`.
+Each command appends its price, quote, or cross-chain endpoint automatically. Switching resources does not require editing the base URL. `SWAP_PARAMS` must be a JSON object with string values, including `chainId`, `sellToken`, `buyToken`, and `sellAmount`.
+
+Existing configurations using a full `AGENTPAY_URL` continue to work when `X402_BASE_URL` is unset. When both are set, `X402_BASE_URL` takes precedence and same-chain commands require `SWAP_PARAMS`; parameters from the legacy URL are not merged. To migrate, copy the legacy URL's query parameters into `SWAP_PARAMS`, use its payment-channel prefix as `X402_BASE_URL`, and remove the legacy variable when ready.
+
+For quotes, the script adds the `taker` address that would execute the swap. It uses `TAKER` from `.env` if set, otherwise `taker` in `SWAP_PARAMS` (or the legacy URL), otherwise the payment wallet's address. The API payment wallet and swap taker can differ. The taker needs the appropriate swap-chain balances and allowances to execute the returned transaction; the scripts only print it.
+
+For example, keep the sample `X402_BASE_URL` and `SWAP_PARAMS` and optionally add `TAKER=0xYourSwapWalletAddress` to `.env`, replacing the placeholder with a valid address. Then use `npm run standard -- quote` or `npm run batch -- quote`.
 
 The payment policy checks the final selected URL, including any added taker, against the resource URL in the payment challenge before signing.
 
@@ -225,7 +234,7 @@ Cross-chain tests cover resource selection, separation of same-chain and cross-c
 
 ### 2. Run the examples on Base Sepolia
 
-Follow the setup above, use `/x402-testnet/` in `AGENTPAY_URL`, set `CHAIN_ID=84532`, and fund the configured payer with Base Sepolia test USDC. Run the TypeScript examples directly to verify their integration with the endpoint:
+Follow the setup above, set `X402_BASE_URL=https://agent.api.0x.org/v1/x402-testnet`, set `CHAIN_ID=84532`, and fund the configured payer with Base Sepolia test USDC. Run the TypeScript examples directly to verify their integration with the endpoint:
 
 ```sh
 npm run standard -- price
@@ -256,7 +265,7 @@ The second and third batch requests used offchain vouchers, so their receipts ha
 
 ### 3. Test production payments
 
-After the testnet runs succeed, replace `/x402-testnet/` with `/x402/` in `AGENTPAY_URL`, set `CHAIN_ID=8453`, verify `PAY_TO`, and fund the payer with Base USDC. Run the same commands to check mainnet behavior. Production runs spend real USDC; `MAX_PAYMENT_AMOUNT` caps each request and `MAX_DEPOSIT_AMOUNT` caps each batch deposit or top-up.
+After the testnet runs succeed, set `X402_BASE_URL=https://agent.api.0x.org/v1/x402`, set `CHAIN_ID=8453`, verify `PAY_TO`, and fund the payer with Base USDC. Run the same commands to check mainnet behavior. Production runs spend real USDC; `MAX_PAYMENT_AMOUNT` caps each request and `MAX_DEPOSIT_AMOUNT` caps each batch deposit or top-up.
 
 ### Verified full swap runs
 

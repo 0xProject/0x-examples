@@ -1,5 +1,6 @@
 import { isAddress } from "viem";
 import type { Config } from "./config.js";
+import { queryParameters } from "./config.js";
 import { crossChainResources, selectCrossChainResource } from "./cross-chain.js";
 import type { CrossChainResource } from "./cross-chain.js";
 
@@ -31,14 +32,21 @@ export function selectRequest(config: Config, resource: RequestResource, env: No
 }
 
 export function selectResource(config: Config, resource: Resource): Config {
-  const url = new URL(config.url);
+  const url = new URL(config.baseUrl ? `${config.baseUrl}/swap-allowance-holder-${resource}` : config.url);
+  if (config.baseUrl) {
+    const params = queryParameters(config.swapParams, "SWAP_PARAMS");
+    for (const key of ["chainId", "sellToken", "buyToken", "sellAmount"]) {
+      if (!params[key]) throw new Error(`Set SWAP_PARAMS.${key} before making a paid request.`);
+    }
+    for (const [key, value] of Object.entries(params)) url.searchParams.set(key, value);
+  }
   if (!/\/swap-allowance-holder-(price|quote)\/?$/.test(url.pathname)) {
     throw new Error("AGENTPAY_URL must point to a swap-allowance-holder-price or swap-allowance-holder-quote endpoint.");
   }
   url.pathname = url.pathname.replace(/swap-allowance-holder-(price|quote)(\/?)$/, `swap-allowance-holder-${resource}$2`);
   if (resource === "quote") {
     const taker = config.taker || url.searchParams.get("taker") || config.account.address;
-    if (!isAddress(taker)) throw new Error("Quote taker must be an EVM address. Set TAKER in .env or taker in AGENTPAY_URL.");
+    if (!isAddress(taker)) throw new Error("Quote taker must be an EVM address. Set TAKER in .env or taker in SWAP_PARAMS (or the legacy URL).");
     url.searchParams.set("taker", taker);
   }
   // The payment policy must check the final selected URL, including taker.
