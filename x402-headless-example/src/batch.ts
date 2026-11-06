@@ -4,9 +4,11 @@ import { FileClientChannelStorage } from "@x402/evm/batch-settlement/client/file
 import { loadConfig } from "./config.js";
 import { batchClient, paidGet } from "./client.js";
 import { parseArgs, selectResource } from "./commands.js";
+import { runSwap } from "./swap.js";
 
 async function main() {
   const { resource, refund } = parseArgs(process.argv.slice(2), true);
+  if (resource === "swap") return runSwap(loadConfig(), "batch");
   const config = selectResource(loadConfig(), resource);
   const publicClient = createPublicClient({ chain: config.chain, transport: http(config.rpcUrl) });
   const signer = toClientEvmSigner(config.account, publicClient);
