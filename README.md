@@ -64,7 +64,7 @@ A collection of 0x API code examples
 
 | Example | Description |
 |---------|-------------|
-| [x402 — Headless](./x402-headless-example) | TypeScript examples for paying for 0x price and quote requests with standard x402 payments or batch settlement through Alchemy AgentPay |
+| [x402 — Headless](./x402-headless-example) | TypeScript examples for standard/batch x402 payments, same-chain swaps, and cross-chain quotes, status, sources, and streaming quotes |
 | [MPP — Headless](./mpp-headless-example) | TypeScript examples for paying for 0x price and quote requests with MPP on Tempo testnet or mainnet |
 
 ## Contribution Guidelines

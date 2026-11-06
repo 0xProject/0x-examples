@@ -1,25 +1,33 @@
 import { isAddress } from "viem";
 import type { Config } from "./config.js";
+import { crossChainResources, selectCrossChainResource } from "./cross-chain.js";
+import type { CrossChainResource } from "./cross-chain.js";
 
 export type Resource = "price" | "quote";
-export type Command = Resource | "swap";
+export type RequestResource = Resource | CrossChainResource;
+export type Command = RequestResource | "swap";
 
 export function parseArgs(args: string[], allowRefund = false) {
   let resource: Command = "price";
   let selected = false;
   let refund = false;
   for (const arg of args) {
-    if ((arg === "price" || arg === "quote" || arg === "swap") && !selected) {
-      resource = arg;
+    if ((arg === "price" || arg === "quote" || arg === "swap" || crossChainResources.includes(arg as CrossChainResource)) && !selected) {
+      resource = arg as Command;
       selected = true;
     } else if (arg === "--refund" && allowRefund && !refund) {
       refund = true;
     } else {
-      throw new Error(`Unexpected argument: ${arg}. Usage: npm run ${allowRefund ? "batch" : "standard"} -- [price|quote|swap]${allowRefund ? " [--refund]" : ""}`);
+      throw new Error(`Unexpected argument: ${arg}. Usage: npm run ${allowRefund ? "batch" : "standard"} -- [price|quote|swap|${crossChainResources.join("|")}]${allowRefund ? " [--refund]" : ""}`);
     }
   }
   if (resource === "swap" && refund) throw new Error("Use price --refund or quote --refund to refund a batch channel.");
   return { resource, refund };
+}
+
+export function selectRequest(config: Config, resource: RequestResource, env: NodeJS.ProcessEnv = process.env): Config {
+  return resource === "price" || resource === "quote"
+    ? selectResource(config, resource) : selectCrossChainResource(config, resource, env);
 }
 
 export function selectResource(config: Config, resource: Resource): Config {

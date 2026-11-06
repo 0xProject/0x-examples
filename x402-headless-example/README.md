@@ -1,6 +1,6 @@
 # x402 payments — headless TypeScript
 
-Pay for 0x AllowanceHolder price and quote requests using either standard x402 settlement or the `batch-settlement` preview. Optionally execute the complete price → approve → quote → swap flow on Base. No 0x API key is needed for these payment-protected URLs.
+Pay for 0x AllowanceHolder price/quote requests and Cross-Chain API requests using either standard x402 settlement or the `batch-settlement` preview. Optionally execute the complete price → approve → quote → swap flow on Base. No 0x API key is needed for these payment-protected URLs.
 
 | Script | What it shows |
 | --- | --- |
@@ -8,6 +8,10 @@ Pay for 0x AllowanceHolder price and quote requests using either standard x402 s
 | `npm run standard -- quote` | Pay for a firm quote with standard x402 settlement. |
 | `npm run batch -- price` | Make sequential price requests using a deposit and cumulative signed vouchers. |
 | `npm run batch -- quote` | Make sequential quote requests using a deposit and cumulative signed vouchers. |
+| `npm run standard -- cross-chain-quotes` | Fetch cross-chain routes and transaction data without executing them. |
+| `npm run standard -- cross-chain-status` | Fetch the status of an existing cross-chain transaction. |
+| `npm run standard -- cross-chain-sources` | List available bridges and swap sources. |
+| `npm run standard -- cross-chain-quotes-stream` | Print cross-chain quote events through SSE. |
 | `npm run standard -- swap` | Pay for price and quote separately, approve USDC if needed, and execute one Base USDC → WETH swap. |
 | `npm run batch -- swap` | Pay for price and quote through batch settlement, approve USDC if needed, and execute one Base USDC → WETH swap. |
 | `npm run batch -- price --refund` | Request a cooperative refund using the price endpoint. Use `quote --refund` for the quote endpoint. |
@@ -15,6 +19,8 @@ Pay for 0x AllowanceHolder price and quote requests using either standard x402 s
 Omitting `price` or `quote` defaults to `price`: `npm run standard`, `npm run batch`, and `npm run batch -- --refund` still work. Use `--` to pass arguments through npm.
 
 The `price` and `quote` commands pay for API access and print the result. The explicit `swap` command also submits an approval when necessary and executes a real swap.
+
+All four `cross-chain-*` commands also work with `npm run batch -- ...`. They pay for API access and print responses; they do not approve tokens, submit bridge transactions, or execute a merchant payment.
 
 ## Setup
 
@@ -79,6 +85,60 @@ npm run batch -- quote --refund
 ```
 
 The refund command uses the SDK's cooperative refund flow. Consult the [batch settlement documentation](https://agentpay.alchemy.com/docs/batch-settlement) for withdrawal timing and preview availability. The deposit cap applies per deposit, not to total spend across runs or repeated top-ups.
+
+## Cross-chain API access
+
+Keep `AGENTPAY_URL` set to the sample price URL. The commands automatically select the cross-chain route under the same `/v1/x402-testnet/` or `/v1/x402/` payment channel. Their query parameters come from separate settings, so the same-chain `chainId`, tokens, and amount do not leak into cross-chain requests.
+
+| Command resource | Production URL | Testnet payment URL |
+| --- | --- | --- |
+| `cross-chain-quotes` | `https://agent.api.0x.org/v1/x402/cross-chain-quotes` | `https://agent.api.0x.org/v1/x402-testnet/cross-chain-quotes` |
+| `cross-chain-status` | `https://agent.api.0x.org/v1/x402/cross-chain-status` | `https://agent.api.0x.org/v1/x402-testnet/cross-chain-status` |
+| `cross-chain-sources` | `https://agent.api.0x.org/v1/x402/cross-chain-sources` | `https://agent.api.0x.org/v1/x402-testnet/cross-chain-sources` |
+| `cross-chain-quotes-stream` | `https://agent.api.0x.org/v1/x402/cross-chain-quotes-stream` | `https://agent.api.0x.org/v1/x402-testnet/cross-chain-quotes-stream` |
+
+### Quotes and streaming quotes
+
+Add `CROSS_CHAIN_PARAMS` from `.env.example` to your existing `.env`. It contains a JSON object whose values are strings. Fill in `originAddress` with the wallet that would execute the cross-chain transaction; it can differ from the API payment wallet. The sample requests 1 USDC on Base → USDC on Arbitrum:
+
+```dotenv
+CROSS_CHAIN_PARAMS='{"originChain":"8453","destinationChain":"42161","sellToken":"0x833589fcd6edb6e08f4c7c32d4f71b54bda02913","buyToken":"0xaf88d065e77c8cc2239327c5edb3a432268e5831","sellAmount":"1000000","originAddress":"YOUR_ORIGIN_WALLET_ADDRESS","sortQuotesBy":"price"}'
+```
+
+```sh
+npm run standard -- cross-chain-sources
+npm run standard -- cross-chain-quotes
+npm run standard -- cross-chain-quotes-stream
+
+# Alternative payment mode; defaults to three sequential paid requests:
+npm run batch -- cross-chain-quotes
+```
+
+Use `originChain` and `destinationChain` supported by Cross-Chain API, and token addresses native to those chains. `sellAmount` is in the origin token's base units. A small request can return no liquidity; inspect the response before considering execution. These read-only commands do not require the swap execution ETH/USDC reserves checked by `swap`, but do require funds for API payments or deposits.
+
+Streaming prints each SSE event and stops at the final `result` event. It removes `sortQuotesBy` because quotes arrive in discovery order. An `error` event, malformed response, incomplete stream, 60-second request timeout, 10 MiB response limit, or 100-event limit stops the command. It does not reconnect automatically; each new connection is another paid API request. The proxy may advertise JSON as its response type; the streaming command explicitly requests SSE and parses the event frames rather than calling `response.json()`.
+
+### Transaction status and refunds
+
+For status, set `CROSS_CHAIN_STATUS_PARAMS` to a JSON object with `originChain` and the actual `originTxHash`. Include `quoteId` from the executed quote when available, particularly for bundled transactions. The example does not create a transaction hash for you. For example, replace the placeholder before running:
+
+```dotenv
+CROSS_CHAIN_STATUS_PARAMS='{"originChain":"8453","originTxHash":"YOUR_ORIGIN_TRANSACTION_HASH","quoteId":"YOUR_QUOTE_ID"}'
+```
+
+```sh
+npm run standard -- cross-chain-status
+npm run batch -- cross-chain-status
+
+# Refund unused batch escrow with the same payer, payment network and channel state:
+npm run batch -- cross-chain-quotes --refund
+```
+
+Each status poll is a separate paid request; batch mode repeats the same status request `REQUEST_COUNT` times without a polling delay. Use `REQUEST_COUNT=1` for one batch request or one streaming connection. Quotes, status, and streams use the configured per-request and batch-deposit caps. Do not assume separate endpoints share credit: compare their channel IDs and receipts.
+
+Production unpaid challenges advertise 0.01 USDC per cross-chain API request, with standard payments on Base/Solana and batch settlement on Base. These scripts pay only on Base/Base Sepolia. The endpoint's live challenge determines available payment options. Paid cross-chain responses, streaming through the deployed proxy, and cross-chain execution have not been verified in the development runs documented here.
+
+The `swap` command below remains a same-chain Base USDC → WETH workflow. For cross-chain execution, a wallet must separately validate and authorize the returned route, execute its steps, monitor status, and confirm destination funds before paying a merchant. [Cross-Chain API guide](https://docs.0x.org/cross-chain/cross-chain-api/guides/get-started) · [Streaming quotes](https://docs.0x.org/cross-chain/cross-chain-api/guides/streaming-quotes)
 
 ## Full price → approve → quote → swap flow
 
@@ -160,6 +220,8 @@ npm test
 Tests use real SDK signing with a public dummy private key, mocked HTTP responses, and mocked onchain channel reads. They verify command parsing, resource selection, quote taker handling, binding payments to the selected URL, standard 402 negotiation, payment policy rejection, capped batch deposits followed by cumulative vouchers, and refusal to fall back from batch to exact. They do not send transactions or require your private key or funds. These local checks do not verify live settlement.
 
 Full-flow tests mock wallet/RPC submission and cover approval-required/skipped paths, payment/deposit reserves, failed approvals and API requests, quote validation and freshness, gas limits, changed balances, and reverted swaps. A session test checks a deposit on the price URL followed by a cumulative voucher on the quote URL with the same channel ID. It simulates shared server accounting and does not establish that the deployed endpoints share it.
+
+Cross-chain tests cover resource selection, separation of same-chain and cross-chain parameters, payment-channel checks, input validation, real SDK signing for a mocked streaming request, chunked SSE parsing, stream errors, and response limits. No bridge or swap transactions are submitted by these tests.
 
 ### 2. Run the examples on Base Sepolia
 
