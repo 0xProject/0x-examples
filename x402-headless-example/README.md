@@ -125,7 +125,7 @@ This reserve is conservative, including when API payments use testnet funds or t
 
 The wallet must also have Base ETH covering `2 × MAX_GAS_COST_WEI` (0.002 ETH with defaults), conservatively allowing one approval and one swap. The submitted gas limit uses an estimated-gas buffer of 20%; transactions exceeding the per-transaction cost cap are rejected. These are maximum funding requirements, not expected fees.
 
-For batch swaps, one scheme and `.channels/` store are reused across price and quote. The SDK can reuse a compatible channel or establish a separate channel if its configuration differs. Logs show `deposit`/`voucher` and channel IDs so this behavior is visible. Cross-endpoint channel sharing has only been tested locally with mocked server accounting; live price-to-quote reuse is not yet verified. Unused escrow remains available; refunds are explicit using the existing price/quote refund commands.
+For batch swaps, one scheme and `.channels/` store are reused across price and quote. The SDK can reuse a compatible channel or establish a separate channel if its configuration differs. Logs show `deposit`/`voucher` and channel IDs so this behavior is visible. Live Base Sepolia testing verified a deposit for price followed by a voucher for quote on the same channel. Unused escrow remains available; refunds are explicit using the existing price/quote refund commands.
 
 ### Failures and retries
 
@@ -196,7 +196,18 @@ The second and third batch requests used offchain vouchers, so their receipts ha
 
 After the testnet runs succeed, replace `/x402-testnet/` with `/x402/` in `AGENTPAY_URL`, set `CHAIN_ID=8453`, verify `PAY_TO`, and fund the payer with Base USDC. Run the same commands to check mainnet behavior. Production runs spend real USDC; `MAX_PAYMENT_AMOUNT` caps each request and `MAX_DEPOSIT_AMOUNT` caps each batch deposit or top-up.
 
-The example transactions above are from Base Sepolia. Mainnet API payments, approvals, and full swap execution have not been verified in these test runs. The new swap command has only been validated with local tests so far.
+### Verified full swap runs
+
+Both `npm run standard -- swap` and `npm run batch -- swap` completed with Base Sepolia API payments and real Base mainnet swaps of 1 USDC to WETH. Existing allowance was sufficient in both runs, so approval submission was skipped.
+
+| Action | Network | Transaction |
+| --- | --- | --- |
+| Standard-flow swap | Base | [View swap](https://basescan.org/tx/0xd051b2c16d5279f85119c40a7e1588348a85790c139261e80020ba24be51f1b5) |
+| Batch deposit — 0.10 test USDC | Base Sepolia | [View deposit](https://sepolia.basescan.org/tx/0x0d761b10dfb3132716970dc21e9c11baf68ff0d861d6552057b6b10c93057627) |
+| Batch-flow swap | Base | [View swap](https://basescan.org/tx/0x5139c99be85433973a61d64b3d7e38c14e5bd5c895e2ef57e558b4531ef8f50d) |
+| Batch refund — 0.08 test USDC | Base Sepolia | [View refund](https://sepolia.basescan.org/tx/0x6c8ba0a4f998ca54ff6329d7711c60c952c3b5f11d835cad113a8350dd5d7933) |
+
+The batch run charged 0.01 test USDC for price, then 0.01 for quote using a voucher on the same channel without another deposit transaction. The unused 0.08 test USDC was subsequently refunded. Mainnet API payments and live approval submission remain unverified; approval-required paths are covered by local tests.
 
 ## References
 
