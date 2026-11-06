@@ -212,9 +212,6 @@ The batch run charged 0.01 test USDC for price, then 0.01 for quote using a vouc
 ## References
 
 - [0x autonomous agent payments](https://docs.0x.org/docs/introduction/develop-with-ai/autonomous-agent-payments)
-- [Standard x402 payments](https://agentpay.alchemy.com/docs/x402)
-- [x402 testnet](https://agentpay.alchemy.com/docs/x402-testnet)
-- [Batch settlement preview](https://agentpay.alchemy.com/docs/batch-settlement)
 - [x402 SDK batch client documentation](https://github.com/x402-foundation/x402/blob/main/docs/schemes/batch-settlement.mdx)
 
 The x402 packages are pinned to 2.30.0, which publishes the batch client and file storage exports used here. For MPP payments on Tempo, see the [MPP example](../mpp-headless-example).
