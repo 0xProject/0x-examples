@@ -1,6 +1,6 @@
 # x402 payments — headless TypeScript
 
-Pay for 0x AllowanceHolder price and quote requests through Alchemy AgentPay using either standard x402 settlement or the `batch-settlement` preview. Optionally execute the complete price → approve → quote → swap flow on Base. No 0x API key is needed for these payment-protected URLs.
+Pay for 0x AllowanceHolder price and quote requests using either standard x402 settlement or the `batch-settlement` preview. Optionally execute the complete price → approve → quote → swap flow on Base. No 0x API key is needed for these payment-protected URLs.
 
 | Script | What it shows |
 | --- | --- |
@@ -52,9 +52,9 @@ npm run standard -- price
 npm run standard -- quote
 ```
 
-[`src/standard.ts`](src/standard.ts) registers only the `exact` EVM scheme. The policy in [`src/client.ts`](src/client.ts) selects the USDC EIP-3009 option. AgentPay submits and pays gas for the payment transaction; the client signs an authorization.
+[`src/standard.ts`](src/standard.ts) registers only the `exact` EVM scheme. The policy in [`src/client.ts`](src/client.ts) selects the USDC EIP-3009 option. The payment facilitator submits and pays gas for the payment transaction; the client signs an authorization.
 
-AgentPay settles standard payments before running the backend. A backend error can therefore still mean payment succeeded. The script prints any `PAYMENT-RESPONSE` receipt before reporting an HTTP error. Review that receipt before retrying.
+Standard payments settle before running the backend. A backend error can therefore still mean payment succeeded. The script prints any `PAYMENT-RESPONSE` receipt before reporting an HTTP error. Review that receipt before retrying.
 
 ## Batch settlement
 
@@ -69,7 +69,7 @@ The SDK uses the advertised `extra.minDeposit` hint when present, otherwise a de
 
 `REQUEST_COUNT` defaults to 3 and is limited to 100. Calls run sequentially with the same client so each voucher incorporates the previous receipt. Do not run multiple copies against the same wallet/channel concurrently. Channel state is stored in the ignored `.channels/` directory; keep it across runs.
 
-AgentPay records batch charges after successful backend responses and settles outstanding vouchers periodically. Voucher receipts need not contain an onchain transaction hash. Deposits do. Unused funds remain in escrow until spent or refunded.
+The payment service records batch charges after successful backend responses and settles outstanding vouchers periodically. Voucher receipts need not contain an onchain transaction hash. Deposits do. Unused funds remain in escrow until spent or refunded.
 
 ```sh
 # Use the same endpoint, payer, network, and channel state.
@@ -211,7 +211,7 @@ The batch run charged 0.01 test USDC for price, then 0.01 for quote using a vouc
 
 ## References
 
-- [Alchemy AgentPay overview](https://agentpay.alchemy.com/docs)
+- [0x autonomous agent payments](https://docs.0x.org/docs/introduction/develop-with-ai/autonomous-agent-payments)
 - [Standard x402 payments](https://agentpay.alchemy.com/docs/x402)
 - [x402 testnet](https://agentpay.alchemy.com/docs/x402-testnet)
 - [Batch settlement preview](https://agentpay.alchemy.com/docs/batch-settlement)

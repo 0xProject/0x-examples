@@ -23,7 +23,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env) {
     throw new Error("Set PRIVATE_KEY to a 0x-prefixed 32-byte private key.");
   }
   const payTo = env.PAY_TO ?? "";
-  if (!isAddress(payTo)) throw new Error("Set PAY_TO to your AgentPay recipient address.");
+  if (!isAddress(payTo)) throw new Error("Set PAY_TO to the expected payment recipient address.");
   const maxPayment = positiveInteger(env.MAX_PAYMENT_AMOUNT ?? "10000", "MAX_PAYMENT_AMOUNT");
   const maxDeposit = positiveInteger(env.MAX_DEPOSIT_AMOUNT ?? "2000000", "MAX_DEPOSIT_AMOUNT");
   const count = positiveInteger(env.REQUEST_COUNT ?? "3", "REQUEST_COUNT");

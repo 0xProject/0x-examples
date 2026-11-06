@@ -10,7 +10,7 @@ async function main() {
   console.log(`Payer: ${config.account.address}; network: ${config.network}; scheme: exact`);
   console.log(`Resource: ${resource}`);
   // The SDK fetches the 402, signs USDC's EIP-3009 authorization, and retries
-  // with PAYMENT-SIGNATURE. AgentPay handles verification and onchain settlement.
+  // with PAYMENT-SIGNATURE. The facilitator handles verification and onchain settlement.
   await paidGet(config.url, standardClient(config, config.account));
 }
 

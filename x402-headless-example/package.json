@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Standard x402 and batch settlement payments through Alchemy AgentPay",
+  "description": "Standard x402 and batch settlement payments for 0x API requests",
   "scripts": {
     "standard": "node --import tsx src/standard.ts",
     "batch": "node --import tsx src/batch.ts",
