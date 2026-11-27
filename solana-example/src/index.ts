@@ -1,178 +1,64 @@
 import {
-  AddressLookupTableAccount,
-  PublicKey,
-  TransactionInstruction,
-  TransactionMessage,
-  VersionedTransaction,
-} from "@solana/web3.js";
-import { fetchConfig } from "./config";
+  createKeyPairSignerFromBytes,
+  createNoopSigner,
+  createSolanaRpc,
+  createSolanaRpcSubscriptions,
+  getBase58Encoder,
+} from "@solana/kit";
+import { findDemoTaker } from "./demo.js";
 import {
-  Instruction,
-  InstructionAccount,
-  ZeroExQuoteResponse,
-  ZeroExQuoteResponseSchema,
-} from "./schema";
+  buildSwapTransaction,
+  getSwapInstructions,
+  NATIVE_SOL,
+  signAndSend,
+  toKitInstruction,
+} from "./swap.js";
 
-const config = fetchConfig();
-
-if (!process.env.ZEROEX_API_KEY) {
-  throw new Error("ZEROEX_API_KEY is not set");
+try {
+  process.loadEnvFile();
+} catch {
+  // No .env file: read the variables from the environment.
 }
 
-// === Step 1: Get a Quote ===
-async function getQuote(): Promise<ZeroExQuoteResponse> {
-  const response = await fetch("https://api.0x.org/solana/swap-instructions", {
-    method: "POST",
-    headers: {
-      "0x-api-key": config.zeroexApiKey,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      token_out: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", // USDC
-      token_in: "So11111111111111111111111111111111111111112", // SOL
-      amount_in: 1000000, // 0.001 SOL
-      slippage_bps: 100, // Optional. Slippage tolerance in basis points (bps). Must be between 0 and 10,000.
-      taker: config.keypairConfig.keypair.publicKey.toBase58(),
-    }),
-  });
+const API_KEY = process.env.ZEROEX_API_KEY;
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
+const RPC_URL = process.env.RPC_URL ?? "https://api.mainnet.solana.com";
+const DRY_RUN = !PRIVATE_KEY || process.env.DRY_RUN !== "false";
+if (!API_KEY) throw new Error("Set ZEROEX_API_KEY in .env");
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch quote: ${response.statusText}`);
-  }
+const USDC = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
 
-  return ZeroExQuoteResponseSchema.parse(await response.json());
-}
+const rpc = createSolanaRpc(RPC_URL);
+const rpcSubscriptions = createSolanaRpcSubscriptions(RPC_URL.replace(/^http/, "ws"));
+const taker = PRIVATE_KEY
+  ? await createKeyPairSignerFromBytes(getBase58Encoder().encode(PRIVATE_KEY))
+  : createNoopSigner(await findDemoTaker(rpc, USDC));
 
-// === Step 2: Build Instructions ===
-function decodePubkey(bytes: number[]): PublicKey {
-  return new PublicKey(Uint8Array.from(bytes));
-}
+const swap = await getSwapInstructions(API_KEY, {
+  token_in: NATIVE_SOL,
+  token_out: USDC,
+  amount_in: 1_000_000, // 0.001 SOL in lamports
+  taker: taker.address,
+  slippage_bps: 50,
+});
+console.log(`Quote: ${swap.amount_out} USDC base units (at least ${swap.min_amount_out})`);
 
-function buildInstructions(
-  instructionsData: Instruction[]
-): TransactionInstruction[] {
-  return instructionsData.map((ix) => {
-    const keys = ix.accounts.map((acc: InstructionAccount) => ({
-      pubkey: decodePubkey(acc.pubkey),
-      isSigner: acc.is_signer,
-      isWritable: acc.is_writable,
-    }));
+const transaction = await buildSwapTransaction(
+  rpc,
+  taker,
+  swap.instructions.map(toKitInstruction),
+  10_000n,
+);
+console.log("Simulation succeeded");
 
-    const programId = decodePubkey(ix.program_id);
-    const data = Buffer.from(ix.data);
-
-    return new TransactionInstruction({ keys, programId, data });
-  });
-}
-
-// === Step 3: Resolve Address Lookup Tables ===
-async function resolveAddressLookupTables(
-  keys: string[]
-): Promise<AddressLookupTableAccount[]> {
-  const accountInfos = await config.connection.getMultipleAccountsInfo(
-    keys.map((key) => new PublicKey(key))
+if (DRY_RUN) {
+  console.log(
+    PRIVATE_KEY
+      ? "Dry run: set DRY_RUN=false to send the transaction."
+      : `Dry run for ${taker.address}: set PRIVATE_KEY to swap from your own wallet.`,
   );
-
-  const accounts: AddressLookupTableAccount[] = [];
-  for (let i = 0; i < keys.length; i++) {
-    const accountInfo = accountInfos[i];
-    if (!accountInfo) {
-      throw new Error(
-        `Failed to resolve address lookup table: ${keys[i]}`
-      );
-    }
-    accounts.push(
-      new AddressLookupTableAccount({
-        key: new PublicKey(keys[i]),
-        state: AddressLookupTableAccount.deserialize(accountInfo.data),
-      })
-    );
-  }
-
-  console.debug(`Resolved ${accounts.length} address lookup table(s)`);
-
-  return accounts;
+  process.exit(0);
 }
 
-// === Step 4: Execute Swap with Simulation and Confirmation ===
-async function executeSwap() {
-  try {
-    const quote = await getQuote();
-    console.log(`💰 Quote received: ${quote.amount_out} base units of USDC`);
-
-    const instructions = buildInstructions(quote.instructions);
-    const [addressLookupTableAccounts, latestBlockhash] = await Promise.all([
-      resolveAddressLookupTables(quote.address_lookup_tables ?? []),
-      config.connection.getLatestBlockhash(),
-    ]);
-
-    const messageV0 = new TransactionMessage({
-      payerKey: config.keypairConfig.keypair.publicKey,
-      recentBlockhash: latestBlockhash.blockhash,
-      instructions,
-    }).compileToV0Message(addressLookupTableAccounts);
-
-    const versionedTx = new VersionedTransaction(messageV0);
-    versionedTx.sign([config.keypairConfig.keypair]);
-
-    if (!config.keypairConfig.isUserProvided) {
-      console.log(
-        "No private key provided. Please provide a private key to enable simulation and transaction sending."
-      );
-      return;
-    }
-
-    // === Simulate Transaction ===
-    const { value: simulationResult } =
-      await config.connection.simulateTransaction(versionedTx, {
-        sigVerify: true,
-      });
-
-    if (simulationResult.err) {
-      console.error("❌ Simulation failed:", simulationResult.err);
-      if (simulationResult.logs) {
-        console.error("🪵 Logs:\n" + simulationResult.logs.join("\n"));
-      }
-      throw new Error("Aborting due to failed simulation.");
-    } else {
-      console.log("✅ Simulation succeeded");
-    }
-
-    if (config.dryRun) {
-      console.log("🏁 Dry run complete. Set DRY_RUN=false to send the transaction.");
-      return;
-    }
-
-    // === Send Transaction ===
-    const signature = await config.connection.sendTransaction(versionedTx, {
-      skipPreflight: false,
-    });
-
-    console.log(`✍️ Transaction sent with signature: ${signature}`);
-
-    // === Confirm Transaction Status ===
-    const confirmation = await config.connection.confirmTransaction(
-      {
-        signature,
-        blockhash: latestBlockhash.blockhash,
-        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
-      },
-      "confirmed"
-    );
-
-    if (confirmation.value.err) {
-      console.error(
-        `❌ Transaction failed: ${JSON.stringify(confirmation.value.err)}`
-      );
-    } else {
-      console.log(
-        `✅ Transaction confirmed: https://solscan.io/tx/${signature}`
-      );
-    }
-  } catch (error) {
-    console.error("Failed to process quote and swap:", error);
-  }
-}
-
-// === Run ===
-executeSwap().catch(console.error);
+const signature = await signAndSend(rpc, rpcSubscriptions, transaction);
+console.log(`Swap confirmed: https://solscan.io/tx/${signature}`);

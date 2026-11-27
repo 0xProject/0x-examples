@@ -1,23 +1,22 @@
 {
   "name": "0x-solana-example",
-  "version": "1.0.0",
-  "description": "TypeScript example for 0x Solana Swap API",
-  "main": "src/index.ts",
+  "version": "2.0.0",
+  "description": "TypeScript example for the 0x Solana Swap API",
+  "type": "module",
   "scripts": {
-    "index": "tsx src/index.ts"
+    "index": "tsx src/index.ts",
+    "typecheck": "tsc"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
+  "engines": {
+    "node": ">=20.12"
+  },
+  "dependencies": {
+    "@solana/kit": "^8.5.0"
+  },
   "devDependencies": {
     "@types/node": "^24.1.0",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3"
-  },
-  "dependencies": {
-    "@solana/web3.js": "^1.95.2",
-    "bs58": "^6.0.0",
-    "dotenv": "^17.2.0",
-    "zod": "^4.0.10"
   }
 }
