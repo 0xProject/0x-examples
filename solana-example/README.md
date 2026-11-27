@@ -16,14 +16,15 @@ Requires Node.js 20.12 or later.
 
 ```bash
 npm install
-cp .env.example .env   # then fill in the values
+cp .env.example .env   # set ZEROEX_API_KEY; PRIVATE_KEY is optional
 npm run index
 ```
 
 | Variable         | Description                                                                                   | Default                               |
 | ---------------- | --------------------------------------------------------------------------------------------- | ------------------------------------- |
 | `ZEROEX_API_KEY` | Your API key from the [0x Dashboard](https://dashboard.0x.org).                                | Required                              |
-| `PRIVATE_KEY`    | Base58 private key of the wallet that swaps. It needs at least 0.001 SOL plus fees.            | Required                              |
+| `PRIVATE_KEY`    | Base58 private key of the wallet that swaps. It needs at least 0.001 SOL plus fees. Without it, the script quotes and simulates for `TAKER` and never signs. | None                                  |
+| `TAKER`          | Public wallet to simulate for when `PRIVATE_KEY` is not set. It must hold SOL.                 | A public wallet that holds SOL        |
 | `RPC_URL`        | Solana RPC HTTP URL. The public endpoint is rate limited; use your own for anything real.       | `https://api.mainnet-beta.solana.com` |
 | `DRY_RUN`        | When `true`, the script simulates the transaction but does not send it.                        | `true`                                |
 

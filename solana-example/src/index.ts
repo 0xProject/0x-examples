@@ -1,9 +1,11 @@
 import {
   AccountRole,
+  address,
   appendTransactionMessageInstructions,
   assertIsTransactionWithBlockhashLifetime,
   assertIsTransactionWithinSizeLimit,
   createKeyPairSignerFromBytes,
+  createNoopSigner,
   createSolanaRpc,
   createSolanaRpcSubscriptions,
   createTransactionMessage,
@@ -31,9 +33,11 @@ try {
 const API_KEY = process.env.ZEROEX_API_KEY;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const RPC_URL = process.env.RPC_URL ?? "https://api.mainnet-beta.solana.com";
-const DRY_RUN = process.env.DRY_RUN !== "false";
 if (!API_KEY) throw new Error("Set ZEROEX_API_KEY in .env");
-if (!PRIVATE_KEY) throw new Error("Set PRIVATE_KEY (base58) in .env");
+// Without a private key the script quotes and simulates for a public wallet
+// that holds SOL, and never signs.
+const DRY_RUN = !PRIVATE_KEY || process.env.DRY_RUN !== "false";
+const DEMO_TAKER = address(process.env.TAKER ?? "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM");
 
 const NATIVE_SOL = "So11111111111111111111111111111111111111111";
 const USDC = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
@@ -52,7 +56,9 @@ type ZeroExInstruction = {
 
 const rpc = createSolanaRpc(RPC_URL);
 const rpcSubscriptions = createSolanaRpcSubscriptions(RPC_URL.replace(/^http/, "ws"));
-const taker = await createKeyPairSignerFromBytes(getBase58Encoder().encode(PRIVATE_KEY));
+const taker = PRIVATE_KEY
+  ? await createKeyPairSignerFromBytes(getBase58Encoder().encode(PRIVATE_KEY))
+  : createNoopSigner(DEMO_TAKER);
 
 // 1. Fetch swap instructions for a v1 transaction.
 const response = await fetch("https://api.0x.org/solana/swap-instructions", {
@@ -125,7 +131,11 @@ console.log(
 );
 
 if (DRY_RUN) {
-  console.log("Dry run: set DRY_RUN=false to send the transaction.");
+  console.log(
+    PRIVATE_KEY
+      ? "Dry run: set DRY_RUN=false to send the transaction."
+      : `Dry run for ${taker.address}: set PRIVATE_KEY to swap from your own wallet.`,
+  );
   process.exit(0);
 }
 
