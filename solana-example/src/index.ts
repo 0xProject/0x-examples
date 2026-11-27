@@ -22,7 +22,7 @@ try {
 
 const API_KEY = process.env.ZEROEX_API_KEY;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
-const RPC_URL = process.env.RPC_URL ?? "https://api.mainnet-beta.solana.com";
+const RPC_URL = process.env.RPC_URL ?? "https://api.mainnet.solana.com";
 const DRY_RUN = !PRIVATE_KEY || process.env.DRY_RUN !== "false";
 if (!API_KEY) throw new Error("Set ZEROEX_API_KEY in .env");
 

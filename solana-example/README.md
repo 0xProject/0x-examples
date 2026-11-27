@@ -25,7 +25,7 @@ npm run index
 | ---------------- | --------------------------------------------------------------------------------------------- | ------------------------------------- |
 | `ZEROEX_API_KEY` | Your API key from the [0x Dashboard](https://dashboard.0x.org).                                | Required                              |
 | `PRIVATE_KEY`    | Base58 private key of the wallet that swaps. It needs at least 0.001 SOL plus fees. Without it, the script simulates the swap for the fee payer of a recent USDC transaction that holds SOL, and never signs. | None                                  |
-| `RPC_URL`        | Solana RPC HTTP URL. The public endpoint is rate limited; use your own for anything real.       | `https://api.mainnet-beta.solana.com` |
+| `RPC_URL`        | Solana RPC HTTP URL. The public endpoint is rate limited; use your own for anything real.       | `https://api.mainnet.solana.com` |
 | `DRY_RUN`        | When `true`, the script simulates the transaction but does not send it.                        | `true`                                |
 
 Example output:
