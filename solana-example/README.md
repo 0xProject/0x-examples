@@ -23,15 +23,14 @@ npm run index
 | Variable         | Description                                                                                   | Default                               |
 | ---------------- | --------------------------------------------------------------------------------------------- | ------------------------------------- |
 | `ZEROEX_API_KEY` | Your API key from the [0x Dashboard](https://dashboard.0x.org).                                | Required                              |
-| `PRIVATE_KEY`    | Base58 private key of the wallet that swaps. It needs at least 0.001 SOL plus fees. Without it, the script quotes and simulates for `TAKER` and never signs. | None                                  |
-| `TAKER`          | Public wallet to simulate for when `PRIVATE_KEY` is not set. It must hold SOL.                 | A public wallet that holds SOL        |
+| `PRIVATE_KEY`    | Base58 private key of the wallet that swaps. It needs at least 0.001 SOL plus fees. Without it, the script simulates the swap for the fee payer of a recent USDC transaction that holds SOL, and never signs. | None                                  |
 | `RPC_URL`        | Solana RPC HTTP URL. The public endpoint is rate limited; use your own for anything real.       | `https://api.mainnet-beta.solana.com` |
 | `DRY_RUN`        | When `true`, the script simulates the transaction but does not send it.                        | `true`                                |
 
 Example output:
 
 ```
-Quote: 72331 USDC base units (at least 71969)
-Simulation succeeded: 122043 compute units, 4161685 bytes of account data
-Dry run for 9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM: set PRIVATE_KEY to swap from your own wallet.
+Quote: 72220 USDC base units (at least 71858)
+Simulation succeeded: 113324 compute units, 3093269 bytes of account data
+Dry run for HHGGfR9ff5oCZaVf9zxg4iB77A1RG3XNQrYojRvUoAJg: set PRIVATE_KEY to swap from your own wallet.
 ```

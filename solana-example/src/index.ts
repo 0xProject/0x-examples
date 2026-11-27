@@ -1,5 +1,6 @@
 import {
   AccountRole,
+  type Address,
   address,
   appendTransactionMessageInstructions,
   assertIsTransactionWithBlockhashLifetime,
@@ -34,13 +35,12 @@ const API_KEY = process.env.ZEROEX_API_KEY;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const RPC_URL = process.env.RPC_URL ?? "https://api.mainnet-beta.solana.com";
 if (!API_KEY) throw new Error("Set ZEROEX_API_KEY in .env");
-// Without a private key the script quotes and simulates for a public wallet
-// that holds SOL, and never signs.
 const DRY_RUN = !PRIVATE_KEY || process.env.DRY_RUN !== "false";
-const DEMO_TAKER = address(process.env.TAKER ?? "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM");
 
 const NATIVE_SOL = "So11111111111111111111111111111111111111111";
 const USDC = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
+const SYSTEM_PROGRAM = "11111111111111111111111111111111";
+const MIN_DEMO_TAKER_LAMPORTS = 100_000_000n; // 0.1 SOL
 
 // Simulation measures the swap at the current pool state; the margin covers
 // changes between simulation and execution.
@@ -56,9 +56,30 @@ type ZeroExInstruction = {
 
 const rpc = createSolanaRpc(RPC_URL);
 const rpcSubscriptions = createSolanaRpcSubscriptions(RPC_URL.replace(/^http/, "ws"));
+
+// Without a private key, simulate as the fee payer of a recent USDC
+// transaction that is a wallet (owned by the System Program, so it can pay
+// fees) holding enough SOL. The script never signs for it.
+async function findDemoTaker(): Promise<Address> {
+  const signatures = await rpc.getSignaturesForAddress(address(USDC), { limit: 10 }).send();
+  for (const { signature, err } of signatures) {
+    if (err !== null) continue;
+    const transaction = await rpc
+      .getTransaction(signature, { encoding: "json", maxSupportedTransactionVersion: 1 })
+      .send();
+    const feePayer = transaction?.transaction.message.accountKeys[0];
+    if (!feePayer) continue;
+    const { value: account } = await rpc.getAccountInfo(feePayer, { encoding: "base64" }).send();
+    if (account?.owner === SYSTEM_PROGRAM && account.lamports >= MIN_DEMO_TAKER_LAMPORTS) {
+      return feePayer;
+    }
+  }
+  throw new Error("No funded wallet found to simulate with: set PRIVATE_KEY");
+}
+
 const taker = PRIVATE_KEY
   ? await createKeyPairSignerFromBytes(getBase58Encoder().encode(PRIVATE_KEY))
-  : createNoopSigner(DEMO_TAKER);
+  : createNoopSigner(await findDemoTaker());
 
 // 1. Fetch swap instructions for a v1 transaction.
 const response = await fetch("https://api.0x.org/solana/swap-instructions", {
