@@ -31,7 +31,7 @@ npm run index
 Example output:
 
 ```
-Quote: 72114 USDC base units (at least 71753)
-Simulation succeeded: 77234 compute units, 1926712 bytes of account data
-Dry run: set DRY_RUN=false to send the transaction.
+Quote: 72331 USDC base units (at least 71969)
+Simulation succeeded: 122043 compute units, 4161685 bytes of account data
+Dry run for 9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM: set PRIVATE_KEY to swap from your own wallet.
 ```
