@@ -1,60 +1,36 @@
 # 0x Solana Swap Example
 
-This TypeScript project demonstrates how to interact with the [0x Swap API for Solana](https://docs.0x.org) to get a quote, build swap instructions, and send a swap transaction.
+A TypeScript script that swaps 0.001 SOL for USDC with the [0x Solana Swap API](https://docs.0x.org/svm/solana-swap-api/introduction) and [Solana Kit](https://github.com/anza-xyz/kit). It builds a v1 transaction.
 
-## Example Output
+The script:
 
-```bash
-➜  0x-solana-example git:(main) ✗ npm run index
+1. Fetches swap instructions from `/solana/swap-instructions` with `transaction_version: "v1"`.
+2. Converts the instructions to Solana Kit instructions.
+3. Builds a v1 transaction message with a priority fee.
+4. Simulates the transaction to set the compute unit limit and the loaded accounts data size limit. A v1 transaction that does not set these limits fails.
+5. Signs, sends, and confirms the transaction, unless `DRY_RUN` is `true`.
 
-> 0x-solana-example@1.0.0 index
-> tsx src/index.ts
+## Run it
 
-💰 Quote received: 0.16 USDC
-✅ Simulation succeeded
-✍️ Transaction sent with signature: 3ofwWgzDzZRpPGNQTvAKSY4o3FMPT2y7fjCw6UtTAMTnvHj26TPaYVJWM88v28jNeey5CdX9sWGcVfPYfQNQsSBa
-✅ Transaction confirmed: https://solscan.io/tx/3ofwWgzDzZRpPGNQTvAKSY4o3FMPT2y7fjCw6UtTAMTnvHj26TPaYVJWM88v28jNeey5CdX9sWGcVfPYfQNQsSBa
-```
-
-## What It Does
-
-This script performs the following steps:
-
-1. Loads environment variables from `.env` (0x API key, private key, RPC URL).
-2. Fetches a swap quote from the 0x `/swap-instructions` endpoint.
-
-If you have provided a private key:
-
-3. Builds and signs a transaction from the instructions.
-4. Simulates the transaction to catch errors before sending.
-5. If `DRY_RUN=false`, sends the transaction to the Solana blockchain to execute the swap.
-
-## Getting Started
-
-### 1. Install Dependencies
+Requires Node.js 20.12 or later.
 
 ```bash
 npm install
-```
-
-### 2. Create a `.env` File
-
-Copy the example from [.env.example](./.env.example) into a new `.env` file:
-
-| Variable Name    | Description                                                                                                          | Required | Default Value                         |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------- |
-| `ZEROEX_API_KEY` | API Key for use with 0x Solana API.                                                                                  | ✅       | _None_                                |
-| `PRIVATE_KEY`    | Must be base58-encoded.                                                                                              | ❌       | _Random generated_                    |
-| `RPC_URL`        | Valid Solana RPC HTTP endpoint. For example, get a free RPC key and endpoint from [Helius](https://www.helius.dev/). | ❌       | `https://api.mainnet-beta.solana.com` |
-| `DRY_RUN`        | When `true`, fetches a quote and simulates but does not send the transaction.                                        | ❌       | `true`                                |
-
-### 3. Run the Example
-
-```bash
+cp .env.example .env   # then fill in the values
 npm run index
 ```
 
-## 📝 Notes
+| Variable         | Description                                                                                   | Default                               |
+| ---------------- | --------------------------------------------------------------------------------------------- | ------------------------------------- |
+| `ZEROEX_API_KEY` | Your API key from the [0x Dashboard](https://dashboard.0x.org).                                | Required                              |
+| `PRIVATE_KEY`    | Base58 private key of the wallet that swaps. It needs at least 0.001 SOL plus fees.            | Required                              |
+| `RPC_URL`        | Solana RPC HTTP URL. The public endpoint is rate limited; use your own for anything real.       | `https://api.mainnet-beta.solana.com` |
+| `DRY_RUN`        | When `true`, the script simulates the transaction but does not send it.                        | `true`                                |
 
-- The amount and token mint addresses are hardcoded for simplicity, but can be parameterized.
-- `amount_in` is denominated in base units (e.g. 1 USDC = 1_000_000 units).
+Example output:
+
+```
+Quote: 72114 USDC base units (at least 71753)
+Simulation succeeded: 77234 compute units, 1926712 bytes of account data
+Dry run: set DRY_RUN=false to send the transaction.
+```

@@ -43,7 +43,7 @@ A collection of 0x API code examples
 
 | Example | Description |
 |---------|-------------|
-| [Headless Example](https://github.com/0xProject/0x-examples/tree/main/solana-example) | TypeScript script to get a Solana swap quote, build instructions, and execute the swap |
+| [Headless Example](https://github.com/0xProject/0x-examples/tree/main/solana-example) | TypeScript script that builds and sends a v1 Solana swap transaction with Solana Kit |
 
 ### Response Signatures
 
